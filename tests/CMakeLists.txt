@@ -1,6 +1,7 @@
 message(STATUS "GTEST_INCLUDE_DIRS=${GTEST_INCLUDE_DIRS}")
 set(TESTS
     test_leftApply
+    test_rightApply
    )
 
 foreach(t ${TESTS})
