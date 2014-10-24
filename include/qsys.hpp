@@ -5,5 +5,8 @@
 
 typedef std::complex<double> Amplitude;
 
+void leftApply(int row, int col, Amplitude alpha, int dim, const Amplitude *A,
+               Amplitude *B);
+
 #endif
 

@@ -3,13 +3,13 @@ project(QSYS)
 enable_testing()
 include(GenerateExportHeader)
 
-option(QSYS_BUILD_TESTS
-    "Whether to build tests" OFF)
+option(QSYS_BUILD_TESTS "Whether to build tests" OFF)
 
-include_directories(include)
+include_directories(${PROJECT_SOURCE_DIR}/include)
 add_subdirectory(src)
 if(QSYS_BUILD_TESTS)
   add_subdirectory(gtest-1.7.0)
+  include_directories(${gtest_SOURCE_DIR}/include)
+  add_subdirectory(tests)
 endif()
-add_subdirectory(tests/)
 
