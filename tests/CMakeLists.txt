@@ -5,7 +5,7 @@ set(TESTS
 
 foreach(t ${TESTS})
   add_executable(${t} ${t}.cpp)
-  target_link_libraries(${t} gtest_main gtest)
+  target_link_libraries(${t} qsys gtest_main gtest)
   add_test(${t} ${t})
 endforeach()
 
