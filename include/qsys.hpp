@@ -21,5 +21,17 @@ class Coupling {
   Amplitude g;
 };
 
+class Decay {
+ public:
+  Decay(int into, int outof, double gamma)
+      : into(into), outof(outof), gamma(gamma) {}
+  void apply(int dim, const Amplitude *A, Amplitude *B);
+
+ private:
+  int into;
+  int outof;
+  double gamma;
+};
+
 #endif
 

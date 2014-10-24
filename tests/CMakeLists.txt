@@ -3,6 +3,7 @@ set(TESTS
     test_leftApply
     test_rightApply
     test_Coupling
+    test_Decay
    )
 
 foreach(t ${TESTS})
