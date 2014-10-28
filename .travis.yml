@@ -1,6 +1,6 @@
 language: cpp
 compiler:
-  - gcc
+  - g++
 before_install:
   - sh ./utilities/download_gtest.sh
 script:
