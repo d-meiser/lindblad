@@ -39,9 +39,20 @@ std::vector<Amplitude> randomVector(int dim) {
   return A;
 }
 
-template <typename T>
-void LindbladTraceProperty(T op, int dim) {
+std::vector<Amplitude> hermitianMatrix(int dim) {
   std::vector<Amplitude> A = randomVector(dim * dim);
+  std::vector<Amplitude> B(dim * dim, 0);
+  for (int i = 0; i < dim; ++i) {
+    for (int j = 0; j < dim; ++j) {
+      B[i * dim + j] = A[i * dim + j] + conj(A[j * dim + i]);
+    }
+  }
+  return B;
+}
+
+template <typename T>
+void CheckLindbladTraceProperty(T op, int dim) {
+  std::vector<Amplitude> A = hermitianMatrix(dim);
   std::vector<Amplitude> B(dim * dim, 0);
   op.apply(dim, &A[0], &B[0]);
   Amplitude trace;
@@ -52,8 +63,8 @@ void LindbladTraceProperty(T op, int dim) {
 }
 
 template <typename T>
-void LindbladHermiticityProperty(T op, int dim) {
-  std::vector<Amplitude> A = randomVector(dim * dim);
+void CheckLindbladHermiticityProperty(T op, int dim) {
+  std::vector<Amplitude> A = hermitianMatrix(dim);
   std::vector<Amplitude> B(dim * dim, 0);
   op.apply(dim, &A[0], &B[0]);
   for (int i = 0; i < dim; ++i) {

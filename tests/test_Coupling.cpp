@@ -43,3 +43,22 @@ TEST(Coupling, ApplySp) {
   EXPECT_RANGES_EQ(expected, expected + 4, rho2.begin(), rho2.end());
 }
 
+TEST(Coupling, TraceSp) {
+  Coupling a(1, 0, 1.0);
+  CheckLindbladTraceProperty(a, 2);
+}
+
+TEST(Coupling, HermiticitySp) {
+  Coupling a(1, 0, 1.0);
+  CheckLindbladHermiticityProperty(a, 2);
+}
+
+TEST(Coupling, TraceSpSm) {
+  Coupling a(1, 1, 1.0);
+  CheckLindbladTraceProperty(a, 2);
+}
+
+TEST(Coupling, HermiticitySpSm) {
+  Coupling a(1, 1, 1.0);
+  CheckLindbladHermiticityProperty(a, 2);
+}
