@@ -62,3 +62,8 @@ TEST(Coupling, HermiticitySpSm) {
   Coupling a(1, 1, 1.0);
   CheckLindbladHermiticityProperty(a, 2);
 }
+
+TEST(Coupling, HermiticityComplexMatElem) {
+  Coupling a(0, 1, Amplitude(2.3, 4.8));
+  CheckLindbladHermiticityProperty(a, 2);
+}

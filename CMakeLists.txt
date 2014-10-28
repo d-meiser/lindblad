@@ -1,7 +1,6 @@
 cmake_minimum_required(VERSION 2.6.2)
 project(LINDBLAD)
 enable_testing()
-include(GenerateExportHeader)
 
 option(LINDBLAD_BUILD_TESTS "Whether to build tests" OFF)
 

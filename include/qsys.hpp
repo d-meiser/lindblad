@@ -2,6 +2,7 @@
 #define QSYS_HPP
 
 #include <complex>
+#include <vector>
 
 typedef std::complex<double> Amplitude;
 
@@ -31,6 +32,17 @@ class Decay {
   int into;
   int outof;
   double gamma;
+};
+
+class MasterEqnRhs {
+ public:
+  void addCoupling(Coupling c);
+  void addDecay(Decay d);
+  void apply(int dim, const Amplitude *A, Amplitude *B);
+
+ private:
+  std::vector<Coupling> couplings;
+  std::vector<Decay> decays;
 };
 
 #endif
