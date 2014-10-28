@@ -6,7 +6,7 @@ before_install:
 script:
   - mkdir -p build
   - cd build
-  - cmake ..
+  - cmake -DLINDBLAD_BUILD_TESTS ..
   - make
   - ctest --output-on-failure
   - rm -rf *
