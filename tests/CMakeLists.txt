@@ -5,6 +5,7 @@ set(TESTS
     test_Coupling
     test_Decay
     test_MasterEqnRhs
+    test_MasterEquation
    )
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})
