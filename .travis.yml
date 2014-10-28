@@ -1,0 +1,12 @@
+language: cpp
+compiler:
+  - gcc
+before_install:
+  - sh ./utilities/download_gtest.sh
+script:
+  - mkdir -p build
+  - cd build
+  - cmake ..
+  - make
+  - ctest --output-on-failure
+  - rm -rf *
