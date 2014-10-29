@@ -6,6 +6,7 @@ set(TESTS
     test_Decay
     test_MasterEqnRhs
     test_MasterEquation
+    test_Integrator
    )
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})
