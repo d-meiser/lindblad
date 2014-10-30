@@ -5,7 +5,7 @@
 
 class Integrator {
  public:
-  Integrator(int dim, double time, double* state,
+  Integrator(int dim, double time, const double* state,
              void (*f)(double* x, double* y, double t, void* ctx))
       : d(dim), t(time), state(state), rhs(f), engineInitialized(false) {}
   void takeStep(void* ctx);
@@ -19,10 +19,11 @@ class Integrator {
  private:
   int d;
   double t;
-  double *state;
+  const double *state;
   void (*rhs)(double* x, double* y, double t, void* ctx);
   bool engineInitialized;
-  virtual void buildIntegratorData(size_t dim, double* state, double t) = 0;
+  virtual void buildIntegratorData(size_t dim, const double* state,
+                                   double t) = 0;
   virtual const double* getCurrentState() const = 0;
   virtual void advance(double* t, void* ctx) = 0;
 };

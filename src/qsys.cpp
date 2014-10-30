@@ -1,4 +1,5 @@
 #include <qsys.hpp>
+#include <RK4.hpp>
 
 void leftApply(int row, int col, Amplitude alpha, int dim, const Amplitude *A,
                Amplitude *B) {
@@ -41,6 +42,7 @@ void MasterEqnRhs::addDecay(Decay d) {
 }
 
 void MasterEqnRhs::apply(int dim, const Amplitude *A, Amplitude *B) const {
+  std::fill(B, B + dim * dim, 0);
   for (std::vector<Coupling>::const_iterator c = couplings.begin();
        c != couplings.end(); ++c) {
     c->apply(dim, A, B);
@@ -51,7 +53,36 @@ void MasterEqnRhs::apply(int dim, const Amplitude *A, Amplitude *B) const {
   }
 }
 
-MasterEquation::MasterEquation(int d, const Amplitude *A, const MasterEqnRhs *r)
-    : dim(d), time(0), dt(1.0e-3), state(A, A + dim * dim), rhs(r) {}
+struct MasterEqnRhsContext {
+  int dim;
+  const MasterEqnRhs* rhs;
+};
+static void applyRhs(double* x, double* y, double t, void* ctx) {
+  MasterEqnRhsContext* meCtx = (MasterEqnRhsContext *)ctx;
+  meCtx->rhs->apply(meCtx->dim, (const Amplitude*) x, (Amplitude*) y);
+}
 
-void MasterEquation::takeStep() { time += dt; }
+MasterEquation::MasterEquation(int d, const Amplitude *A, const MasterEqnRhs *r)
+     {
+  ctx = new MasterEqnRhsContext;
+  ctx->dim = d;
+  ctx->rhs = r;
+  integrator = new RK4(2 * d * d, 0, (const double *)A, &applyRhs, 1.0e-2);
+}
+
+MasterEquation::~MasterEquation() {
+  delete ctx;
+  delete integrator;
+}
+
+double MasterEquation::getTime() const {
+  return integrator->getTime();
+}
+
+void MasterEquation::takeStep() {
+  integrator->takeStep(ctx);
+}
+
+const Amplitude* MasterEquation::getState() const {
+  return (const Amplitude*) integrator->getState();
+}

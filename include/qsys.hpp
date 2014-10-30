@@ -45,19 +45,19 @@ class MasterEqnRhs {
   std::vector<Decay> decays;
 };
 
+class Integrator;
+struct MasterEqnRhsContext;
 class MasterEquation {
  public:
   MasterEquation(int dim, const Amplitude *A, const MasterEqnRhs *rhs);
-  ~MasterEquation() {}
-  double getTime() const { return time; }
+  ~MasterEquation();
+  double getTime() const;
   void takeStep();
+  const Amplitude* getState() const;
 
  private:
-  int dim;
-  double time;
-  double dt;
-  std::vector<Amplitude> state;
-  const MasterEqnRhs *rhs;
+  MasterEqnRhsContext *ctx;
+  Integrator* integrator;
 };
 
 #endif

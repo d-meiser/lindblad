@@ -1,7 +1,7 @@
 #include <RK4.hpp>
 #include <iostream>
 
-void RK4::buildIntegratorData(size_t dim, double* state, double t) {
+void RK4::buildIntegratorData(size_t dim, const double* state, double t) {
   k1.resize(dim);
   k2.resize(dim);
   k3.resize(dim);

@@ -9,7 +9,7 @@ class MockEuler : public Integrator {
             void (*f)(double* x, double* y, double t, void* ctx))
       : Integrator(dim, time, state, f), y(dim), dt(1.0e-6) {}
  private:
-  virtual void buildIntegratorData(size_t dim, double* state, double t) {
+  virtual void buildIntegratorData(size_t dim, const double* state, double t) {
     k1.resize(dim);
     y.resize(dim);
     std::copy(state, state + dim, y.begin());
