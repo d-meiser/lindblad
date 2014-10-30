@@ -1,4 +1,5 @@
 #include <RK4.hpp>
+#include <iostream>
 
 void RK4::buildIntegratorData(size_t dim, double* state, double t) {
   k1.resize(dim);
@@ -28,7 +29,7 @@ void RK4::advance(double* t, void* ctx) {
   evaluateRHS(&work[0], &k4[0], *t + dt, ctx);
   double prefactor = dt / 6.0;
   for (size_t i = 0; i < y.size(); ++i) {
-    work[i] = y[i] + prefactor * (k1[i] + 0.5 * k2[i] + 0.5 * k3[i] + k4[i]);
+    y[i] += prefactor * (k1[i] + 2.0 * k2[i] + 2.0 * k3[i] + k4[i]);
   }
   *t += dt;
 }

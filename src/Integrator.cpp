@@ -3,6 +3,7 @@
 void Integrator::takeStep(void* ctx) {
   if (!engineInitialized) {
     buildIntegratorData(d, state, t);
+    engineInitialized = true;
   }
   advance(&t, ctx);
 }
