@@ -1,0 +1,4 @@
+add_executable(RabiOscillations RabiOscillations.cpp)
+target_link_libraries(RabiOscillations qsys)
+add_test(RabiOscillations RabiOscillations)
+
