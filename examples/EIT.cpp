@@ -1,4 +1,4 @@
-#include <qsys.hpp>
+#include <Lindblad.hpp>
 #include <cmath>
 
 static const int numIters = 1000;

@@ -1,4 +1,4 @@
-#include <qsys.hpp>
+#include <Lindblad.hpp>
 
 static const int numIters = 10 * 1000;
 

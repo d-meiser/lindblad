@@ -13,7 +13,7 @@ set(TESTS
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 foreach(t ${TESTS})
   add_executable(${t} ${t}.cpp)
-  target_link_libraries(${t} qsys gtest_main gtest)
+  target_link_libraries(${t} lindblad gtest_main gtest)
   add_test(${t} ${t})
 endforeach()
 

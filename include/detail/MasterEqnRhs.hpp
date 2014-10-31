@@ -1,7 +1,7 @@
 #ifndef MASTER_EQN_RHS_HPP
 #define MASTER_EQN_RHS_HPP
 
-#include <qsys.hpp>
+#include <Lindblad.hpp>
 
 class MasterEqnRhs {
  public:
