@@ -1,4 +1,4 @@
-message(STATUS "GTEST_INCLUDE_DIRS=${GTEST_INCLUDE_DIRS}")
+include_directories(${PROJECT_SOURCE_DIR}/include/detail)
 set(TESTS
     test_leftApply
     test_rightApply
