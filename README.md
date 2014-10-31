@@ -51,5 +51,5 @@ int main() {
 ## Questions, comments, and issues
 
 Questions, comments, and issues should be reported via the [github issue
-tracker](https://github.com/d-meiser/lindblad/issuesa).
+tracker](https://github.com/d-meiser/lindblad/issues).
 
