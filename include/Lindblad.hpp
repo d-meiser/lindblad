@@ -1,5 +1,5 @@
-#ifndef QSYS_HPP
-#define QSYS_HPP
+#ifndef LINDBLAD_HPP
+#define LINDBLAD_HPP
 
 #include <complex>
 #include <vector>

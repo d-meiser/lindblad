@@ -1,4 +1,4 @@
-#include <qsys.hpp>
+#include <Lindblad.hpp>
 #include <RK4.hpp>
 #include <MasterEqnRhs.hpp>
 #include <SparseApply.hpp>
