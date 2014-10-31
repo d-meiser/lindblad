@@ -11,7 +11,7 @@ int main() {
 
   std::vector<Amplitude> rhoInitial(dim * dim, 0);
   rhoInitial[1 + 1 * dim] = 1.0;
-  MasterEquation meqn(dim, &rhoInitial[0]);
+  MasterEqn meqn(dim, &rhoInitial[0]);
   meqn.addCoupling(Coupling(3, 0, -OmegaR / 2.0 / sqrt(6.0)));
   meqn.addCoupling(Coupling(3, 2, -OmegaR / 2.0 / sqrt(6.0)));
   meqn.addCoupling(Coupling(0, 0, OmegaB / 8.0));

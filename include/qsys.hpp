@@ -37,10 +37,10 @@ class Decay {
 class Integrator;
 struct MasterEqnRhsContext;
 class MasterEqnRhs;
-class MasterEquation {
+class MasterEqn {
  public:
-  MasterEquation(int dim, const Amplitude *A);
-  ~MasterEquation();
+  MasterEqn(int dim, const Amplitude *A);
+  ~MasterEqn();
   void addCoupling(Coupling c);
   void addDecay(Decay d);
   double getTime() const;

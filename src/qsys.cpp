@@ -44,7 +44,7 @@ static void applyRhs(double* x, double* y, double t, void* ctx) {
   meCtx->rhs->apply(meCtx->dim, (const Amplitude*) x, (Amplitude*) y);
 }
 
-MasterEquation::MasterEquation(int d, const Amplitude *A)
+MasterEqn::MasterEqn(int d, const Amplitude *A)
      {
   rhs = new MasterEqnRhs();
   ctx = new MasterEqnRhsContext;
@@ -53,28 +53,28 @@ MasterEquation::MasterEquation(int d, const Amplitude *A)
   integrator = new RK4(2 * d * d, 0, (const double *)A, &applyRhs, 1.0e-2);
 }
 
-MasterEquation::~MasterEquation() {
+MasterEqn::~MasterEqn() {
   delete rhs;
   delete ctx;
   delete integrator;
 }
 
-double MasterEquation::getTime() const {
+double MasterEqn::getTime() const {
   return integrator->getTime();
 }
 
-void MasterEquation::takeStep() {
+void MasterEqn::takeStep() {
   integrator->takeStep(ctx);
 }
 
-const Amplitude* MasterEquation::getState() const {
+const Amplitude* MasterEqn::getState() const {
   return (const Amplitude*) integrator->getState();
 }
 
-void MasterEquation::addCoupling(Coupling c) {
+void MasterEqn::addCoupling(Coupling c) {
   rhs->addCoupling(c);
 }
 
-void MasterEquation::addDecay(Decay c) {
+void MasterEqn::addDecay(Decay c) {
   rhs->addDecay(c);
 }
