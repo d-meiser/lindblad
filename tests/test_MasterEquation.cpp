@@ -2,41 +2,37 @@
 #include <qsys.hpp>
 
 TEST(MasterEquation, Constructor) {
-  MasterEqnRhs rhs;
-  rhs.addCoupling(Coupling(1, 0, 1.0));
   std::vector<Amplitude> rhoInitial(4, 0);
   rhoInitial[0] = 1.0;
-  MasterEquation* meqn = new MasterEquation(2, &rhoInitial[0], &rhs);
+  MasterEquation* meqn = new MasterEquation(2, &rhoInitial[0]);
+  meqn->addCoupling(Coupling(1, 0, 1.0));
   EXPECT_TRUE(meqn != 0);
   delete meqn;
 }
 
 TEST(MasterEquation, GetTime) {
-  MasterEqnRhs rhs;
-  rhs.addCoupling(Coupling(1, 0, 1.0));
   std::vector<Amplitude> rhoInitial(4, 0);
   rhoInitial[0] = 1.0;
-  MasterEquation meqn(2, &rhoInitial[0], &rhs);
+  MasterEquation meqn(2, &rhoInitial[0]);
+  meqn.addCoupling(Coupling(1, 0, 1.0));
   EXPECT_FLOAT_EQ(0, meqn.getTime());
 }
 
 TEST(MasterEquation, TakeStep) {
-  MasterEqnRhs rhs;
-  rhs.addCoupling(Coupling(1, 0, 1.0));
   std::vector<Amplitude> rhoInitial(4, 0);
   rhoInitial[0] = 1.0;
-  MasterEquation meqn(2, &rhoInitial[0], &rhs);
+  MasterEquation meqn(2, &rhoInitial[0]);
+  meqn.addCoupling(Coupling(1, 0, 1.0));
   meqn.takeStep();
   EXPECT_LE(0, meqn.getTime());
 }
 
 TEST(MasterEquation, SpontaneousDecay) {
-  MasterEqnRhs rhs;
-  double gamma = 1.0;
-  rhs.addDecay(Decay(0, 1, gamma));
   std::vector<Amplitude> rhoInitial(4, 0);
   rhoInitial[3] = 1.0;
-  MasterEquation meqn(2, &rhoInitial[0], &rhs);
+  MasterEquation meqn(2, &rhoInitial[0]);
+  double gamma = 1.0;
+  meqn.addDecay(Decay(0, 1, gamma));
 
   while (meqn.getTime() < 2.0) {
     meqn.takeStep();
@@ -56,13 +52,12 @@ TEST(MasterEquation, SpontaneousDecay) {
 }
 
 TEST(MasterEquation, RabiOscillations) {
-  MasterEqnRhs rhs;
-  double g = 1.0;
-  rhs.addCoupling(Coupling(0, 1, g));
   std::vector<Amplitude> rhoInitial(4, 0);
   // Start in ground state
   rhoInitial[0] = 1.0;
-  MasterEquation meqn(2, &rhoInitial[0], &rhs);
+  MasterEquation meqn(2, &rhoInitial[0]);
+  double g = 1.0;
+  meqn.addCoupling(Coupling(0, 1, g));
 
   while (meqn.getTime() < 2.0) {
     meqn.takeStep();

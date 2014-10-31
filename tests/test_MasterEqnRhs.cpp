@@ -1,5 +1,5 @@
 #include <gtest/gtest.h>
-#include <qsys.hpp>
+#include <MasterEqnRhs.hpp>
 #include <testUtils.hpp>
 
 TEST(MasterEqnRhs, Constructor) {

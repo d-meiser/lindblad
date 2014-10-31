@@ -34,28 +34,21 @@ class Decay {
   double gamma;
 };
 
-class MasterEqnRhs {
- public:
-  void addCoupling(Coupling c);
-  void addDecay(Decay d);
-  void apply(int dim, const Amplitude *A, Amplitude *B) const;
-
- private:
-  std::vector<Coupling> couplings;
-  std::vector<Decay> decays;
-};
-
 class Integrator;
 struct MasterEqnRhsContext;
+class MasterEqnRhs;
 class MasterEquation {
  public:
-  MasterEquation(int dim, const Amplitude *A, const MasterEqnRhs *rhs);
+  MasterEquation(int dim, const Amplitude *A);
   ~MasterEquation();
+  void addCoupling(Coupling c);
+  void addDecay(Decay d);
   double getTime() const;
   void takeStep();
   const Amplitude* getState() const;
 
  private:
+  MasterEqnRhs *rhs;
   MasterEqnRhsContext *ctx;
   Integrator* integrator;
 };
