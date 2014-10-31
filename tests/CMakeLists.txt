@@ -5,7 +5,7 @@ set(TESTS
     test_Coupling
     test_Decay
     test_MasterEqnRhs
-    test_MasterEquation
+    test_MasterEqn
     test_Integrator
     test_RK4
    )
