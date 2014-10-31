@@ -44,37 +44,43 @@ static void applyRhs(double* x, double* y, double t, void* ctx) {
   meCtx->rhs->apply(meCtx->dim, (const Amplitude*) x, (Amplitude*) y);
 }
 
+struct MasterEqn::MasterEqnImpl {
+  MasterEqnImpl(int d, const Amplitude* A) {
+    ctx.dim = d;
+    ctx.rhs = &rhs;
+    integrator = new RK4(2 * d * d, 0, (const double *)A, &applyRhs, 1.0e-2);
+  }
+  ~MasterEqnImpl() { delete integrator; }
+  MasterEqnRhs rhs;
+  MasterEqnRhsContext ctx;
+  Integrator* integrator;
+};
+
 MasterEqn::MasterEqn(int d, const Amplitude *A)
      {
-  rhs = new MasterEqnRhs();
-  ctx = new MasterEqnRhsContext;
-  ctx->dim = d;
-  ctx->rhs = rhs;
-  integrator = new RK4(2 * d * d, 0, (const double *)A, &applyRhs, 1.0e-2);
+  impl = new MasterEqnImpl(d, A);
 }
 
 MasterEqn::~MasterEqn() {
-  delete rhs;
-  delete ctx;
-  delete integrator;
+  delete impl;
 }
 
 double MasterEqn::getTime() const {
-  return integrator->getTime();
+  return impl->integrator->getTime();
 }
 
 void MasterEqn::takeStep() {
-  integrator->takeStep(ctx);
+  impl->integrator->takeStep(&impl->ctx);
 }
 
 const Amplitude* MasterEqn::getState() const {
-  return (const Amplitude*) integrator->getState();
+  return (const Amplitude*) impl->integrator->getState();
 }
 
 void MasterEqn::addCoupling(Coupling c) {
-  rhs->addCoupling(c);
+  impl->rhs.addCoupling(c);
 }
 
 void MasterEqn::addDecay(Decay c) {
-  rhs->addDecay(c);
+  impl->rhs.addDecay(c);
 }

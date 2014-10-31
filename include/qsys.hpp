@@ -34,9 +34,6 @@ class Decay {
   double gamma;
 };
 
-class Integrator;
-struct MasterEqnRhsContext;
-class MasterEqnRhs;
 class MasterEqn {
  public:
   MasterEqn(int dim, const Amplitude *A);
@@ -48,9 +45,8 @@ class MasterEqn {
   const Amplitude* getState() const;
 
  private:
-  MasterEqnRhs *rhs;
-  MasterEqnRhsContext *ctx;
-  Integrator* integrator;
+  struct MasterEqnImpl;
+  MasterEqnImpl* impl;
 };
 
 #endif
