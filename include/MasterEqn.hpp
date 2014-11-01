@@ -13,9 +13,10 @@ class MasterEqn {
   void takeStep();
   const Amplitude* getState() const;
 
+  friend struct MasterEqnRhsContext;
  private:
-  struct MasterEqnImpl;
-  MasterEqnImpl* impl;
+  struct Impl;
+  Impl* impl;
 };
 
 #endif

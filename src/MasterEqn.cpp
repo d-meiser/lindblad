@@ -4,29 +4,39 @@
 
 struct MasterEqnRhsContext {
   int dim;
-  const MasterEqnRhs* rhs;
+  const MasterEqn::Impl* rhs;
 };
 
-static void applyRhs(double* x, double* y, double t, void* ctx) {
-  MasterEqnRhsContext* meCtx = (MasterEqnRhsContext *)ctx;
-  meCtx->rhs->apply(meCtx->dim, (const Amplitude*) x, (Amplitude*) y);
-}
+static void applyRhs(double* x, double* y, double t, void* ctx);
 
-struct MasterEqn::MasterEqnImpl {
-  MasterEqnImpl(int d, const Amplitude* A) {
+struct MasterEqn::Impl {
+  Impl(int d, const Amplitude* A) {
     ctx.dim = d;
-    ctx.rhs = &rhs;
+    ctx.rhs = this;
     integrator = new RK4(2 * d * d, 0, (const double *)A, &applyRhs, 1.0e-2);
   }
-  ~MasterEqnImpl() { delete integrator; }
-  MasterEqnRhs rhs;
+  ~Impl() { delete integrator; }
+  void apply(int dim, const Amplitude* A, Amplitude* B) const {
+    std::fill(B, B + dim * dim, 0);
+    for (std::vector<Coupling>::const_iterator c = couplings.begin();
+         c != couplings.end(); ++c) {
+      c->apply(dim, A, B);
+    }
+    for (std::vector<Decay>::const_iterator d = decays.begin();
+         d != decays.end(); ++d) {
+      d->apply(dim, A, B);
+    }
+  }
+
+  std::vector<Coupling> couplings;
+  std::vector<Decay> decays;
   MasterEqnRhsContext ctx;
   Integrator* integrator;
 };
 
 MasterEqn::MasterEqn(int d, const Amplitude *A)
      {
-  impl = new MasterEqnImpl(d, A);
+  impl = new Impl(d, A);
 }
 
 MasterEqn::~MasterEqn() {
@@ -46,9 +56,15 @@ const Amplitude* MasterEqn::getState() const {
 }
 
 void MasterEqn::addCoupling(int m, int n, Amplitude a) {
-  impl->rhs.addCoupling(Coupling(m, n, a));
+  impl->couplings.push_back(Coupling(m, n, a));
 }
 
 void MasterEqn::addDecay(int into, int outOf, double gamma) {
-  impl->rhs.addDecay(Decay(into, outOf, gamma));
+  impl->decays.push_back(Decay(into, outOf, gamma));
 }
+
+static void applyRhs(double* x, double* y, double t, void* ctx) {
+  MasterEqnRhsContext* meCtx = (MasterEqnRhsContext*)ctx;
+  meCtx->rhs->apply(meCtx->dim, (const Amplitude*)x, (Amplitude*)y);
+}
+
