@@ -12,3 +12,6 @@ const double* Integrator::getState() const {
   return getCurrentState();
 }
 
+Integrator* Integrator::copy() const {
+  makeCopy();
+}

@@ -15,6 +15,7 @@ class Integrator {
   void evaluateRHS(double* in, double* out, double t, void* ctx) {
     rhs(in, out, t, ctx);
   }
+  Integrator* copy() const;
 
  private:
   int d;
@@ -26,6 +27,7 @@ class Integrator {
                                    double t) = 0;
   virtual const double* getCurrentState() const = 0;
   virtual void advance(double* t, void* ctx) = 0;
+  virtual Integrator* makeCopy() const = 0;
 };
 
 #endif

@@ -33,3 +33,7 @@ void RK4::advance(double* t, void* ctx) {
   }
   *t += dt;
 }
+
+RK4* RK4::makeCopy() const {
+  return new RK4(*this);
+}

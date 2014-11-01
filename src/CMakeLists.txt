@@ -3,7 +3,6 @@ add_library(lindblad
     MasterEqn.cpp
     Integrator.cpp
     RK4.cpp
-    MasterEqnRhs.cpp
     SparseApply.cpp
     Coupling.cpp
     Decay.cpp

@@ -15,6 +15,13 @@ struct MasterEqn::Impl {
     ctx.rhs = this;
     integrator = new RK4(2 * d * d, 0, (const double *)A, &applyRhs, 1.0e-2);
   }
+  Impl(const Impl& other)
+      : couplings(other.couplings),
+        decays(other.decays),
+        ctx(other.ctx),
+        integrator(other.integrator->copy()) {
+    ctx.rhs = this;
+  }
   ~Impl() { delete integrator; }
   void apply(int dim, const Amplitude* A, Amplitude* B) const {
     std::fill(B, B + dim * dim, 0);
@@ -34,9 +41,17 @@ struct MasterEqn::Impl {
   Integrator* integrator;
 };
 
-MasterEqn::MasterEqn(int d, const Amplitude *A)
-     {
-  impl = new Impl(d, A);
+MasterEqn::MasterEqn(int d, const Amplitude* A) { impl = new Impl(d, A); }
+
+MasterEqn::MasterEqn(const MasterEqn& other)
+    : impl(new MasterEqn::Impl(*other.impl)) {}
+
+MasterEqn& MasterEqn::operator=(const MasterEqn& rhs) {
+  if (this != &rhs) {
+    delete impl;
+    impl = new MasterEqn::Impl(*rhs.impl);
+  }
+  return *this;
 }
 
 MasterEqn::~MasterEqn() {
@@ -62,6 +77,11 @@ void MasterEqn::addCoupling(int m, int n, Amplitude a) {
 void MasterEqn::addDecay(int into, int outOf, double gamma) {
   impl->decays.push_back(Decay(into, outOf, gamma));
 }
+
+void MasterEqn::apply(int dim, const Amplitude* A, Amplitude *B) const {
+  impl->apply(dim, A, B);
+}
+
 
 static void applyRhs(double* x, double* y, double t, void* ctx) {
   MasterEqnRhsContext* meCtx = (MasterEqnRhsContext*)ctx;

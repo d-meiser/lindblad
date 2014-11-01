@@ -54,7 +54,7 @@ template <typename T>
 void CheckLindbladTraceProperty(T op, int dim) {
   std::vector<Amplitude> A = hermitianMatrix(dim);
   std::vector<Amplitude> B(dim * dim, 0);
-  op.apply(dim, &A[0], &B[0]);
+  //op.apply(dim, &A[0], &B[0]);
   Amplitude trace;
   for (int i = 0; i < dim; ++i) {
     trace += B[i + i * dim];

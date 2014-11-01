@@ -27,6 +27,9 @@ class MockEuler : public Integrator {
   std::vector<double> y;
   std::vector<double> k1;
   double dt;
+  virtual MockEuler* makeCopy() const {
+    return new MockEuler(*this);
+  }
 };
 
 struct FooCtx {
