@@ -1,5 +1,5 @@
-#ifndef LINDBLAD_HPP
-#define LINDBLAD_HPP
+#ifndef MASTEREQN_HPP
+#define MASTEREQN_HPP
 
 #include <Amplitude.hpp>
 

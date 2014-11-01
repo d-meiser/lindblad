@@ -1,4 +1,5 @@
-#include <Lindblad.hpp>
+#include <MasterEqn.hpp>
+#include <Amplitude.hpp>
 #include <cmath>
 #include <vector>
 

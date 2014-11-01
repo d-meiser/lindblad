@@ -1,4 +1,4 @@
-#include <Lindblad.hpp>
+#include <MasterEqn.hpp>
 #include <RK4.hpp>
 #include <MasterEqnRhs.hpp>
 

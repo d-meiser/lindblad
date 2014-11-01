@@ -1,5 +1,5 @@
 #include <gtest/gtest.h>
-#include <Lindblad.hpp>
+#include <MasterEqn.hpp>
 
 TEST(MasterEqn, Constructor) {
   std::vector<Amplitude> rhoInitial(4, 0);

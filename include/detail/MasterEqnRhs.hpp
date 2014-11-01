@@ -1,7 +1,7 @@
 #ifndef MASTER_EQN_RHS_HPP
 #define MASTER_EQN_RHS_HPP
 
-#include <Lindblad.hpp>
+#include <MasterEqn.hpp>
 #include <Coupling.hpp>
 #include <Decay.hpp>
 #include <vector>
