@@ -1,4 +1,5 @@
 #include <Lindblad.hpp>
+#include <vector>
 
 static const int numIters = 10 * 1000;
 
@@ -8,7 +9,7 @@ int main() {
   rhoInitial[0] = 1.0;
   MasterEqn meqn(2, &rhoInitial[0]);
   double g = 1.0;
-  meqn.addCoupling(Coupling(0, 1, g));
+  meqn.addCoupling(0, 1, g);
   for (int i = 0; i < numIters; ++i) {
     meqn.takeStep();
   }

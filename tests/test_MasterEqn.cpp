@@ -5,7 +5,7 @@ TEST(MasterEqn, Constructor) {
   std::vector<Amplitude> rhoInitial(4, 0);
   rhoInitial[0] = 1.0;
   MasterEqn* meqn = new MasterEqn(2, &rhoInitial[0]);
-  meqn->addCoupling(Coupling(1, 0, 1.0));
+  meqn->addCoupling(1, 0, 1.0);
   EXPECT_TRUE(meqn != 0);
   delete meqn;
 }
@@ -14,7 +14,7 @@ TEST(MasterEqn, GetTime) {
   std::vector<Amplitude> rhoInitial(4, 0);
   rhoInitial[0] = 1.0;
   MasterEqn meqn(2, &rhoInitial[0]);
-  meqn.addCoupling(Coupling(1, 0, 1.0));
+  meqn.addCoupling(1, 0, 1.0);
   EXPECT_FLOAT_EQ(0, meqn.getTime());
 }
 
@@ -22,7 +22,7 @@ TEST(MasterEqn, TakeStep) {
   std::vector<Amplitude> rhoInitial(4, 0);
   rhoInitial[0] = 1.0;
   MasterEqn meqn(2, &rhoInitial[0]);
-  meqn.addCoupling(Coupling(1, 0, 1.0));
+  meqn.addCoupling(1, 0, 1.0);
   meqn.takeStep();
   EXPECT_LE(0, meqn.getTime());
 }
@@ -32,7 +32,7 @@ TEST(MasterEqn, SpontaneousDecay) {
   rhoInitial[3] = 1.0;
   MasterEqn meqn(2, &rhoInitial[0]);
   double gamma = 1.0;
-  meqn.addDecay(Decay(0, 1, gamma));
+  meqn.addDecay(0, 1, gamma);
 
   while (meqn.getTime() < 2.0) {
     meqn.takeStep();
@@ -57,7 +57,7 @@ TEST(MasterEqn, RabiOscillations) {
   rhoInitial[0] = 1.0;
   MasterEqn meqn(2, &rhoInitial[0]);
   double g = 1.0;
-  meqn.addCoupling(Coupling(0, 1, g));
+  meqn.addCoupling(0, 1, g);
 
   while (meqn.getTime() < 2.0) {
     meqn.takeStep();

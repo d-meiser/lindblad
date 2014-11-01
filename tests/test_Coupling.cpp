@@ -1,5 +1,5 @@
 #include <gtest/gtest.h>
-#include <Lindblad.hpp>
+#include <Coupling.hpp>
 #include <vector>
 #include <testUtils.hpp>
 

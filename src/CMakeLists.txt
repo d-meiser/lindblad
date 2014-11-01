@@ -5,5 +5,7 @@ add_library(lindblad
     RK4.cpp
     MasterEqnRhs.cpp
     SparseApply.cpp
+    Coupling.cpp
+    Decay.cpp
     )
 

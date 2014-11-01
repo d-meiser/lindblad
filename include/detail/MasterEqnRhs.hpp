@@ -2,6 +2,9 @@
 #define MASTER_EQN_RHS_HPP
 
 #include <Lindblad.hpp>
+#include <Coupling.hpp>
+#include <Decay.hpp>
+#include <vector>
 
 class MasterEqnRhs {
  public:

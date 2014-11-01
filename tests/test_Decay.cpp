@@ -1,5 +1,5 @@
 #include <gtest/gtest.h>
-#include <Lindblad.hpp>
+#include <Decay.hpp>
 #include <testUtils.hpp>
 
 TEST(Decay, Constructor) {

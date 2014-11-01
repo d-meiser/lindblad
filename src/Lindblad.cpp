@@ -1,21 +1,6 @@
 #include <Lindblad.hpp>
 #include <RK4.hpp>
 #include <MasterEqnRhs.hpp>
-#include <SparseApply.hpp>
-
-void Coupling::apply(int dim, const Amplitude *A, Amplitude *B) const {
-  static const Amplitude I(0, 1);
-  leftApply(m, n, 0.5 * g / I, dim, A, B);
-  leftApply(n, m, 0.5 * conj(g) / I, dim, A, B);
-  rightApply(m, n, -0.5 * g / I, dim, A, B);
-  rightApply(n, m, -0.5 * conj(g) / I, dim, A, B);
-}
-
-void Decay::apply(int dim, const Amplitude *A, Amplitude *B) const {
-  leftApply(outof, outof, -0.5 * gamma, dim, A, B);
-  rightApply(outof, outof, -0.5 * gamma, dim, A, B);
-  B[into + into * dim] += gamma * A[outof + outof * dim];
-}
 
 struct MasterEqnRhsContext {
   int dim;
@@ -60,10 +45,10 @@ const Amplitude* MasterEqn::getState() const {
   return (const Amplitude*) impl->integrator->getState();
 }
 
-void MasterEqn::addCoupling(Coupling c) {
-  impl->rhs.addCoupling(c);
+void MasterEqn::addCoupling(int m, int n, Amplitude a) {
+  impl->rhs.addCoupling(Coupling(m, n, a));
 }
 
-void MasterEqn::addDecay(Decay c) {
-  impl->rhs.addDecay(c);
+void MasterEqn::addDecay(int into, int outOf, double gamma) {
+  impl->rhs.addDecay(Decay(into, outOf, gamma));
 }
