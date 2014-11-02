@@ -32,17 +32,19 @@ make install
 
 ```
 #include <Lindblad.hpp>
+#include <vector>
 
 static const int numIters = 1000;
 
 int main() {
-  std::vector<Amplitude> rhoInitial(4, 0);
-  rhoInitial[0] = 1.0;
-  MasterEqn meqn(2, &rhoInitial[0]);
+  MasterEqn meqn(2);
   double g = 1.0;
   meqn.addCoupling(0, 1, g);
+  std::vector<Amplitude> rhoInitial(4, 0);
+  rhoInitial[0] = 1.0;
+  MasterEqnEvolution evolution(meqn, &rhoInitial[0]);
   for (int i = 0; i < numIters; ++i) {
-    meqn.takeStep();
+    evolution.takeStep();
   }
   return 0;
 }
