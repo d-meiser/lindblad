@@ -1,30 +1,21 @@
 #include <MasterEqn.hpp>
-#include <RK4.hpp>
 #include <Coupling.hpp>
 #include <Decay.hpp>
-
-struct MasterEqnRhsContext {
-  int dim;
-  const MasterEqn::Impl* rhs;
-};
-
-static void applyRhs(double* x, double* y, double t, void* ctx);
+#include <vector>
 
 struct MasterEqn::Impl {
-  Impl(int d, const Amplitude* A) {
-    dim = d;
-    ctx.dim = d;
-    ctx.rhs = this;
-    integrator = new RK4(2 * d * d, 0, (const double *)A, &applyRhs, 1.0e-2);
-  }
+  Impl(int d) : dim(d) {}
   Impl(const Impl& other)
-      : couplings(other.couplings),
-        decays(other.decays),
-        ctx(other.ctx),
-        integrator(other.integrator->copy()) {
-    ctx.rhs = this;
+      : dim(other.dim), couplings(other.couplings), decays(other.decays) {}
+  Impl& operator=(const Impl& other) {
+    if (this != &other) {
+      dim = other.dim;
+      couplings = other.couplings;
+      decays = other.decays;
+    }
+    return *this;
   }
-  ~Impl() { delete integrator; }
+  ~Impl() {}
   void apply(int dim, const Amplitude* A, Amplitude* B) const {
     std::fill(B, B + dim * dim, 0);
     for (std::vector<Coupling>::const_iterator c = couplings.begin();
@@ -41,11 +32,9 @@ struct MasterEqn::Impl {
   int dim;
   std::vector<Coupling> couplings;
   std::vector<Decay> decays;
-  MasterEqnRhsContext ctx;
-  Integrator* integrator;
 };
 
-MasterEqn::MasterEqn(int d, const Amplitude* A) { impl = new Impl(d, A); }
+MasterEqn::MasterEqn(int d) { impl = new Impl(d); }
 
 MasterEqn::MasterEqn(const MasterEqn& other)
     : impl(new MasterEqn::Impl(*other.impl)) {}
@@ -62,18 +51,6 @@ MasterEqn::~MasterEqn() {
   delete impl;
 }
 
-double MasterEqn::getTime() const {
-  return impl->integrator->getTime();
-}
-
-void MasterEqn::takeStep() {
-  impl->integrator->takeStep(&impl->ctx);
-}
-
-const Amplitude* MasterEqn::getState() const {
-  return (const Amplitude*) impl->integrator->getState();
-}
-
 void MasterEqn::addCoupling(int m, int n, Amplitude a) {
   impl->couplings.push_back(Coupling(m, n, a));
 }
@@ -88,10 +65,5 @@ void MasterEqn::apply(int dim, const Amplitude* A, Amplitude *B) const {
 
 int MasterEqn::getDim() const {
   return impl->getDim();
-}
-
-static void applyRhs(double* x, double* y, double t, void* ctx) {
-  MasterEqnRhsContext* meCtx = (MasterEqnRhsContext*)ctx;
-  meCtx->rhs->apply(meCtx->dim, (const Amplitude*)x, (Amplitude*)y);
 }
 

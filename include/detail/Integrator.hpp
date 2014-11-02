@@ -12,9 +12,7 @@ class Integrator {
   double getTime() const { return t; }
   const double* getState() const;
   size_t getDim() const { return d; }
-  void evaluateRHS(double* in, double* out, double t, void* ctx) {
-    rhs(in, out, t, ctx);
-  }
+  void evaluateRHS(double* in, double* out, double t, void* ctx);
   Integrator* copy() const;
 
  private:

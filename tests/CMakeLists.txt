@@ -5,6 +5,7 @@ set(TESTS
     test_Coupling
     test_Decay
     test_MasterEqn
+    test_MasterEqnEvolution
     test_Integrator
     test_RK4
    )
