@@ -12,6 +12,7 @@ static void applyRhs(double* x, double* y, double t, void* ctx);
 
 struct MasterEqn::Impl {
   Impl(int d, const Amplitude* A) {
+    dim = d;
     ctx.dim = d;
     ctx.rhs = this;
     integrator = new RK4(2 * d * d, 0, (const double *)A, &applyRhs, 1.0e-2);
@@ -35,7 +36,9 @@ struct MasterEqn::Impl {
       d->apply(dim, A, B);
     }
   }
+  int getDim() const { return dim; }
 
+  int dim;
   std::vector<Coupling> couplings;
   std::vector<Decay> decays;
   MasterEqnRhsContext ctx;
@@ -83,6 +86,9 @@ void MasterEqn::apply(int dim, const Amplitude* A, Amplitude *B) const {
   impl->apply(dim, A, B);
 }
 
+int MasterEqn::getDim() const {
+  return impl->getDim();
+}
 
 static void applyRhs(double* x, double* y, double t, void* ctx) {
   MasterEqnRhsContext* meCtx = (MasterEqnRhsContext*)ctx;

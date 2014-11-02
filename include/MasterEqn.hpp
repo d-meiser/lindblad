@@ -15,6 +15,7 @@ class MasterEqn {
   void takeStep();
   const Amplitude* getState() const;
   void apply(int dim, const Amplitude* A, Amplitude* B) const;
+  int getDim() const;
 
   friend struct MasterEqnRhsContext;
  private:
