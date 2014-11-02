@@ -1,6 +1,4 @@
-#include <MasterEqn.hpp>
-#include <MasterEqnEvolution.hpp>
-#include <Amplitude.hpp>
+#include <Lindblad.hpp>
 #include <vector>
 
 static const int numIters = 10 * 1000;

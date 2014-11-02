@@ -1,6 +1,4 @@
-#include <MasterEqn.hpp>
-#include <MasterEqnEvolution.hpp>
-#include <Amplitude.hpp>
+#include <Lindblad.hpp>
 #include <cmath>
 #include <vector>
 
