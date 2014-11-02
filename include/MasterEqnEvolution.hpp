@@ -10,6 +10,8 @@ class MasterEqnEvolution {
   double getTime() const;
   void takeStep();
   const Amplitude* getState() const;
+  void setTimeStep(double dt);
+  double getTimeStep() const;
 
   friend struct MasterEqnEvolutionContext;
 

@@ -17,12 +17,12 @@ class MockEuler : public Integrator {
   virtual const double* getCurrentState() const {
     return &y[0];
   }
-  virtual void advance(double* t, void* ctx) {
+  virtual void advance(double* t, double* dt, void* ctx) {
     evaluateRHS(&y[0], &k1[0], *t, ctx);
     for (size_t i = 0; i < y.size(); ++i) {
-      y[i] += dt * k1[i];
+      y[i] += *dt * k1[i];
     }
-    *t += dt;
+    *t += *dt;
   }
   std::vector<double> y;
   std::vector<double> k1;
@@ -75,4 +75,9 @@ TEST(Integrator, EvaluateRHS) {
   }
 }
 
-
+TEST(Integrator, GetTimeStep) {
+  MockEuler integ(0, 0, 0, &foo);
+  integ.setTimeStep(1.0e-5);
+  double dt = integ.getTimeStep();
+  EXPECT_FLOAT_EQ(1.0e-5, dt);
+}

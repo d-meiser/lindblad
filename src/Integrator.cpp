@@ -5,7 +5,7 @@ void Integrator::takeStep(void* ctx) {
     buildIntegratorData(d, state, t);
     engineInitialized = true;
   }
-  advance(&t, ctx);
+  advance(&t, &dt, ctx);
 }
 
 const double* Integrator::getState() const {

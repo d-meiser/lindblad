@@ -13,7 +13,7 @@ void foo(double* x, double* y, double t, void* ctx) {
 }
 
 TEST(RK4, Constructor) {
-  RK4 rk4(10, 0, 0, &foo, 1.0e-5);
+  RK4 rk4(10, 0, 0, &foo);
 }
 
 struct DecayCtx {
@@ -28,26 +28,26 @@ TEST(RK4, Exp) {
   static const double gamma = 6.3;
   struct DecayCtx ctx = {gamma};
   double x = 1.7;
-  static const double dt = 1.0e-3;
-  RK4 rk4(1, 0, &x, &exponentialDecay, dt);
+  RK4 rk4(1, 0, &x, &exponentialDecay);
   rk4.takeStep(&ctx);
   static const double EPS = 1.0e-10;
-  EXPECT_TRUE(*rk4.getState() > x * exp(-gamma * dt) - EPS);
-  EXPECT_TRUE(*rk4.getState() < x * exp(-gamma * dt) + EPS);
+  double t = rk4.getTime();
+  EXPECT_GE(*rk4.getState(), x * exp(-gamma * t) - EPS);
+  EXPECT_LE(*rk4.getState(), x * exp(-gamma * t) + EPS);
 }
 
 TEST(RK4, ExpMultipleSteps) {
   static const double gamma = 6.3;
   struct DecayCtx ctx = {gamma};
   double x = 1.7;
-  static const double dt = 1.0e-3;
-  RK4 rk4(1, 0, &x, &exponentialDecay, dt);
+  RK4 rk4(1, 0, &x, &exponentialDecay);
   static const int N = 10;
   for (int i = 0; i < N; ++i) {
     rk4.takeStep(&ctx);
   }
   static const double EPS = 1.0e-10;
-  EXPECT_TRUE(*rk4.getState() > x * exp(-gamma * N * dt) - EPS);
-  EXPECT_TRUE(*rk4.getState() < x * exp(-gamma * N * dt) + EPS);
+  double t = rk4.getTime();
+  EXPECT_GE(*rk4.getState(), x * exp(-gamma * t) - EPS);
+  EXPECT_LE(*rk4.getState(), x * exp(-gamma * t) + EPS);
 }
 
