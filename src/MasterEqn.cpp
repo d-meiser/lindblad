@@ -1,6 +1,7 @@
 #include <MasterEqn.hpp>
 #include <RK4.hpp>
-#include <MasterEqnRhs.hpp>
+#include <Coupling.hpp>
+#include <Decay.hpp>
 
 struct MasterEqnRhsContext {
   int dim;
