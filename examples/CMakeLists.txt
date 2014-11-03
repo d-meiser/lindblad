@@ -7,3 +7,6 @@ foreach(e ${EXAMPLES})
   add_test(${e} ${e})
 endforeach()
 
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/plotRabiOscillationsData.py
+    ${CMAKE_CURRENT_BINARY_DIR}/plotRabiOscillationsData.py)
+

@@ -51,5 +51,5 @@ int main() {
 void dumpState(const MasterEqnEvolution& evolution) {
   std::cout << evolution.getTime() << " ";
   const Amplitude* state = evolution.getState();
-  std::cout << state[0].real() << "\n";
+  std::cout << state[0].real() << " " << abs(state[1]) << "\n";
 }
