@@ -19,10 +19,6 @@ with lindblad.  If not, see <http://www.gnu.org/licenses/>.
 #include <Integrator.hpp>
 
 void Integrator::takeStep(void* ctx) {
-  if (!engineInitialized) {
-    buildIntegratorData(d, state, t);
-    engineInitialized = true;
-  }
   advance(&t, &dt, ctx);
 }
 

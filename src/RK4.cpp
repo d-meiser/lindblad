@@ -19,7 +19,9 @@ with lindblad.  If not, see <http://www.gnu.org/licenses/>.
 #include <RK4.hpp>
 #include <iostream>
 
-void RK4::buildIntegratorData(size_t dim, const double* state, double t) {
+RK4::RK4(int dim, double time, const double* state,
+      void (*f)(double* x, double* y, double t, void* ctx))
+    : Integrator(dim, time, state, f) {
   k1.resize(dim);
   k2.resize(dim);
   k3.resize(dim);

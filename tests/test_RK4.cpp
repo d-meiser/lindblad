@@ -31,7 +31,8 @@ void foo(double* x, double* y, double t, void* ctx) {
 }
 
 TEST(RK4, Constructor) {
-  RK4 rk4(10, 0, 0, &foo);
+  std::vector<double> x(10);
+  RK4 rk4(10, 0, &x[0], &foo);
 }
 
 struct DecayCtx {

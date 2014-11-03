@@ -25,13 +25,12 @@ class MockEuler : public Integrator {
  public:
   MockEuler(int dim, double time, double* state,
             void (*f)(double* x, double* y, double t, void* ctx))
-      : Integrator(dim, time, state, f), y(dim), dt(1.0e-6) {}
+      : Integrator(dim, time, state, f), y(dim), dt(1.0e-6) {
+      y.resize(dim);
+      std::copy(state, state + dim, y.begin());
+      k1.resize(dim);
+      }
  private:
-  virtual void buildIntegratorData(size_t dim, const double* state, double t) {
-    k1.resize(dim);
-    y.resize(dim);
-    std::copy(state, state + dim, y.begin());
-  }
   virtual const double* getCurrentState() const {
     return &y[0];
   }
@@ -61,7 +60,8 @@ void foo(double* x, double* y, double t, void* ctx) {
 }
 
 TEST(Integrator, Constructor) {
-  MockEuler integ(10, 0, 0, &foo);
+  std::vector<double> y(10);
+  MockEuler integ(10, 0, &y[0], &foo);
 }
 
 TEST(Integrator, TakeStep) {
