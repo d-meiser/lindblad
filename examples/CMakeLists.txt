@@ -9,6 +9,7 @@ endforeach()
 
 set(PETSC_EXAMPLES
     SteadyStateEIT
+    SteadyStateEIA
     SteadyState)
 find_path(PETSC_INCLUDE_DIR petsc.h ${PETSC_DIR}/include)
 message(STATUS "PETSC_INCLUDE_DIR==${PETSC_INCLUDE_DIR}")
