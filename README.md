@@ -50,6 +50,15 @@ int main() {
 }
 ```
 
+## Overview of the source code
+
+- [include](include): Public API of the lindblad library
+- [examples](examples): Some examples.
+- [include/detail](include/detail): Internal headers.
+- [tests](tests): Tests for lindblad.
+- [src](src): Implementation files of the library.
+
+
 ## Questions, comments, and issues
 
 Questions, comments, and issues should be reported via the [github issue
