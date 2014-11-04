@@ -18,7 +18,7 @@ int mult(Mat A, Vec x, Vec y) {
   ierr = MatShellGetContext(A, (void*)&meqn);CHKERRQ(ierr);
   ierr = VecGetArrayRead(x, &xarr);CHKERRQ(ierr);
   ierr = VecGetArray(y, &yarr);CHKERRQ(ierr);
-  meqn->apply(meqn->getDim(), (const Amplitude*)xarr, (Amplitude*)yarr);
+  meqn->apply((const Amplitude*)xarr, (Amplitude*)yarr);
   ierr = VecRestoreArrayRead(x, &xarr);CHKERRQ(ierr);
   ierr = VecRestoreArray(y, &yarr);CHKERRQ(ierr);
   PetscFunctionReturn(0);
