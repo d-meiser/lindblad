@@ -76,7 +76,6 @@ double MasterEqnEvolution::getTimeStep() const {
 
 static void applyRhs(double* x, double* y, double t, void* ctx) {
   MasterEqnEvolutionContext* meCtx = (MasterEqnEvolutionContext*)ctx;
-  meCtx->impl->meqn.apply(meCtx->impl->meqn.getDim(), (const Amplitude*)x,
-                          (Amplitude*)y);
+  meCtx->impl->meqn.apply((const Amplitude*)x, (Amplitude*)y);
 }
 

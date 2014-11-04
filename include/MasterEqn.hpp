@@ -29,7 +29,7 @@ class MasterEqn {
   ~MasterEqn();
   void addCoupling(int m, int n, Amplitude a);
   void addDecay(int into, int outOf, double gamma);
-  void apply(int dim, const Amplitude* A, Amplitude* B) const;
+  void apply(const Amplitude* A, Amplitude* B) const;
   int getDim() const;
 
  private:

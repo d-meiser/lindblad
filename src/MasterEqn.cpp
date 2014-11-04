@@ -34,7 +34,7 @@ struct MasterEqn::Impl {
     return *this;
   }
   ~Impl() {}
-  void apply(int dim, const Amplitude* A, Amplitude* B) const {
+  void apply(const Amplitude* A, Amplitude* B) const {
     std::fill(B, B + dim * dim, 0);
     for (std::vector<Coupling>::const_iterator c = couplings.begin();
          c != couplings.end(); ++c) {
@@ -77,8 +77,8 @@ void MasterEqn::addDecay(int into, int outOf, double gamma) {
   impl->decays.push_back(Decay(into, outOf, gamma));
 }
 
-void MasterEqn::apply(int dim, const Amplitude* A, Amplitude *B) const {
-  impl->apply(dim, A, B);
+void MasterEqn::apply(const Amplitude* A, Amplitude *B) const {
+  impl->apply(A, B);
 }
 
 int MasterEqn::getDim() const {

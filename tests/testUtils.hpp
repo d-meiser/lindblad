@@ -23,6 +23,7 @@ with lindblad.  If not, see <http://www.gnu.org/licenses/>.
 #include <cstdlib>
 #include <algorithm>
 #include <vector>
+#include <MasterEqn.hpp>
 
 template <typename T>
 void MY_EXPECT_EQ(T a, T b, size_t i) {
@@ -69,10 +70,22 @@ std::vector<Amplitude> hermitianMatrix(int dim) {
 }
 
 template <typename T>
-void CheckLindbladTraceProperty(T op, int dim) {
+void CheckLindbladTraceProperty(const T& op, int dim) {
   std::vector<Amplitude> A = hermitianMatrix(dim);
   std::vector<Amplitude> B(dim * dim, 0);
-  //op.apply(dim, &A[0], &B[0]);
+  op.apply(dim, &A[0], &B[0]);
+  Amplitude trace;
+  for (int i = 0; i < dim; ++i) {
+    trace += B[i + i * dim];
+  }
+  EXPECT_TRUE(abs(trace) < 1.0e-12);
+}
+
+template <>
+void CheckLindbladTraceProperty(const MasterEqn& op, int dim) {
+  std::vector<Amplitude> A = hermitianMatrix(dim);
+  std::vector<Amplitude> B(dim * dim, 0);
+  op.apply(&A[0], &B[0]);
   Amplitude trace;
   for (int i = 0; i < dim; ++i) {
     trace += B[i + i * dim];
@@ -81,10 +94,27 @@ void CheckLindbladTraceProperty(T op, int dim) {
 }
 
 template <typename T>
-void CheckLindbladHermiticityProperty(T op, int dim) {
+void CheckLindbladHermiticityProperty(const T& op, int dim) {
   std::vector<Amplitude> A = hermitianMatrix(dim);
   std::vector<Amplitude> B(dim * dim, 0);
   op.apply(dim, &A[0], &B[0]);
+  for (int i = 0; i < dim; ++i) {
+    for (int j = 0; j <= i; ++j) {
+      Amplitude bij = B[i * dim + j];
+      Amplitude bji = B[j * dim + i];
+      EXPECT_FLOAT_EQ(bij.real(), bji.real()) << "(i,j) == (" << i << "," << j
+                                              << ") [real]";
+      EXPECT_FLOAT_EQ(bij.imag(), -bji.imag()) << "(i,j) == (" << i << "," << j
+                                              << ") [imag]";
+    }
+  }
+}
+
+template <>
+void CheckLindbladHermiticityProperty(const MasterEqn& op, int dim) {
+  std::vector<Amplitude> A = hermitianMatrix(dim);
+  std::vector<Amplitude> B(dim * dim, 0);
+  op.apply(&A[0], &B[0]);
   for (int i = 0; i < dim; ++i) {
     for (int j = 0; j <= i; ++j) {
       Amplitude bij = B[i * dim + j];
