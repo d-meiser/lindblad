@@ -11,6 +11,7 @@ set(PETSC_EXAMPLES
     SteadyStateEIT
     SteadyStateEIA
     SteadyState)
+find_package(DL)
 find_path(PETSC_INCLUDE_DIR petsc.h ${PETSC_DIR}/include)
 message(STATUS "PETSC_INCLUDE_DIR==${PETSC_INCLUDE_DIR}")
 find_library(PETSC_LIBS petsc ${PETSC_DIR}/lib)
@@ -22,7 +23,7 @@ endif()
 if(PETSC_FOUND)
 foreach(e ${PETSC_EXAMPLES})
   add_executable(${e} ${e}.cpp)
-  target_link_libraries(${e} lindblad ${PETSC_LIBS} lapack blas pthread)
+  target_link_libraries(${e} lindblad ${PETSC_LIBS} lapack blas pthread ${DL_LIBRARIES})
   add_test(${e} ${e} -pc_type none)
 endforeach()
 endif()

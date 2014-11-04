@@ -1,6 +1,7 @@
 cmake_minimum_required(VERSION 2.6.2)
 project(LINDBLAD)
 enable_testing()
+set(CMAKE_MODULE_PATH "${CMAKE_MODULE_PATH};${PROJECT_SOURCE_DIR}/cmake")
 
 option(LINDBLAD_BUILD_TESTS "Whether to build tests" OFF)
 
