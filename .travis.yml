@@ -3,10 +3,11 @@ compiler:
   - g++
 before_install:
   - sh ./utilities/download_gtest.sh
+  - sh ./utilities/get_petsc.sh
 script:
   - mkdir -p build
   - cd build
-  - cmake -DLINDBLAD_BUILD_TESTS=ON ..
+  - cmake -DLINDBLAD_BUILD_TESTS=ON -DPETSC_DIR=../petsc-cpucmplx ..
   - make
   - ctest --output-on-failure
   - rm -rf *
