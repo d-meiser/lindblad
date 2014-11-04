@@ -13,7 +13,7 @@ PETSC_ARCH=cpucmplx-rel PETSC_DIR=`pwd` ./configure \
   --with-pthread=0 \
   --with-mpiuni-fortran-binding=0 \
   --with-fortran-interfaces
-make PETSC_DIR=/home/dmeiser/Documents/misc/qsys/build/petsc-3.5.2 PETSC_ARCH=cpucmplx-rel all
-make PETSC_DIR=/home/dmeiser/Documents/misc/qsys/build/petsc-3.5.2 PETSC_ARCH=cpucmplx-rel install
+make PETSC_DIR=`pwd` PETSC_ARCH=cpucmplx-rel all
+make PETSC_DIR=`pwd` PETSC_ARCH=cpucmplx-rel install
 cd -
 
