@@ -3,6 +3,7 @@ compiler:
   - g++
 before_install:
   - sh ./utilities/download_gtest.sh
+  - sudo apt-get install libblas-dev libatlas-dev liblapack-dev
   - sh ./utilities/get_petsc.sh
 script:
   - mkdir -p build
