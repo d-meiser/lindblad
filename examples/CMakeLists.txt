@@ -23,7 +23,7 @@ if(PETSC_FOUND)
 foreach(e ${PETSC_EXAMPLES})
   add_executable(${e} ${e}.cpp)
   target_link_libraries(${e} lindblad ${PETSC_LIBS} lapack blas pthread)
-  add_test(${e} ${e})
+  add_test(${e} ${e} -pc_type none)
 endforeach()
 endif()
 
