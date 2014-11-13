@@ -34,7 +34,7 @@ int main(int argn, char **argv) {
   Mat            A;
   PetscInt       i, m, n;
   PetscErrorCode ierr;
-  PetscReal      OmegaR, OmegaB, Delta, gamma;
+  PetscReal      OmegaR, OmegaB, Delta, gamma, deltaB, Gamma;
   MasterEqn      meqn(N);
   PetscScalar    *xarr, trace;
 
@@ -54,18 +54,28 @@ int main(int argn, char **argv) {
   ierr = VecGetLocalSize(y, &m);CHKERRQ(ierr);
   ierr = VecGetLocalSize(x, &n);CHKERRQ(ierr);
 
-  OmegaR = 1.0;
-  OmegaB = 0.00;
-  Delta = -0.1;
-  gamma = 1.0;
-  meqn.addCoupling(3, 0, -OmegaR / 2.0 / sqrt(6.0));
-  meqn.addCoupling(3, 2, -OmegaR / 2.0 / sqrt(6.0));
-  meqn.addCoupling(0, 1, OmegaB / 8.0);
-  meqn.addCoupling(2, 1, -OmegaB / 8.0);
+  OmegaR = 1.25e6 * 2.0 * M_PI;
+  OmegaB = 700.0e3 * 2.0 * M_PI * 0.01;
+  Delta = 0.0;
+  gamma = 1.0e3 * 2.0 * M_PI;
+  Gamma = 6.0e6 * 2.0 * M_PI;
+  /* 700kHz/Gauss, 10 milli Gauss */
+  //deltaB = 700.0e3 * 2.0 * M_PI * 0.01;
+  deltaB = 0.0;
+  meqn.addCoupling(0, 0, OmegaB / 8.0);
+  meqn.addCoupling(0, 1, deltaB / 8.0 / sqrt(2.0));
+  meqn.addCoupling(1, 2, deltaB / 8.0 / sqrt(2.0));
+  meqn.addCoupling(2, 2, -OmegaB / 8.0);
+  meqn.addCoupling(0, 3, Amplitude(1.0, -1.0) / 8.0 * OmegaR / sqrt(3.0));
+  meqn.addCoupling(2, 3, -Amplitude(1.0, 1.0) / 8.0 * OmegaR / sqrt(3.0));
   meqn.addCoupling(3, 3, -Delta);
-  meqn.addDecay(0, 3, gamma);
-  meqn.addDecay(1, 3, gamma);
-  meqn.addDecay(2, 3, gamma);
+  meqn.addDecay(0, 0, gamma);
+  meqn.addDecay(1, 1, gamma);
+  meqn.addDecay(2, 2, gamma);
+  meqn.addDecay(3, 3, gamma);
+  meqn.addDecay(0, 3, Gamma);
+  meqn.addDecay(1, 3, Gamma);
+  meqn.addDecay(2, 3, Gamma);
   ierr = MatCreateShell(PETSC_COMM_WORLD, m, n, N * N, N * N, &meqn, &A);CHKERRQ(ierr);
   ierr = MatShellSetOperation(A, MATOP_MULT, (void(*)(void))mult);CHKERRQ(ierr);
 
