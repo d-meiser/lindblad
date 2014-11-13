@@ -29,6 +29,7 @@ int mult(Mat A, Vec x, Vec y) {
 #define __FUNCT__ "main"
 int main(int argn, char **argv) {
   KSP            ksp;
+  PC             pc;
   Vec            x, y;
   Mat            A;
   PetscInt       i, m, n, mp, mpp;
@@ -88,6 +89,8 @@ int main(int argn, char **argv) {
   ierr = MatShellSetOperation(A, MATOP_MULT, (void(*)(void))mult);CHKERRQ(ierr);
 
   ierr = KSPCreate(PETSC_COMM_WORLD, &ksp);CHKERRQ(ierr);
+  ierr = KSPGetPC(ksp, &pc);CHKERRQ(ierr);
+  ierr = PCSetType(pc, PCNONE);CHKERRQ(ierr);
   ierr = KSPSetFromOptions(ksp);CHKERRQ(ierr);
   ierr = KSPSetOperators(ksp, A, A);CHKERRQ(ierr);
   ierr = KSPSetInitialGuessNonzero(ksp, PETSC_TRUE);CHKERRQ(ierr);
