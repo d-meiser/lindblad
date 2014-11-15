@@ -62,7 +62,7 @@ following works for me:
 ```
 sudo apt-get install libblas-dev libatlas-dev liblapack-dev
 cd $LINDBLAD_ROOT_DIRECTORY
-./utilities/get_petsc.sh
+sh ./utilities/get_petsc.sh
 ```
 `$LINDBLAD_ROOT_DIRECTORY` is the directory in which this README file
 lives.  The `get_petsc.sh` script builds a minimal PETSc library and
