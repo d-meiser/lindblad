@@ -96,6 +96,7 @@ int main(int argn, const char** argv) {
   ierr = KSPCreate(PETSC_COMM_WORLD, &ksp);CHKERRQ(ierr);
   ierr = KSPGetPC(ksp, &pc);CHKERRQ(ierr);
   ierr = PCSetType(pc, PCNONE);CHKERRQ(ierr);
+  ierr = KSPSetTolerances(ksp, 1.0e-15, PETSC_DEFAULT, PETSC_DEFAULT, PETSC_DEFAULT);CHKERRQ(ierr);
   ierr = KSPSetFromOptions(ksp);CHKERRQ(ierr);
   ierr = KSPSetOperators(ksp, A, A);CHKERRQ(ierr);
   ierr = KSPSetInitialGuessNonzero(ksp, PETSC_TRUE);CHKERRQ(ierr);
