@@ -29,8 +29,5 @@ endforeach()
 endif()
 
 set(SCRIPTS plotRabiOscillationsData.py scanEIT.py)
-foreach(s ${SCRIPTS})
-  configure_file(${CMAKE_CURRENT_SOURCE_DIR}/${s}
-      ${CMAKE_CURRENT_BINARY_DIR}/${s})
-endforeach()
+file(COPY ${SCRIPTS} DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
 
