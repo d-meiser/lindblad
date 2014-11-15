@@ -23,6 +23,7 @@ static PetscErrorCode getParameters(int argn, const char** argv,
                                     SystemParameters* parameters);
 static PetscErrorCode readParameter(int n, const char** argv, PetscReal* param,
                                     const char* name);
+static PetscErrorCode printDensityMatrix(Vec x);
 
 #undef __FUNCT__
 #define __FUNCT__ "mult"
@@ -106,12 +107,11 @@ int main(int argn, const char** argv) {
   for (i = 0; i < N; ++i) {
     trace += xarr[i + i * N];
   }
-  ierr = PetscPrintf(PETSC_COMM_WORLD, "trace == %lf + i %lf\n", trace.real(), trace.imag()); CHKERRQ(ierr);
   for (i = 0; i < N * N; ++i) {
     xarr[i] = xarr[i] / trace;
   }
   ierr = VecRestoreArray(x, &xarr);CHKERRQ(ierr);
-  ierr = VecView(x, PETSC_VIEWER_STDOUT_WORLD);CHKERRQ(ierr);
+  ierr = printDensityMatrix(x);CHKERRQ(ierr);
 
   ierr = MatDestroy(&A);CHKERRQ(ierr);
   ierr = VecDestroy(&x);CHKERRQ(ierr);
@@ -159,3 +159,21 @@ PetscErrorCode readParameter(int n, const char** argv, PetscReal* param,
   PetscFunctionReturn(0);
 }
 
+#undef __FUNCT__
+#define __FUNCT__ "printDensityMatrix"
+PetscErrorCode printDensityMatrix(Vec x) {
+  PetscErrorCode    ierr;
+  const PetscScalar *rho;
+  int               i, j;
+
+  PetscFunctionBegin;
+  ierr = VecGetArrayRead(x, &rho);CHKERRQ(ierr);
+  for (i = 0; i < N; ++i) {
+    for (j = 0; j < N; ++j) {
+      printf("%+1.5lf %+1.5lf  ", PetscRealPart(rho[i * N + j]), PetscImaginaryPart(rho[i * N + j]));
+    }
+    printf("\n");
+  }
+  ierr = VecRestoreArrayRead(x, &rho);CHKERRQ(ierr);
+  PetscFunctionReturn(0);
+}
