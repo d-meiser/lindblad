@@ -28,6 +28,9 @@ foreach(e ${PETSC_EXAMPLES})
 endforeach()
 endif()
 
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/plotRabiOscillationsData.py
-    ${CMAKE_CURRENT_BINARY_DIR}/plotRabiOscillationsData.py)
+set(SCRIPTS plotRabiOscillationsData.py scanEIT.py)
+foreach(s ${SCRIPTS})
+  configure_file(${CMAKE_CURRENT_SOURCE_DIR}/${s}
+      ${CMAKE_CURRENT_BINARY_DIR}/${s})
+endforeach()
 
