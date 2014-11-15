@@ -106,7 +106,7 @@ int main(int argn, const char** argv) {
   for (i = 0; i < N; ++i) {
     trace += xarr[i + i * N];
   }
-  ierr = PetscPrintf(PETSC_COMM_WORLD, "trace == %lf + i %lf\n", trace.real(), trace.imag());CHKERRQ(ierr);
+  ierr = PetscPrintf(PETSC_COMM_WORLD, "trace == %lf + i %lf\n", trace.real(), trace.imag()); CHKERRQ(ierr);
   for (i = 0; i < N * N; ++i) {
     xarr[i] = xarr[i] / trace;
   }
@@ -123,6 +123,8 @@ int main(int argn, const char** argv) {
 #define __FUNCT__ "getParameters"
 PetscErrorCode getParameters(int argn, const char** argv,
                              SystemParameters* parameters) {
+  PetscErrorCode ierr;
+
   PetscFunctionBegin;
   if (argn == 1) {
     parameters->OmegaR = 1.25e6 * 2.0 * M_PI;
@@ -136,12 +138,12 @@ PetscErrorCode getParameters(int argn, const char** argv,
   } else if (argn < 7) {
     SETERRQ(PETSC_COMM_WORLD, 1, "Insufficient parameters provided.");
   } else {
-    readParameter(1, argv, &parameters->OmegaR, "OmegaR");
-    readParameter(2, argv, &parameters->OmegaB, "OmegaB");
-    readParameter(3, argv, &parameters->Delta, "Delta");
-    readParameter(4, argv, &parameters->gamma, "gamma");
-    readParameter(5, argv, &parameters->Gamma, "Gamma");
-    readParameter(6, argv, &parameters->deltaB, "deltaB");
+    ierr = readParameter(1, argv, &parameters->OmegaR, "OmegaR");CHKERRQ(ierr);
+    ierr = readParameter(2, argv, &parameters->OmegaB, "OmegaB");CHKERRQ(ierr);
+    ierr = readParameter(3, argv, &parameters->Delta, "Delta");CHKERRQ(ierr);
+    ierr = readParameter(4, argv, &parameters->gamma, "gamma");CHKERRQ(ierr);
+    ierr = readParameter(5, argv, &parameters->Gamma, "Gamma");CHKERRQ(ierr);
+    ierr = readParameter(6, argv, &parameters->deltaB, "deltaB");CHKERRQ(ierr);
   }
   PetscFunctionReturn(0);
 }
