@@ -16,7 +16,7 @@ static const char help[] =
 static const PetscInt N = 4;
 
 struct SystemParameters {
-  PetscReal OmegaR, OmegaB, Delta, gamma, deltaB, Gamma;
+  PetscReal OmegaR, OmegaB, Delta, gamma, Gamma, deltaB;
 };
 
 static PetscErrorCode getParameters(int argn, const char** argv,
@@ -80,16 +80,16 @@ int main(int argn, const char** argv) {
   meqn.addCoupling(0, 1, params.deltaB / 8.0 / sqrt(2.0));
   meqn.addCoupling(1, 2, params.deltaB / 8.0 / sqrt(2.0));
   meqn.addCoupling(2, 2, -params.OmegaB / 8.0);
-  meqn.addCoupling(0, 3, Amplitude(1.0, -1.0) / 8.0 * params.OmegaR / sqrt(3.0));
-  meqn.addCoupling(2, 3, -Amplitude(1.0, 1.0) / 8.0 * params.OmegaR / sqrt(3.0));
+  meqn.addCoupling(0, 3, 1.0 / 4.0 * params.OmegaR / sqrt(6.0));
+  meqn.addCoupling(2, 3, -1.0 / 4.0 * params.OmegaR / sqrt(6.0));
   meqn.addCoupling(3, 3, -params.Delta);
   meqn.addDecay(0, 0, params.gamma);
   meqn.addDecay(1, 1, params.gamma);
   meqn.addDecay(2, 2, params.gamma);
   meqn.addDecay(3, 3, params.gamma);
-  meqn.addDecay(0, 3, params.Gamma);
-  meqn.addDecay(1, 3, params.Gamma);
-  meqn.addDecay(2, 3, params.Gamma);
+  meqn.addDecay(0, 3, params.Gamma / 3.0);
+  meqn.addDecay(1, 3, params.Gamma / 3.0);
+  meqn.addDecay(2, 3, params.Gamma / 3.0);
   ierr = MatCreateShell(PETSC_COMM_WORLD, m, n, N * N, N * N, &meqn, &A);CHKERRQ(ierr);
   ierr = MatShellSetOperation(A, MATOP_MULT, (void(*)(void))mult);CHKERRQ(ierr);
 
