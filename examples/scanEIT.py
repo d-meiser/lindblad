@@ -24,25 +24,35 @@ OmegaR = 1.25e6 * 2.0 * np.pi
 Delta = 0.0;
 gamma = 1.0e3 * 2.0 * np.pi
 Gamma = 6.0e6 * 2.0 * np.pi
-deltaB = np.arange(-0.1, 0.1, 0.0005) * 700.0e3 * 2.0 * np.pi
+OmegaB = np.arange(-0.1, 0.1, 0.0005) * 700.0e3 * 2.0 * np.pi
 
-OmegaB = 700.0e3 * 2.0 * np.pi * 0.01
-absorptionsNonZeroField = np.imag(np.array([
-  get_polarization([OmegaR, OmegaB, Delta, gamma, Gamma, db])
-                    for db in deltaB]))
+deltaB = 700.0e3 * 2.0 * np.pi * 0.01
+NonZeroPolarization=np.array([get_polarization([OmegaR, ob, Delta, gamma, Gamma, deltaB])
+                    for ob in OmegaB])
+absorptionNonZeroField = NonZeroPolarization.imag
+rotationNonZeroField = NonZeroPolarization.real
 
-OmegaB = 700.0e3 * 2.0 * np.pi * 0.0
-absorptionsZeroField = np.imag(np.array([
-  get_polarization([OmegaR, OmegaB, Delta, gamma, Gamma, db])
-                    for db in deltaB]))
+deltaB = 700.0e3 * 2.0 * np.pi * 0.0
+ZeroPolarization=np.array([get_polarization([OmegaR, ob, Delta, gamma, Gamma, deltaB])
+                    for ob in OmegaB])
+absorptionZeroField = ZeroPolarization.imag
+rotationZeroField = ZeroPolarization.real
 
-plt.plot(deltaB / (700.0e3 * 2.0 * np.pi), 1.0e3 * absorptionsZeroField)
-plt.plot(deltaB / (700.0e3 * 2.0 * np.pi), 1.0e3 *
-        absorptionsNonZeroField,'--r')
+plt.subplot(2,1,1)
+plt.plot(OmegaB / (700.0e3 * 2.0 * np.pi), 1.0e3 * absorptionZeroField)
+plt.plot(OmegaB / (700.0e3 * 2.0 * np.pi), 1.0e3 *
+        absorptionNonZeroField,'--r')
 
-plt.xlabel(r'$B_z({\rm G})$')
 plt.ylabel(r'${\rm Absorption\; [arb. units]}$')
-plt.gcf().set_size_inches(4, 3)
-plt.gcf().subplots_adjust(bottom = 0.15, left = 0.15, top = 0.97, right = 0.95)
-plt.savefig('absorption.pdf')
 
+plt.subplot(2,1,2)
+plt.plot(OmegaB / (700.0e3 * 2.0 * np.pi), 1.0e3 * rotationZeroField)
+plt.plot(OmegaB / (700.0e3 * 2.0 * np.pi), 1.0e3 *
+        rotationNonZeroField,'--r')
+        
+plt.xlabel(r'$B_z({\rm G})$')
+plt.ylabel(r'${\rm Faraday Rotation\; [arb. units]}$')
+
+plt.gcf().set_size_inches(4, 6)
+plt.gcf().subplots_adjust(bottom = 0.1, left = 0.2, top = 0.97, right = 0.95)
+plt.savefig('absorption.png')
