@@ -53,13 +53,15 @@ int main(int argn, const char** argv) {
   PetscInt         i, m, n;
   PetscErrorCode   ierr;
   MasterEqn        meqn(N);
-  PetscScalar      *xarr, trace;
+  PetscScalar      *xarr, *yarr, trace;
   SystemParameters params;
 
   PetscFunctionBegin;
   PetscInitialize(&argn, (char***)&argv, 0, help);
 
   getParameters(argn, argv, &params);
+  
+  // intialize solution vector with initial guess for solve
   ierr = VecCreate(PETSC_COMM_WORLD, &x);CHKERRQ(ierr);
   ierr = VecSetSizes(x, PETSC_DECIDE, N * N);CHKERRQ(ierr);
   ierr = VecSetFromOptions(x);CHKERRQ(ierr);
@@ -68,21 +70,30 @@ int main(int argn, const char** argv) {
     xarr[i + i * N] = 1.0 / N;
   }
   ierr = VecRestoreArray(x, &xarr);CHKERRQ(ierr);
+  ierr = VecGetLocalSize(x, &n);CHKERRQ(ierr);
+
+  // populate y vector with source terms
   ierr = VecCreate(PETSC_COMM_WORLD, &y);CHKERRQ(ierr);
   ierr = VecSetSizes(y, PETSC_DECIDE, N * N);CHKERRQ(ierr);
   ierr = VecSetFromOptions(y);CHKERRQ(ierr);
-  ierr = VecZeroEntries(y);CHKERRQ(ierr);
+  //ierr = VecZeroEntries(y);CHKERRQ(ierr);
+  ierr = VecGetArray(y, &yarr);CHKERRQ(ierr);
+  for (i = 0; i < 3; ++i) {
+    yarr[i + i * N] = -params.gamma / 8.0;
+  }
+  ierr = VecRestoreArray(y, &yarr);CHKERRQ(ierr);  
   ierr = VecGetLocalSize(y, &m);CHKERRQ(ierr);
-  ierr = VecGetLocalSize(x, &n);CHKERRQ(ierr);
 
-
-  meqn.addCoupling(0, 0, params.OmegaB / 8.0);
-  meqn.addCoupling(0, 1, params.deltaB / 8.0 / sqrt(2.0));
-  meqn.addCoupling(1, 2, params.deltaB / 8.0 / sqrt(2.0));
-  meqn.addCoupling(2, 2, -params.OmegaB / 8.0);
+  // State Labels: 0->{1,1}, 1->{1,0}, 2->{1,-1}, 3->{0,0}
+  // define couplings from the Hamiltonian
+  meqn.addCoupling(0, 0, params.OmegaB / 2.0);
+  meqn.addCoupling(0, 1, params.deltaB / 2.0 / sqrt(2.0));
+  meqn.addCoupling(1, 2, params.deltaB / 2.0 / sqrt(2.0));
+  meqn.addCoupling(2, 2, -params.OmegaB / 2.0);
   meqn.addCoupling(0, 3, 1.0 / 4.0 * params.OmegaR / sqrt(6.0));
   meqn.addCoupling(2, 3, -1.0 / 4.0 * params.OmegaR / sqrt(6.0));
   meqn.addCoupling(3, 3, -params.Delta);
+  //define the decays from relaxations
   meqn.addDecay(0, 0, params.gamma);
   meqn.addDecay(1, 1, params.gamma);
   meqn.addDecay(2, 2, params.gamma);
@@ -90,6 +101,7 @@ int main(int argn, const char** argv) {
   meqn.addDecay(0, 3, params.Gamma / 3.0);
   meqn.addDecay(1, 3, params.Gamma / 3.0);
   meqn.addDecay(2, 3, params.Gamma / 3.0);
+  
   ierr = MatCreateShell(PETSC_COMM_WORLD, m, n, N * N, N * N, &meqn, &A);CHKERRQ(ierr);
   ierr = MatShellSetOperation(A, MATOP_MULT, (void(*)(void))mult);CHKERRQ(ierr);
 
