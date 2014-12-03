@@ -1,9 +1,23 @@
+#!/usr/bin/python
+
+import sys
 import subprocess
 import numpy as np
 from matplotlib import rc
 rc('font',**{'family':'sans-serif','sans-serif':['Helvetica']})
 rc('text', usetex=True)
 import matplotlib.pyplot as plt
+
+if (len(sys.argv) == 2):
+	# one argument has been provided for output plot name
+	outputFilename = str(sys.argv[1])
+elif (len(sys.argv) == 1):
+	# no filename provided, use default
+	outputFilename = 'test.png'
+else:
+	# improper usage, use default and inform
+	print("Usage: python scanEIT-SmallRange.py filename")
+	outputFilename = 'test.png'
 
 def get_steady_state(arguments = None):
     if arguments:
@@ -18,41 +32,55 @@ def get_steady_state(arguments = None):
 
 def get_polarization(arguments = None):
     density_matrix = get_steady_state(arguments)
-    return density_matrix[0, 3]
+    return [density_matrix[0, 3] , density_matrix[2, 3]]
 
-OmegaR = 1.25e6 * 2.0 * np.pi
-Delta = 0.0;
-gamma = 1.0e3 * 2.0 * np.pi
-Gamma = 6.0e6 * 2.0 * np.pi
-OmegaB = np.arange(-0.1, 0.1, 0.0005) * 700.0e3 * 2.0 * np.pi
+def absorption(polarizationArray):
+	# post-process density matrix elements 
+	# to get absorption from atomic polarization
+	return polarizationArray[:,0].imag - polarizationArray[:,1].imag
+	
+def rotation(polarizationArray):
+	# post-process density matrix elements 
+	# to get light polarization rotation from atomic polarization
+	return polarizationArray[:,0].real + polarizationArray[:,1].real
 
-deltaB = 700.0e3 * 2.0 * np.pi * 0.01
-NonZeroPolarization=np.array([get_polarization([OmegaR, ob, Delta, gamma, Gamma, deltaB])
-                    for ob in OmegaB])
-absorptionNonZeroField = NonZeroPolarization.imag
-rotationNonZeroField = NonZeroPolarization.real
+def main(argv):
+    OmegaR = 1.25e6 * 2.0 * np.pi
+    Delta = 0.0;
+    gamma = 1.0e3 * 2.0 * np.pi
+    Gamma = 6.0e6 * 2.0 * np.pi
+    OmegaB = np.arange(-0.1, 0.1, 0.0005) * 700.0e3 * 2.0 * np.pi
 
-deltaB = 700.0e3 * 2.0 * np.pi * 0.0
-ZeroPolarization=np.array([get_polarization([OmegaR, ob, Delta, gamma, Gamma, deltaB])
-                    for ob in OmegaB])
-absorptionZeroField = ZeroPolarization.imag
-rotationZeroField = ZeroPolarization.real
+    deltaB = 700.0e3 * 2.0 * np.pi * 0.01
+    NonZeroPolarization=np.array([get_polarization([OmegaR, ob, Delta, gamma, Gamma, deltaB])
+                        for ob in OmegaB])
+    absorptionNonZeroField = absorption(NonZeroPolarization)
+    rotationNonZeroField = rotation(NonZeroPolarization)
 
-plt.subplot(2,1,1)
-plt.plot(OmegaB / (700.0e3 * 2.0 * np.pi), 1.0e3 * absorptionZeroField)
-plt.plot(OmegaB / (700.0e3 * 2.0 * np.pi), 1.0e3 *
-        absorptionNonZeroField,'--r')
+    deltaB = 700.0e3 * 2.0 * np.pi * 0.0
+    ZeroPolarization=np.array([get_polarization([OmegaR, ob, Delta, gamma, Gamma, deltaB])
+                        for ob in OmegaB])
+    absorptionZeroField = absorption(ZeroPolarization)
+    rotationZeroField = rotation(ZeroPolarization)
 
-plt.ylabel(r'${\rm Absorption\; [arb. units]}$')
+    plt.subplot(2,1,1)
+    plt.plot(OmegaB / (700.0e3 * 2.0 * np.pi), 1.0e3 * absorptionZeroField)
+    plt.plot(OmegaB / (700.0e3 * 2.0 * np.pi), 1.0e3 *
+            absorptionNonZeroField,'--r')
 
-plt.subplot(2,1,2)
-plt.plot(OmegaB / (700.0e3 * 2.0 * np.pi), 1.0e3 * rotationZeroField)
-plt.plot(OmegaB / (700.0e3 * 2.0 * np.pi), 1.0e3 *
-        rotationNonZeroField,'--r')
-        
-plt.xlabel(r'$B_z({\rm G})$')
-plt.ylabel(r'${\rm Faraday Rotation\; [arb. units]}$')
+    plt.ylabel(r'${\rm Absorption\; [arb. units]}$')
 
-plt.gcf().set_size_inches(4, 6)
-plt.gcf().subplots_adjust(bottom = 0.1, left = 0.2, top = 0.97, right = 0.95)
-plt.savefig('absorption.png')
+    plt.subplot(2,1,2)
+    plt.plot(OmegaB / (700.0e3 * 2.0 * np.pi), 1.0e3 * rotationZeroField)
+    plt.plot(OmegaB / (700.0e3 * 2.0 * np.pi), 1.0e3 *
+            rotationNonZeroField,'--r')
+            
+    plt.xlabel(r'$B_z({\rm G})$')
+    plt.ylabel(r'${\rm Faraday Rotation\; [arb. units]}$')
+
+    plt.gcf().set_size_inches(4, 6)
+    plt.gcf().subplots_adjust(bottom = 0.1, left = 0.2, top = 0.97, right = 0.95)
+    plt.savefig(outputFilename,format='png')
+
+if __name__== "__main__":
+    main(sys.argv)
