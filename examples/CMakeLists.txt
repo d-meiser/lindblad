@@ -28,6 +28,6 @@ foreach(e ${PETSC_EXAMPLES})
 endforeach()
 endif()
 
-set(SCRIPTS plotRabiOscillationsData.py scanEIT.py)
+set(SCRIPTS plotRabiOscillationsData.py scanEIT.py dynamicsEIT.py)
 file(COPY ${SCRIPTS} DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
 
