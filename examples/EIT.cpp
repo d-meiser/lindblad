@@ -54,11 +54,13 @@ int main(int argn, const char** argv) {
   meqn.addDecay(2, 3, params.Gamma / 3.0);
 
   std::vector<Amplitude> rhoInitial(dim * dim, 0);
-  rhoInitial[1 + 1 * dim] = 1.0;
+  rhoInitial[0] = 1.0;
   MasterEqnEvolution evolution(meqn, &rhoInitial[0]);
-  evolution.setTimeStep(1.0e-9);
+  evolution.setTimeStep(1.0e-8);
   for (int i = 0; i < numIters; ++i) {
-    evolution.takeStep();
+    for (int j = 0; j < 100; ++j) {
+      evolution.takeStep();
+    }
     printDensityMatrix(evolution.getState(), dim);
   }
   return 0;
