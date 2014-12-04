@@ -27,9 +27,10 @@ struct SystemParameters {
   double OmegaR, OmegaB, Delta, gamma, Gamma, deltaB;
 };
 
-int readParameter(int n, const char** argv, double* param,
+static int readParameter(int n, const char** argv, double* param,
                   const char* name);
-int getParameters(int argn, const char** argv, SystemParameters* parameters);
+static int getParameters(int argn, const char** argv, SystemParameters* parameters);
+static int printDensityMatrix(const Amplitude* rho, int N);
 
 int main(int argn, const char** argv) {
   int dim = 4;
@@ -55,8 +56,10 @@ int main(int argn, const char** argv) {
   std::vector<Amplitude> rhoInitial(dim * dim, 0);
   rhoInitial[1 + 1 * dim] = 1.0;
   MasterEqnEvolution evolution(meqn, &rhoInitial[0]);
+  evolution.setTimeStep(1.0e-9);
   for (int i = 0; i < numIters; ++i) {
     evolution.takeStep();
+    printDensityMatrix(evolution.getState(), dim);
   }
   return 0;
 }
@@ -92,4 +95,14 @@ int readParameter(int n, const char** argv, double* param,
     return -1;
   }
   return 0;
+}
+
+int printDensityMatrix(const Amplitude* rho, int N) {
+  int i, j;
+  for (i = 0; i < N; ++i) {
+    for (j = 0; j < N; ++j) {
+      printf("%+1.5lf %+1.5lf  ", rho[i * N + j].real(), rho[i * N + j].imag());
+    }
+    printf("\n");
+  }
 }
