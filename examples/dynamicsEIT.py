@@ -28,9 +28,9 @@ def main(argv):
 
     deltaB = 700.0e3 * 2.0 * np.pi * 0.01
 
-    dynamics = get_dynamics([OmegaR, OmegaB[0], Delta, gamma, Gamma, deltaB])
+    dynamics = get_dynamics([OmegaR, OmegaB[0], Delta, gamma, Gamma,
+            deltaB, 1.0e-8, 100000, 100])
     populations = [np.array([dynamics[i*4+n,n].real for i in range(1000)]) for n in range(4)]
-    print populations
     plt.clf()
     plots=[]
     for n in range(4):
@@ -38,7 +38,7 @@ def main(argv):
     plt.legend(plots,
             [r'$\rho_{0,0}$', r'$\rho_{1,1}$', r'$\rho_{2,2}$', r'$\rho_{3,3}$'])
     plt.xlabel(r'$t/\mu s$')
-    plt.ylabel(r'$\rho_{n,n}$')
+    plt.ylabel(r'$\rho_{n,n}(t)$')
     plt.gcf().set_size_inches(4, 3)
     plt.gcf().subplots_adjust(bottom = 0.15, left = 0.2, top = 0.97, right = 0.95)
     plt.savefig("populations.png")
