@@ -25,10 +25,33 @@ static const int numIters = 1000;
 
 struct SystemParameters {
   double OmegaR, OmegaB, Delta, gamma, Gamma, deltaB;
+  double dt;
+  int numSteps;
+  int numDump;
 };
 
-static int readParameter(int n, const char** argv, double* param,
+template <typename T>
+static int readParameter(int n, const char** argv, T* param,
                   const char* name);
+template <>
+int readParameter(int n, const char** argv, double* param,
+                  const char* name) {
+  if (sscanf(argv[n], "%lf", param) != 1) {
+    printf("Failed to read argument %d: %s\n", n, name);
+    return -1;
+  }
+  return 0;
+}
+template <>
+int readParameter(int n, const char** argv, int* param,
+                  const char* name) {
+  if (sscanf(argv[n], "%d", param) != 1) {
+    printf("Failed to read argument %d: %s\n", n, name);
+    return -1;
+  }
+  return 0;
+}
+
 static int getParameters(int argn, const char** argv, SystemParameters* parameters);
 static int printDensityMatrix(const Amplitude* rho, int N);
 
@@ -56,12 +79,12 @@ int main(int argn, const char** argv) {
   std::vector<Amplitude> rhoInitial(dim * dim, 0);
   rhoInitial[0] = 1.0;
   MasterEqnEvolution evolution(meqn, &rhoInitial[0]);
-  evolution.setTimeStep(1.0e-8);
-  for (int i = 0; i < numIters; ++i) {
-    for (int j = 0; j < 100; ++j) {
-      evolution.takeStep();
+  evolution.setTimeStep(params.dt);
+  for (int i = 0; i < params.numSteps; ++i) {
+    if (i % params.numDump == 0) {
+      printDensityMatrix(evolution.getState(), dim);
     }
-    printDensityMatrix(evolution.getState(), dim);
+    evolution.takeStep();
   }
   return 0;
 }
@@ -76,27 +99,24 @@ int getParameters(int argn, const char** argv, SystemParameters* parameters) {
     parameters->gamma = 1.0e3 * 2.0 * M_PI;
     parameters->Gamma = 6.0e6 * 2.0 * M_PI;
     parameters->deltaB = 0.0;
-  } else if (argn < 7) {
+    parameters->dt = 1.0e-8;
+    parameters->numDump = 100;
+    parameters->numSteps = 100000;
+  } else if (argn < 10) {
     printf("Insufficient parameters provided.");
     return -1;
   } else {
-    ierr = readParameter(1, argv, &parameters->OmegaR, "OmegaR");
-    ierr = readParameter(2, argv, &parameters->OmegaB, "OmegaB");
-    ierr = readParameter(3, argv, &parameters->Delta, "Delta");
-    ierr = readParameter(4, argv, &parameters->gamma, "gamma");
-    ierr = readParameter(5, argv, &parameters->Gamma, "Gamma");
-    ierr = readParameter(6, argv, &parameters->deltaB, "deltaB");
+    readParameter(1, argv, &parameters->OmegaR, "OmegaR");
+    readParameter(2, argv, &parameters->OmegaB, "OmegaB");
+    readParameter(3, argv, &parameters->Delta, "Delta");
+    readParameter(4, argv, &parameters->gamma, "gamma");
+    readParameter(5, argv, &parameters->Gamma, "Gamma");
+    readParameter(6, argv, &parameters->deltaB, "deltaB");
+    readParameter(7, argv, &parameters->dt, "dt");
+    readParameter(8, argv, &parameters->numSteps, "numSteps");
+    readParameter(9, argv, &parameters->numDump, "numDump");
   }
   return ierr;
-}
-
-int readParameter(int n, const char** argv, double* param,
-                  const char* name) {
-  if (sscanf(argv[n], "%lf", param) != 1) {
-    printf("Failed to read argument %d: %s\n", n, name);
-    return -1;
-  }
-  return 0;
 }
 
 int printDensityMatrix(const Amplitude* rho, int N) {
