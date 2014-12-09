@@ -24,10 +24,15 @@ with lindblad.  If not, see <http://www.gnu.org/licenses/>.
 static const int numIters = 1000;
 
 struct SystemParameters {
-  double OmegaR, OmegaB, Delta, gamma, Gamma, deltaB;
-  double dt;
-  int numSteps;
-  int numDump;
+  double OmegaR; /**< What is this quantity? */
+  double OmegaB; /**< What is this quantity? */
+  double Delta;  /**< What is this quantity? */
+  double gamma;  /**< What is this quantity? */
+  double Gamma;  /**< What is this quantity? */
+  double deltaB; /**< What is this quantity? */
+  double dt;     /**< Time step size used by ODE integrator */
+  int numSteps;  /**< Total number of time steps taken by the simulation */
+  int numDump;   /**< Number of time steps between output of state */
 };
 
 template <typename T>
@@ -75,6 +80,12 @@ int main(int argn, const char** argv) {
   meqn.addDecay(0, 3, params.Gamma / 3.0);
   meqn.addDecay(1, 3, params.Gamma / 3.0);
   meqn.addDecay(2, 3, params.Gamma / 3.0);
+  // Mixing of ground state levels due to atoms entering and leaving
+  // beam.
+  meqn.addDecay(0, 1, params.gamma);
+  meqn.addDecay(1, 0, params.gamma);
+  meqn.addDecay(1, 2, params.gamma);
+  meqn.addDecay(2, 1, params.gamma);
 
   std::vector<Amplitude> rhoInitial(dim * dim, 0);
   rhoInitial[0] = 1.0;
