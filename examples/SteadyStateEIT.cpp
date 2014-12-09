@@ -94,19 +94,23 @@ int main(int argn, const char** argv) {
   meqn.addCoupling(2, 3, -1.0 / 4.0 * params.OmegaR / sqrt(6.0));
   meqn.addCoupling(3, 3, -params.Delta);
   // define the decays from relaxations
-  meqn.addDecay(0, 0, params.gamma);
-  meqn.addDecay(1, 1, params.gamma);
-  meqn.addDecay(2, 2, params.gamma);
+  // The decoherence of the excited state is probably negligible
+  // compared to Gamma, but we keep it here for consistency
   meqn.addDecay(3, 3, params.gamma);
   meqn.addDecay(0, 3, params.Gamma / 3.0);
   meqn.addDecay(1, 3, params.Gamma / 3.0);
   meqn.addDecay(2, 3, params.Gamma / 3.0);
   // Mixing of ground state levels due to atoms entering and leaving
   // beam.
+  meqn.addDecay(0, 0, params.gamma);
   meqn.addDecay(0, 1, params.gamma);
+  meqn.addDecay(0, 2, params.gamma);
   meqn.addDecay(1, 0, params.gamma);
+  meqn.addDecay(1, 1, params.gamma);
   meqn.addDecay(1, 2, params.gamma);
+  meqn.addDecay(2, 0, params.gamma);
   meqn.addDecay(2, 1, params.gamma);
+  meqn.addDecay(2, 2, params.gamma);
 
   ierr = MatCreateShell(PETSC_COMM_WORLD, m, n, N * N, N * N, &meqn, &A);CHKERRQ(ierr);
   ierr = MatShellSetOperation(A, MATOP_MULT, (void(*)(void))mult);CHKERRQ(ierr);
