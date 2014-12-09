@@ -16,7 +16,12 @@ static const char help[] =
 static const PetscInt N = 4;
 
 struct SystemParameters {
-  PetscReal OmegaR, OmegaB, Delta, gamma, Gamma, deltaB;
+  PetscReal OmegaR; /**< What is this quantity? */
+  PetscReal OmegaB; /**< What is this quantity? */
+  PetscReal Delta;  /**< What is this quantity? */
+  PetscReal gamma;  /**< What is this quantity? */
+  PetscReal Gamma;  /**< What is this quantity? */
+  PetscReal deltaB; /**< What is this quantity? */
 };
 
 static PetscErrorCode getParameters(int argn, const char** argv,
