@@ -62,3 +62,10 @@ TEST(GMRES, dot) {
   EXPECT_FLOAT_EQ(nrm * nrm, dot.real());
   EXPECT_FLOAT_EQ(0.0, dot.imag());
 }
+
+TEST(GMRES, solve) {
+  GMRES gmres(2); 
+  std::vector<Amplitude> b(2, 1.3);
+  std::vector<Amplitude> x(2);
+  gmres.solve(&fDouble, &b[0], &x[0], 0);
+}
