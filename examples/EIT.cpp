@@ -24,12 +24,12 @@ with lindblad.  If not, see <http://www.gnu.org/licenses/>.
 static const int numIters = 1000;
 
 struct SystemParameters {
-  double OmegaR; /**< What is this quantity? */
-  double OmegaB; /**< What is this quantity? */
-  double Delta;  /**< What is this quantity? */
-  double gamma;  /**< What is this quantity? */
-  double Gamma;  /**< What is this quantity? */
-  double deltaB; /**< What is this quantity? */
+  double OmegaR; /**< Rabi Freq. of Probe Beam (Hz) */
+  double OmegaB; /**< Larmour Freq. of Axial Field (Hz) */
+  double Delta;  /**< Detuning of Probe beam (Hz) */
+  double gamma;  /**< 1/(Atom Interation Time with Probe) (Hz) */
+  double Gamma;  /**< Natural Linewidth of Excited State (Hz) */
+  double deltaB; /**< Larmour Freq. of Transverse Field (Hz) */
   double dt;     /**< Time step size used by ODE integrator */
   int numSteps;  /**< Total number of time steps taken by the simulation */
   int numDump;   /**< Number of time steps between output of state */
