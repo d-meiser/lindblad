@@ -3,6 +3,7 @@ add_library(lindblad
     MasterEqn.cpp
     MasterEqnEvolution.cpp
     Integrator.cpp
+    GMRES.cpp
     RK4.cpp
     SparseApply.cpp
     Coupling.cpp

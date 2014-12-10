@@ -18,3 +18,9 @@ with lindblad.  If not, see <http://www.gnu.org/licenses/>.
 */
 #include <gtest/gtest.h>
 #include <GMRES.hpp>
+
+TEST(GMRES, Constructor) {
+  GMRES *gmres = new GMRES(1); 
+  ASSERT_TRUE(gmres != 0);
+  delete gmres;
+}
