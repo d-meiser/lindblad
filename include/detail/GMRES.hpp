@@ -32,8 +32,10 @@ public:
             void (*A)(int dim, const Amplitude *, Amplitude *, void *),
             const Amplitude *x, const Amplitude *y, Amplitude *result,
             void *ctx);
-  double norm(const std::vector<Amplitude>& x) const;
+  double norm(int dim, const Amplitude* x) const;
   Amplitude dot(int dim, const Amplitude* x, const Amplitude* y) const;
+
+  bool smallEnough(double error) const;
 
 private:
   std::vector<Amplitude> y;
@@ -43,6 +45,9 @@ private:
   std::vector<Amplitude> w;
   std::vector<Amplitude> bhat;
   std::vector<Amplitude> h;
+  std::vector<Amplitude> rMat;
+  std::vector<Amplitude> c;
+  std::vector<Amplitude> s;
   static const int m = 30;
   static const int MAX_RESTARTS = 10000;
 };
