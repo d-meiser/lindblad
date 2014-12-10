@@ -24,3 +24,24 @@ TEST(GMRES, Constructor) {
   ASSERT_TRUE(gmres != 0);
   delete gmres;
 }
+
+static void fDouble(int dim, const Amplitude *x, Amplitude *result,
+                    void *ctx) {
+  for (int i = 0; i < dim; ++i) {
+    result[i] = 2.0 * x[i];
+  }
+}
+
+TEST(GMRES, axpy) {
+  GMRES gmres(2); 
+  std::vector<Amplitude> y(2);
+  y[0] = 2.0;
+  y[1] = 3.0;
+  std::vector<Amplitude> x(2);
+  x[0] = -1.0;
+  x[1] = 2.7;
+  std::vector<Amplitude> result(2);
+  double alpha = -2.4;
+  gmres.axpy(alpha, &fDouble, &x[0], &y[0], &result[0], 0);
+  EXPECT_FLOAT_EQ((alpha * 2.0 * x[0] + y[0]).real(), result[0].real());
+}
