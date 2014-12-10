@@ -53,3 +53,12 @@ TEST(GMRES, norm) {
   double nrm = gmres.norm(x);
   EXPECT_FLOAT_EQ(sqrt(2.0 * 1.3 * 1.3), nrm);
 }
+
+TEST(GMRES, dot) {
+  GMRES gmres(2); 
+  std::vector<Amplitude> x(2, 1.3);
+  double nrm = gmres.norm(x);
+  Amplitude dot = gmres.dot(x.size(), &x[0], &x[0]);
+  EXPECT_FLOAT_EQ(nrm * nrm, dot.real());
+  EXPECT_FLOAT_EQ(0.0, dot.imag());
+}
