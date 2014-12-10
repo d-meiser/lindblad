@@ -25,18 +25,21 @@ with lindblad.  If not, see <http://www.gnu.org/licenses/>.
 class GMRES {
 public:
   GMRES(int dim);
-  void solve(void (*Ax)(int dim, const Amplitude *x, Amplitude *y, void *ctx),
-             const Amplitude *rhs, Amplitude *x);
+  void solve(void (*A)(int dim, const Amplitude *, Amplitude *, void *),
+             const Amplitude *rhs, Amplitude *x, void *ctx);
 
   void axpy(double alpha,
-            void (*Ax)(int dim, const Amplitude *, Amplitude *, void *),
+            void (*A)(int dim, const Amplitude *, Amplitude *, void *),
             const Amplitude *x, const Amplitude *y, Amplitude *result,
             void *ctx);
+  double norm(const std::vector<Amplitude>& x);
 
 private:
   std::vector<Amplitude> y;
   std::vector<Amplitude> r;
+  std::vector<Amplitude> x;
   static const int m = 30;
+  static const int MAX_RESTARTS = 10000;
 };
 
 #endif

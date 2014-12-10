@@ -18,6 +18,7 @@ with lindblad.  If not, see <http://www.gnu.org/licenses/>.
 */
 #include <gtest/gtest.h>
 #include <GMRES.hpp>
+#include <cmath>
 
 TEST(GMRES, Constructor) {
   GMRES *gmres = new GMRES(1); 
@@ -44,4 +45,11 @@ TEST(GMRES, axpy) {
   double alpha = -2.4;
   gmres.axpy(alpha, &fDouble, &x[0], &y[0], &result[0], 0);
   EXPECT_FLOAT_EQ((alpha * 2.0 * x[0] + y[0]).real(), result[0].real());
+}
+
+TEST(GMRES, norm) {
+  GMRES gmres(2); 
+  std::vector<Amplitude> x(2, 1.3);
+  double nrm = gmres.norm(x);
+  EXPECT_FLOAT_EQ(sqrt(2.0 * 1.3 * 1.3), nrm);
 }
