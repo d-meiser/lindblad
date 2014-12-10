@@ -4,6 +4,7 @@ set(TESTS
     test_rightApply
     test_Coupling
     test_Decay
+    test_GMRES
     test_MasterEqn
     test_MasterEqnEvolution
     test_Integrator
