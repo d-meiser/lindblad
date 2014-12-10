@@ -27,6 +27,8 @@ public:
         void (*Ax)(const Amplitude *x, Amplitude *y, void *ctx));
   void solve(const Amplitude *rhs, Amplitude *x);
 private:
+  std::vector<Amplitude> y;
+  static const int m = 30;
 };
 
 #endif
