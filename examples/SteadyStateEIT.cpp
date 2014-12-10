@@ -16,12 +16,12 @@ static const char help[] =
 static const PetscInt N = 4;
 
 struct SystemParameters {
-  PetscReal OmegaR; /**< What is this quantity? */
-  PetscReal OmegaB; /**< What is this quantity? */
-  PetscReal Delta;  /**< What is this quantity? */
-  PetscReal gamma;  /**< What is this quantity? */
-  PetscReal Gamma;  /**< What is this quantity? */
-  PetscReal deltaB; /**< What is this quantity? */
+  PetscReal OmegaR; /**< Rabi Freq. of Probe Beam (Hz) */
+  PetscReal OmegaB; /**< Larmour Freq. of Axial Field (Hz) */
+  PetscReal Delta;  /**< Detuning of Probe beam (Hz) */
+  PetscReal gamma;  /**< 1/(Atom Interation Time with Probe) (Hz) */
+  PetscReal Gamma;  /**< Natural Linewidth of Excited State (Hz) */
+  PetscReal deltaB; /**< Larmour Freq. of Transverse Field (Hz) */
 };
 
 static PetscErrorCode getParameters(int argn, const char** argv,
