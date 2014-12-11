@@ -36,6 +36,10 @@ public:
   Amplitude dot(int dim, const Amplitude* x, const Amplitude* y) const;
 
   bool smallEnough(double error) const;
+  void setAbsTol(double tol) { tolerance = tol; }
+  double getAbsTol() const { return tolerance; }
+  void setKrylovDim(int dim);
+  int getKrylovDim() const { return m; }
 
 private:
   std::vector<Amplitude> y;
@@ -48,8 +52,13 @@ private:
   std::vector<Amplitude> rMat;
   std::vector<Amplitude> c;
   std::vector<Amplitude> s;
-  static const int m = 50;
+  int dim;
+  int m;
   static const int MAX_RESTARTS = 10000;
+  double tolerance;
+
+  // Utilities
+  void resizeArrays();
 };
 
 #endif

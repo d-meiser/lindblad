@@ -79,6 +79,33 @@ TEST(GMRES, dot) {
   EXPECT_FLOAT_EQ(0.0, dot.imag());
 }
 
+TEST(GMRES, setAbsTol) {
+  GMRES gmres(2);
+  double tol = 1.0e-6;
+  gmres.setAbsTol(tol);
+  EXPECT_FLOAT_EQ(tol, gmres.getAbsTol());
+}
+
+TEST(GMRES, smallEnoughTrue) {
+  GMRES gmres(2);
+  double tol = 1.0e-6;
+  gmres.setAbsTol(tol);
+  EXPECT_TRUE(gmres.smallEnough(tol / 2.0));
+}
+
+TEST(GMRES, smallEnoughFalse) {
+  GMRES gmres(2);
+  double tol = 1.0e-6;
+  gmres.setAbsTol(tol);
+  EXPECT_FALSE(gmres.smallEnough(tol * 2.0));
+}
+
+TEST(GMRES, setKrylovDim) {
+  GMRES gmres(5);
+  gmres.setKrylovDim(12);
+  EXPECT_EQ(12, gmres.getKrylovDim());
+}
+
 TEST(GMRES, solveDouble) {
   int dim = 2;
   GMRES gmres(dim); 

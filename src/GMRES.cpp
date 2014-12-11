@@ -6,16 +6,27 @@ static double absSquared(const Amplitude a) {
   return a.real() * a.real() + a.imag() * a.imag();
 }
 
-GMRES::GMRES(int dim)
-    : y(m), v(dim * m), r(dim), x(dim), w(dim), bhat(m + 1),
-      h((m + 1) * m), rMat((m + 1) * m), c(m), s(m) {}
+GMRES::GMRES(int d) : dim(d), m(30), tolerance(1.0e-6) { resizeArrays(); }
+
+void GMRES::resizeArrays() {
+  y.resize(m);
+  v.resize(dim * m);
+  r.resize(dim);
+  x.resize(dim);
+  w.resize(dim);
+  bhat.resize(m + 1);
+  h.resize((m + 1) * m);
+  rMat.resize((m + 1) * m);
+  c.resize(m);
+  s.resize(m);
+}
 
 void GMRES::axpy(double alpha,
-                 void (*Ax)(int dim, const Amplitude *, Amplitude *, void *ctx),
+                 void (*Ax)(int, const Amplitude *, Amplitude *, void *),
                  const Amplitude *x, const Amplitude *y, Amplitude *result,
                  void *ctx) {
-  Ax(r.size(), x, result, ctx);
-  for (int i = 0; i < r.size(); ++i) {
+  Ax(dim, x, result, ctx);
+  for (int i = 0; i < dim; ++i) {
     result[i] = alpha * result[i] + y[i];
   }
 }
@@ -37,13 +48,17 @@ Amplitude GMRES::dot(int dim, const Amplitude *x, const Amplitude *y) const {
 }
 
 bool GMRES::smallEnough(double error) const {
-  if (error < 1.0e-10) {
+  if (error < tolerance) {
     return true;
   } else {
     return false;
   }
 }
 
+void GMRES::setKrylovDim(int d) {
+  m = d;
+  resizeArrays();
+}
 template <typename T>
 static void assignScaled(T alpha, int n, const Amplitude *x,
                              Amplitude *y) {
@@ -64,7 +79,6 @@ void GMRES::solve(void (*A)(int, const Amplitude *, Amplitude *, void *),
                   const Amplitude *rhs, Amplitude *x0, void *ctx) {
   double rho;
   int nr;
-  int dim = r.size();
   axpy(-1.0, A, x0, rhs, &r[0], ctx);
   std::copy(x0, x0 + dim, &x[0]);
   for (int j = 0; j < MAX_RESTARTS; ++j) {
