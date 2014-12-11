@@ -8,7 +8,7 @@ static double absSquared(const Amplitude a) {
 }
 
 GMRES::GMRES(int dim)
-    : y(dim * m), v(dim * m), r(dim), x(dim), w(dim), bhat((m + 1) * dim),
+    : y(m), v(dim * m), r(dim), x(dim), w(dim), bhat(m + 1),
       h((m + 1) * m), rMat((m + 1) * m), c(m), s(m) {}
 
 void GMRES::axpy(double alpha,
@@ -109,9 +109,9 @@ void GMRES::solve(void (*A)(int, const Amplitude *, Amplitude *, void *),
       c[i] = std::abs(rii) / delta;
       s[i] = std::abs(hipi) * tau / delta;
       rMat[i * m + i] = c[i] * rii + std::conj(s[i]) * hipi;
-      assignScaled(-s[i], dim, &bhat[i * dim], &bhat[(i + 1) * dim]);
-      assignScaled(c[i], dim, &bhat[i * dim], &bhat[i * dim]);
-      rho = norm(dim, &bhat[(i + 1) * dim]);
+      bhat[i + 1] = -s[i] * bhat[i];
+      bhat[i] = c[i] * bhat[i];
+      rho = std::abs(bhat[i + 1]);
       std::cout << "iter: " << j << ", " << i << " rho == " << rho << std::endl;
       if (smallEnough(rho)) {
         nr = i;
@@ -119,21 +119,17 @@ void GMRES::solve(void (*A)(int, const Amplitude *, Amplitude *, void *),
       }
     }
     nr = m;
-    assignScaled(1.0 / rMat[nr * m + nr], dim, &bhat[nr * dim], &y[nr * dim]);
+    y[nr] = bhat[nr] / rMat[nr * m + nr];
   SOL:
     for (int k = nr; k >= 0; --k) {
-      for (int jj = 0; jj < dim; ++jj) {
-        y[k * dim + jj] = bhat[k * dim + jj];
-        for (int i = k + 1; i < nr; ++i) {
-          y[k * dim + jj] -= rMat[k * m + i] * y[i * dim + jj];
-        }
-        y[k * dim +jj] /= rMat[k * m + k];
+      y[k] = bhat[k];
+      for (int i = k + 1; i <= nr; ++i) {
+        y[k] -= rMat[k * m + i] * y[i];
       }
+      y[k] /= rMat[k * m + k];
     }
     for (int i = 0; i <= nr; ++i) {
-      for (int jj = 0; jj < dim; ++jj) {
-        x[jj] += y[i * dim + jj] * v[i * dim + jj];
-      }
+      addAssignScaled(y[i], dim, &v[i * dim], &x[0]);
     }
     if (smallEnough(rho)) {
       std::copy(x.begin(), x.end(), x0);
