@@ -19,12 +19,22 @@ with lindblad.  If not, see <http://www.gnu.org/licenses/>.
 #include <gtest/gtest.h>
 #include <GMRES.hpp>
 #include <cmath>
+#include <algorithm>
 
 void printVector(int dim, Amplitude* v) {
   for (int i = 0; i < dim; ++i) {
     std::cout << v[i] << std::endl;
   }
 }
+
+struct GenRandAmplitude {
+public:
+  Amplitude operator()() {
+    Amplitude a(rand() / (double)RAND_MAX, rand() / (double)RAND_MAX);
+    return a;
+  }
+};
+
 
 TEST(GMRES, Constructor) {
   GMRES *gmres = new GMRES(1); 
@@ -69,15 +79,46 @@ TEST(GMRES, dot) {
   EXPECT_FLOAT_EQ(0.0, dot.imag());
 }
 
-TEST(GMRES, solve) {
-  GMRES gmres(2); 
-  std::vector<Amplitude> b(2);
-  b[0] = Amplitude(3.9, 2.7);
-  b[1] = Amplitude(1.4, 3.7);
-  std::vector<Amplitude> x(2);
+TEST(GMRES, solveDouble) {
+  int dim = 2;
+  GMRES gmres(dim); 
+  std::vector<Amplitude> b(dim);
+  std::generate_n(b.begin(), dim, GenRandAmplitude());
+  std::vector<Amplitude> x(dim);
   gmres.solve(&fDouble, &b[0], &x[0], 0);
-  EXPECT_FLOAT_EQ(0.5 * b[0].real(), x[0].real());
-  EXPECT_FLOAT_EQ(0.5 * b[0].imag(), x[0].imag());
-  EXPECT_FLOAT_EQ(0.5 * b[1].real(), x[1].real());
-  EXPECT_FLOAT_EQ(0.5 * b[1].imag(), x[1].imag());
+  for (int i = 0; i < dim; ++i) {
+    EXPECT_FLOAT_EQ(b[i].real() / 2.0, x[i].real()) << "i == " << i;
+    EXPECT_FLOAT_EQ(b[i].imag() / 2.0, x[i].imag()) << "i == " << i;
+  }
+}
+
+struct DiagOpCtx {
+  double *diagonal;
+  int dim;
+};
+
+static void diagonalOperator(int dim, const Amplitude *x, Amplitude *result,
+                             void *ctx) {
+  struct DiagOpCtx *cont = (struct DiagOpCtx*)ctx;
+  assert(dim == cont->dim);
+  for (int i = 0; i < dim; ++i) {
+    result[i] = cont->diagonal[i] * x[i];
+  }
+}
+
+TEST(GMRES, solveDiagonal) {
+  int dim = 5;
+  GMRES gmres(dim); 
+  std::vector<Amplitude> b(dim);
+  std::generate_n(b.begin(), dim, GenRandAmplitude());
+  std::vector<Amplitude> x(dim);
+  double diagonal[] = {1.0, 2.0, 3.0, 3.0, 3.0};
+  struct DiagOpCtx ctx;
+  ctx.diagonal = diagonal;
+  ctx.dim = dim;
+  gmres.solve(&diagonalOperator, &b[0], &x[0], &ctx);
+  for (int i = 0; i < dim; ++i) {
+    EXPECT_FLOAT_EQ(b[i].real() / diagonal[i], x[i].real()) << "i == " << i;
+    EXPECT_FLOAT_EQ(b[i].imag() / diagonal[i], x[i].imag()) << "i == " << i;
+  }
 }
