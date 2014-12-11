@@ -1,13 +1,15 @@
 #include <GMRES.hpp>
 #include <algorithm>
+#include <limits>
+#include <iostream>
 
 static double absSquared(const Amplitude a) {
   return a.real() * a.real() + a.imag() * a.imag();
 }
 
 GMRES::GMRES(int dim)
-    : y(dim * m), v(dim * m), r(dim), x(dim), w(dim), bhat(m * dim), h(m * m),
-      rMat(m * m), c(m), s(m) {}
+    : y(dim * m), v(dim * m), r(dim), x(dim), w(dim), bhat((m + 1) * dim),
+      h((m + 1) * m), rMat((m + 1) * m), c(m), s(m) {}
 
 void GMRES::axpy(double alpha,
                  void (*Ax)(int dim, const Amplitude *, Amplitude *, void *ctx),
@@ -59,10 +61,11 @@ void GMRES::solve(void (*A)(int, const Amplitude *, Amplitude *, void *),
     std::fill(bhat.begin() + 1, bhat.end(), 0);
     for (int i = 0; i < m; ++i) {
       A(dim, &v[i * dim], &w[0], ctx);
-      for (int k = 0; k < i; ++k) {
+      for (int k = 0; k <= i; ++k) {
         h[k * m + i] = dot(dim, &v[k * dim], &w[0]);
+        Amplitude hki = h[k * m + i];
         for (int jj = 0; jj < dim; ++jj) {
-          w[jj] -= h[k * m + i] * v[k * dim + jj];
+          w[jj] -= hki * v[k * dim + jj];
         }
       }
       h[(i + 1) * m + i] = norm(dim, &w[0]);
@@ -70,7 +73,7 @@ void GMRES::solve(void (*A)(int, const Amplitude *, Amplitude *, void *),
         v[(i + 1) * dim + jj] = w[jj] / h[(i + 1) * m + i];
       }
       rMat[i] = h[i];
-      for (int k = 1; k < i; ++k) {
+      for (int k = 1; k <= i; ++k) {
         Amplitude gamma = c[k - 1] * rMat[(k - 1) * m + i] +
                           std::conj(s[k - 1]) * h[k * m + i];
         rMat[k * m + i] =
@@ -79,13 +82,16 @@ void GMRES::solve(void (*A)(int, const Amplitude *, Amplitude *, void *),
       }
       Amplitude rii = rMat[i * m + i];
       Amplitude hipi = h[(i + 1) * m + i];
-      double delta =
-          sqrt(absSquared(rii) + absSquared(hipi));
+      double delta = sqrt(absSquared(rii) + absSquared(hipi));
       Amplitude mu;
       Amplitude tau;
       if (absSquared(rii) < absSquared(hipi)) {
         mu = rii / hipi;
-        tau = std::conj(mu) / std::abs(mu);
+        if (std::abs(mu) < std::numeric_limits<double>::epsilon()) {
+          tau = 1;
+        } else {
+          tau = std::conj(mu) / std::abs(mu);
+        }
       } else {
         mu = hipi / rii;
         tau = mu / std::abs(mu);
@@ -100,6 +106,7 @@ void GMRES::solve(void (*A)(int, const Amplitude *, Amplitude *, void *),
         bhat[i * dim + jj] = c[i] * bhat[i * dim + jj];
       }
       rho = norm(dim, &bhat[(i + 1) * dim]);
+      std::cout << "iter: " << j << ", " << i << " rho == " << rho << std::endl;
       if (smallEnough(rho)) {
         nr = i;
         goto SOL;
@@ -110,7 +117,7 @@ void GMRES::solve(void (*A)(int, const Amplitude *, Amplitude *, void *),
       y[nr * dim + jj] = bhat[nr * dim + jj] / rMat[nr * m + nr];
     }
   SOL:
-    for (int k = nr - 1; k > 0; --k) {
+    for (int k = nr - 1; k >= 0; --k) {
       for (int jj = 0; jj < dim; ++jj) {
         y[k * dim + jj] = bhat[k * dim + jj];
         for (int i = k + 1; i < nr; ++i) {

@@ -48,7 +48,7 @@ private:
   std::vector<Amplitude> rMat;
   std::vector<Amplitude> c;
   std::vector<Amplitude> s;
-  static const int m = 30;
+  static const int m = 50;
   static const int MAX_RESTARTS = 10000;
 };
 
