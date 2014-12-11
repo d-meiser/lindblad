@@ -45,6 +45,22 @@ bool GMRES::smallEnough(double error) const {
   }
 }
 
+template <typename T>
+static void assignScaled(T alpha, int n, const Amplitude *x,
+                             Amplitude *y) {
+  for (int i = 0; i < n; ++i) {
+    y[i] = alpha * x[i];
+  }
+}
+
+template <typename T>
+static void addAssignScaled(T alpha, int n, const Amplitude *x,
+                             Amplitude *y) {
+  for (int i = 0; i < n; ++i) {
+    y[i] += alpha * x[i];
+  }
+}
+
 void GMRES::solve(void (*A)(int, const Amplitude *, Amplitude *, void *),
                   const Amplitude *rhs, Amplitude *x0, void *ctx) {
   double rho;
@@ -54,9 +70,7 @@ void GMRES::solve(void (*A)(int, const Amplitude *, Amplitude *, void *),
   std::copy(x0, x0 + dim, &x[0]);
   for (int j = 0; j < MAX_RESTARTS; ++j) {
     double beta = norm(dim, &r[0]);
-    for (int jj = 0; jj < dim; ++jj) {
-      v[jj] = r[jj] / beta;
-    }
+    assignScaled(1.0 / beta, dim, &r[0], &v[0]);
     bhat[0] = beta;
     std::fill(bhat.begin() + 1, bhat.end(), 0);
     for (int i = 0; i < m; ++i) {
@@ -64,14 +78,10 @@ void GMRES::solve(void (*A)(int, const Amplitude *, Amplitude *, void *),
       for (int k = 0; k <= i; ++k) {
         h[k * m + i] = dot(dim, &v[k * dim], &w[0]);
         Amplitude hki = h[k * m + i];
-        for (int jj = 0; jj < dim; ++jj) {
-          w[jj] -= hki * v[k * dim + jj];
-        }
+        addAssignScaled(-hki, dim, &v[k * dim], &w[0]);
       }
       h[(i + 1) * m + i] = norm(dim, &w[0]);
-      for (int jj = 0; jj < dim; ++jj) {
-        v[(i + 1) * dim + jj] = w[jj] / h[(i + 1) * m + i];
-      }
+      assignScaled(1.0 / h[(i + 1) * m + i], dim, &w[0], &v[(i + 1) * dim]);
       rMat[i] = h[i];
       for (int k = 1; k <= i; ++k) {
         Amplitude gamma = c[k - 1] * rMat[(k - 1) * m + i] +
@@ -99,12 +109,8 @@ void GMRES::solve(void (*A)(int, const Amplitude *, Amplitude *, void *),
       c[i] = std::abs(rii) / delta;
       s[i] = std::abs(hipi) * tau / delta;
       rMat[i * m + i] = c[i] * rii + std::conj(s[i]) * hipi;
-      for (int jj = 0; jj < dim; ++jj) {
-        bhat[(i + 1) * dim + jj] = -s[i] * bhat[i * dim + jj];
-      }
-      for (int jj = 0; jj < dim; ++jj) {
-        bhat[i * dim + jj] = c[i] * bhat[i * dim + jj];
-      }
+      assignScaled(-s[i], dim, &bhat[i * dim], &bhat[(i + 1) * dim]);
+      assignScaled(c[i], dim, &bhat[i * dim], &bhat[i * dim]);
       rho = norm(dim, &bhat[(i + 1) * dim]);
       std::cout << "iter: " << j << ", " << i << " rho == " << rho << std::endl;
       if (smallEnough(rho)) {
@@ -113,9 +119,7 @@ void GMRES::solve(void (*A)(int, const Amplitude *, Amplitude *, void *),
       }
     }
     nr = m;
-    for (int jj = 0; jj < dim; ++jj) {
-      y[nr * dim + jj] = bhat[nr * dim + jj] / rMat[nr * m + nr];
-    }
+    assignScaled(1.0 / rMat[nr * m + nr], dim, &bhat[nr * dim], &y[nr * dim]);
   SOL:
     for (int k = nr; k >= 0; --k) {
       for (int jj = 0; jj < dim; ++jj) {
