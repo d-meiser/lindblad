@@ -9,8 +9,15 @@ rc('text', usetex=True)
 import matplotlib.pyplot as plt
 try:
     import joblib
-    n_jobs = 4
-    print "Using joblib with", n_jobs, "processes."
+    from multiprocessing import cpu_count
+    cpuNum = cpu_count()
+    # use maximum number of cores available
+    if cpuNum > 1:
+	n_jobs = cpuNum
+	print "Using joblib with", n_jobs, "processes."
+    else:
+	n_jobs = 1
+	print "Using joblib with 1 process."
     have_joblib = True
 except ImportError:
     print "joblib not available."
@@ -65,32 +72,33 @@ def compute_polarization(OmegaR, OmegaBs, Delta, gamma, Gamma, deltaB):
     return polarizations
 
 def main(argv):
+    Bunits = 700e3 * 2.0 * np.pi
     OmegaR = 1.25e6 * 2.0 * np.pi
-    Delta = 0.0;
     gamma = 1.0e3 * 2.0 * np.pi
     Gamma = 6.0e6 * 2.0 * np.pi
-    OmegaB = np.arange(-0.1, 0.1, 0.0005) * 700.0e3 * 2.0 * np.pi
+    Delta = 0.0 * Gamma;
+    OmegaB = np.arange(-0.1, 0.1, 0.0005) * Bunits
 
-    deltaB = 700.0e3 * 2.0 * np.pi * 0.01
+    deltaB = Bunits * 0.01
     NonZeroPolarization = compute_polarization(OmegaR, OmegaB, Delta, gamma, Gamma, deltaB)
     absorptionNonZeroField = absorption(NonZeroPolarization)
     rotationNonZeroField = rotation(NonZeroPolarization)
 
-    deltaB = 700.0e3 * 2.0 * np.pi * 0.0
+    deltaB = Bunits * 0.0
     ZeroPolarization = compute_polarization(OmegaR, OmegaB, Delta, gamma, Gamma, deltaB)
     absorptionZeroField = absorption(ZeroPolarization)
     rotationZeroField = rotation(ZeroPolarization)
 
     plt.subplot(2,1,1)
-    plt.plot(OmegaB / (700.0e3 * 2.0 * np.pi), 1.0e3 * absorptionZeroField)
-    plt.plot(OmegaB / (700.0e3 * 2.0 * np.pi), 1.0e3 *
+    plt.plot(OmegaB / (Bunits), 1.0e3 * absorptionZeroField)
+    plt.plot(OmegaB / (Bunits), 1.0e3 *
             absorptionNonZeroField,'--r')
 
     plt.ylabel(r'${\rm Absorption\; [arb. units]}$')
 
     plt.subplot(2,1,2)
-    plt.plot(OmegaB / (700.0e3 * 2.0 * np.pi), 1.0e3 * rotationZeroField)
-    plt.plot(OmegaB / (700.0e3 * 2.0 * np.pi), 1.0e3 *
+    plt.plot(OmegaB / (Bunits), 1.0e3 * rotationZeroField)
+    plt.plot(OmegaB / (Bunits), 1.0e3 *
             rotationNonZeroField,'--r')
             
     plt.xlabel(r'$B_z({\rm G})$')
