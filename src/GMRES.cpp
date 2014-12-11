@@ -117,7 +117,7 @@ void GMRES::solve(void (*A)(int, const Amplitude *, Amplitude *, void *),
       y[nr * dim + jj] = bhat[nr * dim + jj] / rMat[nr * m + nr];
     }
   SOL:
-    for (int k = nr - 1; k >= 0; --k) {
+    for (int k = nr; k >= 0; --k) {
       for (int jj = 0; jj < dim; ++jj) {
         y[k * dim + jj] = bhat[k * dim + jj];
         for (int i = k + 1; i < nr; ++i) {
@@ -126,8 +126,8 @@ void GMRES::solve(void (*A)(int, const Amplitude *, Amplitude *, void *),
         y[k * dim +jj] /= rMat[k * m + k];
       }
     }
-    for (int jj = 0; jj < dim; ++jj) {
-      for (int i = 0; i < nr; ++i) {
+    for (int i = 0; i <= nr; ++i) {
+      for (int jj = 0; jj < dim; ++jj) {
         x[jj] += y[i * dim + jj] * v[i * dim + jj];
       }
     }

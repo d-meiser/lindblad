@@ -20,6 +20,12 @@ with lindblad.  If not, see <http://www.gnu.org/licenses/>.
 #include <GMRES.hpp>
 #include <cmath>
 
+void printVector(int dim, Amplitude* v) {
+  for (int i = 0; i < dim; ++i) {
+    std::cout << v[i] << std::endl;
+  }
+}
+
 TEST(GMRES, Constructor) {
   GMRES *gmres = new GMRES(1); 
   ASSERT_TRUE(gmres != 0);
@@ -66,6 +72,12 @@ TEST(GMRES, dot) {
 TEST(GMRES, solve) {
   GMRES gmres(2); 
   std::vector<Amplitude> b(2, 1.3);
+//  b[0] = Amplitude(3.9, 2.7);
+//  b[1] = Amplitude(1.4, 3.7);
   std::vector<Amplitude> x(2);
   gmres.solve(&fDouble, &b[0], &x[0], 0);
+  EXPECT_FLOAT_EQ(0.5 * b[0].real(), x[0].real());
+  EXPECT_FLOAT_EQ(0.5 * b[0].imag(), x[0].imag());
+  EXPECT_FLOAT_EQ(0.5 * b[1].real(), x[1].real());
+  EXPECT_FLOAT_EQ(0.5 * b[1].imag(), x[1].imag());
 }
