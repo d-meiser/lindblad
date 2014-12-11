@@ -71,9 +71,9 @@ TEST(GMRES, dot) {
 
 TEST(GMRES, solve) {
   GMRES gmres(2); 
-  std::vector<Amplitude> b(2, 1.3);
-//  b[0] = Amplitude(3.9, 2.7);
-//  b[1] = Amplitude(1.4, 3.7);
+  std::vector<Amplitude> b(2);
+  b[0] = Amplitude(3.9, 2.7);
+  b[1] = Amplitude(1.4, 3.7);
   std::vector<Amplitude> x(2);
   gmres.solve(&fDouble, &b[0], &x[0], 0);
   EXPECT_FLOAT_EQ(0.5 * b[0].real(), x[0].real());
