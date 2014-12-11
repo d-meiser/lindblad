@@ -1,7 +1,6 @@
 #include <GMRES.hpp>
 #include <algorithm>
 #include <limits>
-#include <iostream>
 
 static double absSquared(const Amplitude a) {
   return a.real() * a.real() + a.imag() * a.imag();
@@ -112,7 +111,6 @@ void GMRES::solve(void (*A)(int, const Amplitude *, Amplitude *, void *),
       bhat[i + 1] = -s[i] * bhat[i];
       bhat[i] = c[i] * bhat[i];
       rho = std::abs(bhat[i + 1]);
-      std::cout << "iter: " << j << ", " << i << " rho == " << rho << std::endl;
       if (smallEnough(rho)) {
         nr = i;
         goto SOL;
