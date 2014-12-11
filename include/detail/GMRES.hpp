@@ -40,6 +40,8 @@ public:
   double getAbsTol() const { return tolerance; }
   void setKrylovDim(int dim);
   int getKrylovDim() const { return m; }
+  int getNumLastIter() const { return numLastIters; }
+  int getNumLastRestarts() const { return numLastRestarts; }
 
 private:
   std::vector<Amplitude> y;
@@ -56,6 +58,8 @@ private:
   int m;
   static const int MAX_RESTARTS = 10000;
   double tolerance;
+  int numLastIters;
+  int numLastRestarts;
 
   // Utilities
   void resizeArrays();

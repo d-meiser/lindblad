@@ -113,6 +113,8 @@ TEST(GMRES, solveDouble) {
   std::generate_n(b.begin(), dim, GenRandAmplitude());
   std::vector<Amplitude> x(dim);
   gmres.solve(&fDouble, &b[0], &x[0], 0);
+  int numIters = gmres.getNumLastIter();
+  EXPECT_EQ(1, numIters);
   for (int i = 0; i < dim; ++i) {
     EXPECT_FLOAT_EQ(b[i].real() / 2.0, x[i].real()) << "i == " << i;
     EXPECT_FLOAT_EQ(b[i].imag() / 2.0, x[i].imag()) << "i == " << i;
@@ -144,6 +146,28 @@ TEST(GMRES, solveDiagonal) {
   ctx.diagonal = diagonal;
   ctx.dim = dim;
   gmres.solve(&diagonalOperator, &b[0], &x[0], &ctx);
+  int numIters = gmres.getNumLastIter();
+  EXPECT_EQ(3, numIters);
+  for (int i = 0; i < dim; ++i) {
+    EXPECT_FLOAT_EQ(b[i].real() / diagonal[i], x[i].real()) << "i == " << i;
+    EXPECT_FLOAT_EQ(b[i].imag() / diagonal[i], x[i].imag()) << "i == " << i;
+  }
+}
+
+TEST(GMRES, solveWithRestart) {
+  int dim = 5;
+  GMRES gmres(dim); 
+  std::vector<Amplitude> b(dim);
+  std::generate_n(b.begin(), dim, GenRandAmplitude());
+  std::vector<Amplitude> x(dim);
+  double diagonal[] = {1.0, 2.0, 3.0, 4.0, 3.0};
+  struct DiagOpCtx ctx;
+  ctx.diagonal = diagonal;
+  ctx.dim = dim;
+  gmres.setKrylovDim(2);
+  gmres.solve(&diagonalOperator, &b[0], &x[0], &ctx);
+  int numRestarts = gmres.getNumLastRestarts();
+  EXPECT_GT(numRestarts, 1);
   for (int i = 0; i < dim; ++i) {
     EXPECT_FLOAT_EQ(b[i].real() / diagonal[i], x[i].real()) << "i == " << i;
     EXPECT_FLOAT_EQ(b[i].imag() / diagonal[i], x[i].imag()) << "i == " << i;

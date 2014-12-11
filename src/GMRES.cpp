@@ -6,7 +6,10 @@ static double absSquared(const Amplitude a) {
   return a.real() * a.real() + a.imag() * a.imag();
 }
 
-GMRES::GMRES(int d) : dim(d), m(30), tolerance(1.0e-6) { resizeArrays(); }
+GMRES::GMRES(int d)
+    : dim(d), m(30), tolerance(1.0e-6), numLastIters(0), numLastRestarts(0) {
+  resizeArrays();
+}
 
 void GMRES::resizeArrays() {
   y.resize(m);
@@ -77,16 +80,20 @@ static void addAssignScaled(T alpha, int n, const Amplitude *x,
 
 void GMRES::solve(void (*A)(int, const Amplitude *, Amplitude *, void *),
                   const Amplitude *rhs, Amplitude *x0, void *ctx) {
+  numLastIters = 0;
+  numLastRestarts = 0;
   double rho;
   int nr;
   axpy(-1.0, A, x0, rhs, &r[0], ctx);
   std::copy(x0, x0 + dim, &x[0]);
   for (int j = 0; j < MAX_RESTARTS; ++j) {
+    ++numLastRestarts;
     double beta = norm(dim, &r[0]);
     assignScaled(1.0 / beta, dim, &r[0], &v[0]);
     bhat[0] = beta;
     std::fill(bhat.begin() + 1, bhat.end(), 0);
     for (int i = 0; i < m; ++i) {
+      ++numLastIters;
       A(dim, &v[i * dim], &w[0], ctx);
       for (int k = 0; k <= i; ++k) {
         h[k * m + i] = dot(dim, &v[k * dim], &w[0]);
