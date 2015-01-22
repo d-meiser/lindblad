@@ -28,9 +28,14 @@ def main(argv):
 
     deltaB = 700.0e3 * 2.0 * np.pi * 0.01
 
+    num_steps = 10000
+    num_dump = 100
+    num_snapshots = num_steps / num_dump
+    dt = 4.0e-8
     dynamics = get_dynamics([OmegaR, OmegaB[0], Delta, gamma, Gamma,
-            deltaB, 1.0e-8, 100000, 100])
-    populations = [np.array([dynamics[i*4+n,n].real for i in range(1000)]) for n in range(4)]
+            deltaB, dt, num_steps, num_dump])
+    populations = [np.array([dynamics[i*4+n,n].real for i in
+                            range(num_snapshots)]) for n in range(4)]
     plt.clf()
     plots=[]
     for n in range(4):
