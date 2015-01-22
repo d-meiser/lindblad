@@ -21,8 +21,6 @@ with lindblad.  If not, see <http://www.gnu.org/licenses/>.
 #include <vector>
 #include <cstdio>
 
-static const int numIters = 1000;
-
 struct SystemParameters {
   double OmegaR; /**< Rabi Freq. of Probe Beam (Hz) */
   double OmegaB; /**< Larmour Freq. of Axial Field (Hz) */
@@ -111,7 +109,7 @@ int getParameters(int argn, const char** argv, SystemParameters* parameters) {
     parameters->deltaB = 0.0;
     parameters->dt = 1.0e-8;
     parameters->numDump = 100;
-    parameters->numSteps = 100000;
+    parameters->numSteps = 1000;
   } else if (argn < 10) {
     printf("Insufficient parameters provided.");
     ierr = 1;
