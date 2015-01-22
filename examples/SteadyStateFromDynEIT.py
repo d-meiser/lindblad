@@ -2,10 +2,6 @@
 import sys
 import subprocess
 import numpy as np
-from matplotlib import rc
-rc('font',**{'family':'sans-serif','sans-serif':['Helvetica']})
-rc('text', usetex=True)
-import matplotlib.pyplot as plt
 
 def get_evolution(dim, arguments = None):
     """Returns density matrix evolution for given parameters.

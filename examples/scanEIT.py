@@ -3,10 +3,15 @@
 import sys
 import subprocess
 import numpy as np
-from matplotlib import rc
-rc('font',**{'family':'sans-serif','sans-serif':['Helvetica']})
-rc('text', usetex=True)
-import matplotlib.pyplot as plt
+try:
+    from matplotlib import rc
+    rc('font',**{'family':'sans-serif','sans-serif':['Helvetica']})
+    rc('text', usetex=True)
+    import matplotlib.pyplot as plt
+    have_matplotlib = True
+except ImportError:
+    print "matplotlib not available"
+    have_matplotlib = False
 try:
     import joblib
     from multiprocessing import cpu_count
@@ -88,6 +93,9 @@ def main(argv):
     ZeroPolarization = compute_polarization(OmegaR, OmegaB, Delta, gamma, Gamma, deltaB)
     absorptionZeroField = absorption(ZeroPolarization)
     rotationZeroField = rotation(ZeroPolarization)
+
+    if not have_matplotlib:
+        return
 
     plt.subplot(2,1,1)
     plt.plot(OmegaB / (Bunits), 1.0e3 * absorptionZeroField)

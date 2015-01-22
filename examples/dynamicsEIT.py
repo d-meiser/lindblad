@@ -2,10 +2,15 @@
 import sys
 import subprocess
 import numpy as np
-from matplotlib import rc
-rc('font',**{'family':'sans-serif','sans-serif':['Helvetica']})
-rc('text', usetex=True)
-import matplotlib.pyplot as plt
+try:
+    from matplotlib import rc
+    rc('font',**{'family':'sans-serif','sans-serif':['Helvetica']})
+    rc('text', usetex=True)
+    import matplotlib.pyplot as plt
+    have_matplotlib = True
+except ImportError:
+    print "matplotlib not available"
+    have_matplotlib = False
 
 def get_dynamics(arguments = None):
     if arguments:
@@ -36,6 +41,10 @@ def main(argv):
             deltaB, dt, num_steps, num_dump])
     populations = [np.array([dynamics[i*4+n,n].real for i in
                             range(num_snapshots)]) for n in range(4)]
+
+    if not have_matplotlib:
+        return
+
     plt.clf()
     plots=[]
     for n in range(4):
