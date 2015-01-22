@@ -1,5 +1,5 @@
 /*
-Copyright 2014 Dominic Meiser
+Copyright 2014-2015 Dominic Meiser
 
 This file is part of lindblad.
 
