@@ -2,3 +2,4 @@ build*
 gtest*
 tags
 petsc*
+*swp
