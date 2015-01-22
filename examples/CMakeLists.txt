@@ -36,3 +36,13 @@ set(SCRIPTS
     )
 file(COPY ${SCRIPTS} DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
 
+set(PYTHON_SCRIPT_TESTS
+    dynamicsEIT
+    SteadyStateFromDynEIT
+   )
+if(PETSC_FOUND)
+  list(APPEND PYTHON_SCRIPT_TESTS scanEIT)
+endif()
+foreach(s ${PYTHON_SCRIPT_TESTS})
+  add_test(NAME test_${s} COMMAND python ${s}.py)
+endforeach()
