@@ -1,9 +1,12 @@
+virtualenv:
+  system_site_packages: true
 language: cpp
 compiler:
   - g++
 before_install:
   - sh ./utilities/download_gtest.sh
   - sudo apt-get install libblas-dev libatlas-dev liblapack-dev
+  - sudo apt-get install -qq python-numpy
   - sh ./utilities/get_petsc.sh
 script:
   - mkdir -p build
