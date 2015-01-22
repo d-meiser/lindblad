@@ -43,7 +43,7 @@ int readParameter(int n, const char** argv, double* param,
                   const char* name) {
   if (sscanf(argv[n], "%lf", param) != 1) {
     printf("Failed to read argument %d: %s\n", n, name);
-    return -1;
+    return 1;
   }
   return 0;
 }
@@ -52,13 +52,13 @@ int readParameter(int n, const char** argv, int* param,
                   const char* name) {
   if (sscanf(argv[n], "%d", param) != 1) {
     printf("Failed to read argument %d: %s\n", n, name);
-    return -1;
+    return 1;
   }
   return 0;
 }
 
 static int getParameters(int argn, const char** argv, SystemParameters* parameters);
-static int printDensityMatrix(const Amplitude* rho, int N);
+static void printDensityMatrix(const Amplitude* rho, int N);
 
 int main(int argn, const char** argv) {
   int dim = 4;
@@ -101,8 +101,7 @@ int main(int argn, const char** argv) {
 }
 
 int getParameters(int argn, const char** argv, SystemParameters* parameters) {
-  int ierr;
-
+  int ierr = 0;
   if (argn == 1) {
     parameters->OmegaR = 1.25e6 * 2.0 * M_PI;
     parameters->OmegaB = 700.0e3 * 2.0 * M_PI * 0.01;
@@ -115,22 +114,22 @@ int getParameters(int argn, const char** argv, SystemParameters* parameters) {
     parameters->numSteps = 100000;
   } else if (argn < 10) {
     printf("Insufficient parameters provided.");
-    return -1;
+    ierr = 1;
   } else {
-    readParameter(1, argv, &parameters->OmegaR, "OmegaR");
-    readParameter(2, argv, &parameters->OmegaB, "OmegaB");
-    readParameter(3, argv, &parameters->Delta, "Delta");
-    readParameter(4, argv, &parameters->gamma, "gamma");
-    readParameter(5, argv, &parameters->Gamma, "Gamma");
-    readParameter(6, argv, &parameters->deltaB, "deltaB");
-    readParameter(7, argv, &parameters->dt, "dt");
-    readParameter(8, argv, &parameters->numSteps, "numSteps");
-    readParameter(9, argv, &parameters->numDump, "numDump");
+    ierr += readParameter(1, argv, &parameters->OmegaR, "OmegaR");
+    ierr += readParameter(2, argv, &parameters->OmegaB, "OmegaB");
+    ierr += readParameter(3, argv, &parameters->Delta, "Delta");
+    ierr += readParameter(4, argv, &parameters->gamma, "gamma");
+    ierr += readParameter(5, argv, &parameters->Gamma, "Gamma");
+    ierr += readParameter(6, argv, &parameters->deltaB, "deltaB");
+    ierr += readParameter(7, argv, &parameters->dt, "dt");
+    ierr += readParameter(8, argv, &parameters->numSteps, "numSteps");
+    ierr += readParameter(9, argv, &parameters->numDump, "numDump");
   }
   return ierr;
 }
 
-int printDensityMatrix(const Amplitude* rho, int N) {
+void printDensityMatrix(const Amplitude* rho, int N) {
   int i, j;
   for (i = 0; i < N; ++i) {
     for (j = 0; j < N; ++j) {

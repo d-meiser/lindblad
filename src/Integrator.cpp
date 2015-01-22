@@ -30,5 +30,5 @@ void Integrator::evaluateRHS(double* in, double* out, double t, void* ctx) {
 }
 
 Integrator* Integrator::copy() const {
-  makeCopy();
+  return makeCopy();
 }
