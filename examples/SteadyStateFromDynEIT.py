@@ -1,7 +1,10 @@
 #!/usr/bin/python
-import sys
+import sys, os
 import subprocess
 import numpy as np
+
+eit_executable = os.path.join(os.path.dirname(__file__), 'EIT')
+print "eit_executable == ", eit_executable
 
 def get_evolution(dim, arguments = None):
     """Returns density matrix evolution for given parameters.
@@ -17,7 +20,7 @@ def get_evolution(dim, arguments = None):
     if not len(arguments) == 9:
         raise RuntimeError("Wrong number of arguments")
 
-    output = subprocess.check_output(["./EIT"] +
+    output = subprocess.check_output([eit_executable] +
                 [str(a) for a in arguments])
     density_matrix_evolution = np.matrix(output)
     density_matrix_evolution = density_matrix_evolution.reshape(
