@@ -3,8 +3,7 @@ import sys, os
 import subprocess
 import numpy as np
 
-eit_executable = os.path.join(os.path.dirname(__file__), 'EIT')
-print "eit_executable == ", eit_executable
+eit_executable = os.path.abspath(os.path.join(os.path.dirname(__file__), 'EIT'))
 
 def get_evolution(dim, arguments = None):
     """Returns density matrix evolution for given parameters.
