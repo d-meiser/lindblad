@@ -17,7 +17,7 @@ You should have received a copy of the GNU General Public License along
 with lindblad.  If not, see <http://www.gnu.org/licenses/>.
 */
 #include <detail/SparseApply.hpp>
-#include <vector>
+#include <cstdlib>
 
 static void extractStrided(const Amplitude *x, int offset, int stride, int n,
                            Amplitude *y);
@@ -39,21 +39,13 @@ void leftApply(int row, int col, Amplitude alpha, int dim, const Amplitude *A,
 #define LINDBLAD_SMALL_DIM 1024
 #endif
 
-#if defined(__GNUC__)
-#define ALIGN16BYTES __attribute__ ((__aligned__(16)))
-#elif defined(__clang__)
-#define ALIGN16BYTES __attribute__ ((__aligned__(16)))
-#else
-#define ALIGN16BYTES
-#endif
-
 void rightApply(int row, int col, Amplitude alpha, int dim, const Amplitude *A,
                 Amplitude *B) {
   if (dim > LINDBLAD_SMALL_DIM) {
     rightApplyLargeDim(row, col, alpha, dim, A, B);
   }
-  Amplitude Acolumn[LINDBLAD_SMALL_DIM] ALIGN16BYTES;
-  Amplitude Bcolumn[LINDBLAD_SMALL_DIM] ALIGN16BYTES;
+  Amplitude *Acolumn = (Amplitude*)alloca(dim * sizeof(*Acolumn));
+  Amplitude *Bcolumn = (Amplitude*)alloca(dim * sizeof(*Acolumn));
   extractStrided(A, row, dim, dim, &Acolumn[0]);
   extractStrided(B, col, dim, dim, &Bcolumn[0]);
   for (int r = 0; r < dim; ++r) {
