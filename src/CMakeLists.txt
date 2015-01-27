@@ -4,6 +4,7 @@ add_library(lindblad
     MasterEqnEvolution.cpp
     Integrator.cpp
     RK4.cpp
+    RK45.cpp
     SparseApply.cpp
     Coupling.cpp
     Decay.cpp
