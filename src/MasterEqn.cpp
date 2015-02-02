@@ -24,16 +24,6 @@ with lindblad.  If not, see <http://www.gnu.org/licenses/>.
 
 struct MasterEqn::Impl {
   Impl(int d) : dim(d) {}
-  Impl(const Impl& other)
-      : dim(other.dim), couplings(other.couplings), decays(other.decays) {}
-  Impl& operator=(const Impl& other) {
-    if (this != &other) {
-      dim = other.dim;
-      couplings = other.couplings;
-      decays = other.decays;
-    }
-    return *this;
-  }
   ~Impl() {}
   void apply(const Amplitude* A, Amplitude* B) const {
     std::fill(B, B + dim * dim, 0);
