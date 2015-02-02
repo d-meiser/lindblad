@@ -1,4 +1,5 @@
 include_directories(${PROJECT_SOURCE_DIR}/include/detail)
+include_directories(${PROJECT_BINARY_DIR})
 add_library(lindblad
     Coupling.cpp
     Decay.cpp

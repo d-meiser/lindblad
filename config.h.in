@@ -1,0 +1,3 @@
+// Wheter we have #pragma omp simd
+#cmakedefine HAVE_PRAGMA_OMP_SIMD
+

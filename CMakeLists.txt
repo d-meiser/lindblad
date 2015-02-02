@@ -14,3 +14,7 @@ if(LINDBLAD_BUILD_TESTS)
   add_subdirectory(tests)
 endif()
 
+try_compile(HAVE_PRAGMA_OMP_SIMD ${PROJECT_BINARY_DIR}/cmake
+            ${PROJECT_SOURCE_DIR}/cmake/try_compile/pragma_omp_simd.cpp)
+configure_file(config.h.in config.h)
+

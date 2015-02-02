@@ -20,6 +20,7 @@ with lindblad.  If not, see <http://www.gnu.org/licenses/>.
 #include <iostream>
 #include <detail/SparseApply.hpp>
 #include <detail/Memory.hpp>
+#include <config.h>
 
 #if !defined(LINDBLAD_STACK_ARRAY_ALIGNMENT)
 #define LINDBLAD_STACK_ARRAY_ALIGNMENT 64
