@@ -78,7 +78,7 @@ void CheckLindbladTraceProperty(const T& op, int dim) {
   for (int i = 0; i < dim; ++i) {
     trace += B[i + i * dim];
   }
-  EXPECT_TRUE(abs(trace) < 1.0e-12);
+  EXPECT_LT(abs(trace), 1.0e-12);
 }
 
 template <>
