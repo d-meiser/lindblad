@@ -17,7 +17,6 @@ You should have received a copy of the GNU General Public License along
 with lindblad.  If not, see <http://www.gnu.org/licenses/>.
 */
 #include <cstdlib>
-#include <iostream>
 #include <detail/SparseApply.hpp>
 #include <detail/Memory.hpp>
 #include <config.h>
@@ -51,18 +50,10 @@ void rightApply(int row, int col, Amplitude alpha, int dim, const Amplitude *A,
   if (dim > LINDBLAD_SMALL_DIM) {
     rightApplyLargeDim(row, col, alpha, dim, A, B);
   }
-#if 0
-  Amplitude *Acolumn = (Amplitude *)alloca(
-      dim * sizeof(*Acolumn));
-  Amplitude *Bcolumn = (Amplitude *)alloca(
-      dim * sizeof(*Bcolumn));
-#endif
   Amplitude *Acolumn = (Amplitude *)LINDBLAD_ALIGNED_ALLOCA(
       dim * sizeof(*Acolumn), LINDBLAD_STACK_ARRAY_ALIGNMENT);
   Amplitude *Bcolumn = (Amplitude *)LINDBLAD_ALIGNED_ALLOCA(
       dim * sizeof(*Bcolumn), LINDBLAD_STACK_ARRAY_ALIGNMENT);
-  std::cout << Acolumn << std::endl;
-  std::cout << Bcolumn << std::endl;
   extractStrided(A, row, dim, dim, &Acolumn[0]);
   extractStrided(B, col, dim, dim, &Bcolumn[0]);
 #ifdef HAVE_PRAGMA_OMP_SIMD
