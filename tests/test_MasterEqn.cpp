@@ -37,6 +37,11 @@ TEST(MasterEqn, AddDecay) {
   EXPECT_NO_THROW(meqn.addDecay(2, 3, 2.0));
 }
 
+TEST(MasterEqn, AddSourceSink) {
+  MasterEqn meqn(4);
+  EXPECT_NO_THROW(meqn.addSourceSink(1, 2.0));
+}
+
 MasterEqn buildME(int dim) {
   MasterEqn meqn(dim);
   meqn.addCoupling(2, 1, Amplitude(2.0, -1.0));
