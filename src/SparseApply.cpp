@@ -16,8 +16,18 @@ for more details.
 You should have received a copy of the GNU General Public License along
 with lindblad.  If not, see <http://www.gnu.org/licenses/>.
 */
-#include <detail/SparseApply.hpp>
 #include <cstdlib>
+#include <iostream>
+#include <detail/SparseApply.hpp>
+#include <detail/Memory.hpp>
+
+#if !defined(LINDBLAD_STACK_ARRAY_ALIGNMENT)
+#define LINDBLAD_STACK_ARRAY_ALIGNMENT 64
+#endif
+#if !defined(LINDBLAD_SMALL_DIM)
+#define LINDBLAD_SMALL_DIM 1024
+#endif
+
 
 static void extractStrided(const Amplitude *x, int offset, int stride, int n,
                            Amplitude *y);
@@ -35,19 +45,28 @@ void leftApply(int row, int col, Amplitude alpha, int dim, const Amplitude *A,
   }
 }
 
-#if !defined(LINDBLAD_SMALL_DIM)
-#define LINDBLAD_SMALL_DIM 1024
-#endif
-
 void rightApply(int row, int col, Amplitude alpha, int dim, const Amplitude *A,
                 Amplitude *B) {
   if (dim > LINDBLAD_SMALL_DIM) {
     rightApplyLargeDim(row, col, alpha, dim, A, B);
   }
-  Amplitude *Acolumn = (Amplitude*)alloca(dim * sizeof(*Acolumn));
-  Amplitude *Bcolumn = (Amplitude*)alloca(dim * sizeof(*Acolumn));
+#if 0
+  Amplitude *Acolumn = (Amplitude *)alloca(
+      dim * sizeof(*Acolumn));
+  Amplitude *Bcolumn = (Amplitude *)alloca(
+      dim * sizeof(*Bcolumn));
+#endif
+  Amplitude *Acolumn = (Amplitude *)LINDBLAD_ALIGNED_ALLOCA(
+      dim * sizeof(*Acolumn), LINDBLAD_STACK_ARRAY_ALIGNMENT);
+  Amplitude *Bcolumn = (Amplitude *)LINDBLAD_ALIGNED_ALLOCA(
+      dim * sizeof(*Bcolumn), LINDBLAD_STACK_ARRAY_ALIGNMENT);
+  std::cout << Acolumn << std::endl;
+  std::cout << Bcolumn << std::endl;
   extractStrided(A, row, dim, dim, &Acolumn[0]);
   extractStrided(B, col, dim, dim, &Bcolumn[0]);
+#ifdef HAVE_PRAGMA_OMP_SIMD
+#pragma omp simd aligned(Acolumn, Bcolumn: LINDBLAD_STACK_ARRAY_ALIGNMENT)
+#endif
   for (int r = 0; r < dim; ++r) {
     Bcolumn[r] += alpha * Acolumn[r];
   }
@@ -66,6 +85,9 @@ void rightApplyLargeDim(int row, int col, Amplitude alpha, int dim,
 
 void extractStrided(const Amplitude *x, int offset, int stride, int n,
                            Amplitude *y) {
+#ifdef HAVE_PRAGMA_OMP_SIMD
+#pragma omp simd aligned(y : LINDBLAD_STACK_ARRAY_ALIGNMENT)
+#endif
   for (int i = 0; i < n; ++i) {
     y[i] = x[offset + i * stride];
   }
@@ -73,9 +95,11 @@ void extractStrided(const Amplitude *x, int offset, int stride, int n,
 
 void insertStrided(const Amplitude *x, int offset, int stride, int n,
                               Amplitude *y) {
+#ifdef HAVE_PRAGMA_OMP_SIMD
+#pragma omp simd aligned(x : LINDBLAD_STACK_ARRAY_ALIGNMENT)
+#endif
   for (int i = 0; i < n; ++i) {
     y[offset + i * stride] = x[i];
   }
 }
-
 

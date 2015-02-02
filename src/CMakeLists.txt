@@ -5,7 +5,6 @@ add_library(lindblad
     Integrator.cpp
     MasterEqn.cpp
     MasterEqnEvolution.cpp
-    Memory.cpp
     RK4.cpp
     SourceSink.cpp
     SparseApply.cpp
