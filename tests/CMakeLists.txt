@@ -6,6 +6,7 @@ set(TESTS
     test_Decay
     test_MasterEqn
     test_MasterEqnEvolution
+    test_Memory
     test_Integrator
     test_RK4
     test_SourceSink
