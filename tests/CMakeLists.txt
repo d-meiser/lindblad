@@ -8,6 +8,7 @@ set(TESTS
     test_MasterEqnEvolution
     test_Integrator
     test_RK4
+    test_SourceSink
    )
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})
