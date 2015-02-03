@@ -42,6 +42,7 @@ class RK45 : public Integrator {
   static const double b5[6];
 
   void computeWork(int row, double dt);
+  double errorEstimate(const std::vector<double>& x, const std::vector<double>& y) const;
   virtual const double* getCurrentState() const;
   virtual void advance(double* t, double* dt, void* ctx);
   virtual RK45* makeCopy() const;
