@@ -19,14 +19,26 @@ with lindblad.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef RK45_HPP
 #define RK45_HPP
 
+#include <vector>
+
 #include <Integrator.hpp>
 
 class RK45 : public Integrator {
  public:
   RK45(int dim, double time, const double* state,
       void (*f)(double* x, double* y, double t, void* ctx));
+  ~RK45();
 
  private:
+  std::vector<double> y;
+  std::vector<std::vector<double> > ks;
+  std::vector<double> work;
+
+  static const double cs[5];
+  static const double as[25];
+  static const double b4[6];
+  static const double b5[6];
+
   virtual const double* getCurrentState() const;
   virtual void advance(double* t, double* dt, void* ctx);
   virtual RK45* makeCopy() const;

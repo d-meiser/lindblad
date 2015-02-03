@@ -18,6 +18,7 @@ with lindblad.  If not, see <http://www.gnu.org/licenses/>.
 */
 #include <gtest/gtest.h>
 #include <RK45.hpp>
+#include <cmath>
 
 struct FooCtx {
   size_t dim;
@@ -40,5 +41,17 @@ struct DecayCtx {
 void exponentialDecay(double* x, double* y, double t, void* ctx) {
   struct DecayCtx *decCtx = (struct DecayCtx*)ctx;
   *y = -decCtx->gamma * *x;
+}
+
+TEST(RK45, Exp) {
+  static const double gamma = 6.3;
+  struct DecayCtx ctx = {gamma};
+  double x = 1.7;
+  RK45 integrator(1, 0, &x, &exponentialDecay);
+  integrator.takeStep(&ctx);
+  static const double EPS = 1.0e-10;
+  double t = integrator.getTime();
+  EXPECT_GE(*integrator.getState(), x * exp(-gamma * t) - EPS);
+  EXPECT_LE(*integrator.getState(), x * exp(-gamma * t) + EPS);
 }
 

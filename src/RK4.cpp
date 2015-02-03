@@ -31,6 +31,8 @@ RK4::RK4(int dim, double time, const double* state,
   std::copy(state, state + dim, y.begin());
 }
 
+RK4::~RK4() {}
+
 const double* RK4::getCurrentState() const { return &y[0]; }
 
 void RK4::advance(double* t, double* dt, void* ctx) {

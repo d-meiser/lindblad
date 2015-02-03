@@ -18,9 +18,35 @@ with lindblad.  If not, see <http://www.gnu.org/licenses/>.
 */
 #include <RK45.hpp>
 
+#include <algorithm>
+
+const double RK45::cs[5] = {1.0 / 4.0, 3.0 / 8.0, 12.0 / 13.0, 1.0, 1.0 / 2.0};
+const double RK45::as[25] = {
+  1.0 / 4.0,       0,                0,                0,               0,
+  3.0 / 32.0,      9.0 / 32.0,       0,                0,               0,
+  1932.0 / 2197.0, -7200.0 / 2197.0, 7296.0 / 2197.0,  0,               0,
+  439.0 / 216.0,   -8.0,             3680.0 / 513.0,   -845.0 / 4104.0, 0,
+  -8.0 / 27.0,     2.0,              -3544.0 / 2565.0, 1859.0 / 4104.0, -11.0 / 40.0};
+const double RK45::b5[6] = {16.0 / 135.0, 0, 6656.0 / 12825.0,
+                            28561.0 / 56430.0, -9.0 / 50.0, 2.0 / 55.0};
+const double RK45::b4[6] = {25.0 / 216.0, 0, 1408.0 / 2565.0, -1.0 / 5.0, 0, 0};
+
 RK45::RK45(int dim, double time, const double* state,
            void (*f)(double* x, double* y, double t, void* ctx))
-    : Integrator(dim, time, state, f) {}
-const double* RK45::getCurrentState() const {}
-void RK45::advance(double* t, double* dt, void* ctx) {}
+    : Integrator(dim, time, state, f), y(dim), ks(5), work(dim) {
+  std::copy(state, state + dim, &y[0]);
+  for (int i = 0; i < 5; ++i) {
+    ks[i].resize(dim);
+  }
+}
+RK45::~RK45() {}
+const double* RK45::getCurrentState() const {
+  return &y[0];
+}
+void RK45::advance(double* t, double* dt, void* ctx) {
+  evaluateRHS(&y[0], &k[0][0], *t, ctx);
+  for (std::size_t i = 0; i < y.size(); ++i) {
+    work[i] = y[i] + cs[0] * *dt * k[0][i];
+  }
+}
 RK45* RK45::makeCopy() const {}
