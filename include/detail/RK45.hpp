@@ -33,12 +33,15 @@ class RK45 : public Integrator {
   std::vector<double> y;
   std::vector<std::vector<double> > ks;
   std::vector<double> work;
+  std::vector<double> sol4;
+  std::vector<double> sol5;
 
-  static const double cs[5];
+  static const double cs[6];
   static const double as[25];
   static const double b4[6];
   static const double b5[6];
 
+  void computeWork(int row, double dt);
   virtual const double* getCurrentState() const;
   virtual void advance(double* t, double* dt, void* ctx);
   virtual RK45* makeCopy() const;
