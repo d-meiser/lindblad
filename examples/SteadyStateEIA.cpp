@@ -32,9 +32,9 @@ int main(int argn, char **argv) {
   PC             pc;
   Vec            x, y;
   Mat            A;
-  PetscInt       i, m, n, mp, mpp;
+  PetscInt       i, m, n, mp;
   PetscErrorCode ierr;
-  PetscReal      OmegaR, OmegaB, Delta, gamma;
+  PetscReal      Delta, OmegaR, OmegaB, gamma;
   MasterEqn      meqn(N);
   PetscScalar    *xarr, trace;
 

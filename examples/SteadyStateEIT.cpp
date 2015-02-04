@@ -58,7 +58,7 @@ int main(int argn, const char** argv) {
   PetscInt         i, m, n;
   PetscErrorCode   ierr;
   MasterEqn        meqn(N);
-  PetscScalar      *xarr, *yarr, trace;
+  PetscScalar      *xarr, trace;
   SystemParameters params;
 
   PetscFunctionBegin;
