@@ -16,24 +16,36 @@ for more details.
 You should have received a copy of the GNU General Public License along
 with lindblad.  If not, see <http://www.gnu.org/licenses/>.
 */
-#ifndef RK4_HPP
-#define RK4_HPP
+#ifndef RK45_HPP
+#define RK45_HPP
 
-#include <Integrator.hpp>
 #include <vector>
 
-class RK4 : public Integrator {
+#include <Integrator.hpp>
+
+class RK45 : public Integrator {
  public:
-  RK4(int dim, double time, const double* state,
+  RK45(int dim, double time, const double* state,
       void (*f)(double* x, double* y, double t, void* ctx));
-  ~RK4();
+  ~RK45();
 
  private:
-  std::vector<double> k1, k2, k3, k4, y, work;
+  std::vector<double> y;
+  std::vector<std::vector<double> > ks;
+  std::vector<double> work;
+  std::vector<double> sol4;
+  std::vector<double> sol5;
+
+  static const double cs[6];
+  static const double as[25];
+  static const double b4[6];
+  static const double b5[6];
+
+  void computeWork(int row, double dt);
+  double errorEstimate(const std::vector<double>& x, const std::vector<double>& y) const;
   virtual const double* getCurrentState() const;
   virtual void advance(double* t, double* dt, void* ctx);
-  virtual RK4* makeCopy() const;
+  virtual RK45* makeCopy() const;
 };
 
 #endif
-

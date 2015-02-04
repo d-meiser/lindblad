@@ -10,6 +10,7 @@ set(TESTS
     test_Integrator
     test_RK4
     test_SourceSink
+    test_RK45
    )
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})

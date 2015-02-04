@@ -8,6 +8,7 @@ add_library(lindblad
     MasterEqnEvolution.cpp
     RK4.cpp
     SourceSink.cpp
+    RK45.cpp
     SparseApply.cpp
     )
 
