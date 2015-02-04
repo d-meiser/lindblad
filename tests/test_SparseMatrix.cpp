@@ -1,5 +1,5 @@
 /*
-Copyright 2014-2015 Dominic Meiser
+Copyright 2014 Dominic Meiser
 
 This file is part of lindblad.
 
@@ -16,12 +16,21 @@ for more details.
 You should have received a copy of the GNU General Public License along
 with lindblad.  If not, see <http://www.gnu.org/licenses/>.
 */
-#ifndef LINDBLAD_HPP
-#define LINDBLAD_HPP
-
-#include <Amplitude.hpp>
+#include <gtest/gtest.h>
 #include <SparseMatrix.hpp>
-#include <MasterEqn.hpp>
-#include <MasterEqnEvolution.hpp>
 
-#endif
+TEST(SparseMatrix, DefaultConstructible) {
+  SparseMatrix a;
+  EXPECT_TRUE(a.entries.empty());
+}
+
+TEST(SparseMatrix, ConstructFromMatrixEntry) {
+  SparseMatrix a(SparseMatrixEntry(0, 1, 2.0));
+  EXPECT_EQ(1u, a.entries.size());
+}
+
+TEST(SparseMatrix, CanAddTo) {
+  SparseMatrix a;
+  a.add(SparseMatrixEntry(2, 3, 5.0));
+  EXPECT_EQ(1u, a.entries.size());
+}
