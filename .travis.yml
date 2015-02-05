@@ -17,7 +17,6 @@ script:
   - cmake -DLINDBLAD_BUILD_TESTS:BOOL=ON -DLINDBLAD_ENABLE_COVERAGE:BOOL=ON -DPETSC_DIR:PATH=../petsc-cpucmplx ..
   - make
   - ctest --output-on-failure
-  - rm -rf *
 after_success:
   - lcov -d tests -d src -d examples -base-directory .. -c -o coverage.info
   - lcov --remove coverage.info '/usr/*' -o coverage.info
