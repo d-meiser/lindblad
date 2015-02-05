@@ -36,7 +36,7 @@ TEST(GeneralDecayOperator, IsNullOperatorWhenEmpty) {
   }
 }
 
-TEST(GeneralDecayOperator, ExcitedToGroundState) {
+TEST(GeneralDecayOperator, ProducesCorrectDensityMatrixForEToGDecay) {
   double gamma = 0.2;
   GeneralDecayOperator op(
       SparseMatrix(SparseMatrixEntry(0, 1, std::sqrt(gamma))));
@@ -53,12 +53,25 @@ TEST(GeneralDecayOperator, ExcitedToGroundState) {
   EXPECT_FLOAT_EQ(0.0, rho2[2].imag());
 }
 
-TEST(GeneralDecayOperator, EToGTrace) {
+TEST(GeneralDecayOperator, IsTracelessForEToG) {
   GeneralDecayOperator op(SparseMatrix(SparseMatrixEntry(0, 1, 0.2)));
   CheckLindbladTraceProperty(op, 2);
 }
 
-TEST(GeneralDecayOperator, EToGHermiticity) {
-  GeneralDecayOperator op(SparseMatrix(SparseMatrixEntry(0, 1, 0.2)));
-  CheckLindbladHermiticityProperty(op, 2);
+TEST(GeneralDecayOperator, IsTracelessInGeneralCase) {
+  SparseMatrix lambda;
+  lambda.add(SparseMatrixEntry(0, 3, 0.2));
+  lambda.add(SparseMatrixEntry(1, 3, 0.3));
+  lambda.add(SparseMatrixEntry(2, 3, 0.2));
+  GeneralDecayOperator op(lambda);
+  CheckLindbladTraceProperty(op, 4);
+}
+
+TEST(GeneralDecayOperator, IsHermitianInGeneralCase) {
+  SparseMatrix lambda;
+  lambda.add(SparseMatrixEntry(0, 3, 0.2));
+  lambda.add(SparseMatrixEntry(1, 3, 0.3));
+  lambda.add(SparseMatrixEntry(2, 3, 0.2));
+  GeneralDecayOperator op(lambda);
+  CheckLindbladHermiticityProperty(op, 4);
 }
