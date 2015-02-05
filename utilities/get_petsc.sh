@@ -1,5 +1,5 @@
 #!/bin/sh
-wget http://ftp.mcs.anl.gov/pub/petsc/release-snapshots/petsc-3.5.2.tar.gz
+wget http://ftp.mcs.anl.gov/pub/petsc/release-snapshots/petsc-lite-3.5.3.tar.gz
 tar xfz petsc-3.5.2.tar.gz
 cd petsc-3.5.2
 PETSC_ARCH=cpucmplx-rel PETSC_DIR=`pwd` ./configure \
