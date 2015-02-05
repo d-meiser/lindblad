@@ -5,5 +5,6 @@ set(LINDBLAD_HEADERS
   MasterEqn.hpp
   SparseMatrix.hpp
   )
-install(FILES ${LINDBLAD_HEADERS} ${PROJECT_BINARY_DIR}/LindbladExport.h DESTINATION include)
+install(FILES ${LINDBLAD_HEADERS} ${PROJECT_BINARY_DIR}/config.h ${PROJECT_BINARY_DIR}/LindbladExport.h
+        DESTINATION include)
 
