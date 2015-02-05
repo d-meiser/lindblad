@@ -11,6 +11,8 @@
 #define LINDBLAD_ALLOCA alloca
 #endif
 
+#define LINDBLAD_MAX_STACK_ALLOCATION_SIZE (1<<16)
+
 #define LINDBLAD_ALIGNED_ALLOCA(size, alignment)                               \
   (void *)(                                                                    \
       (alignment) *                                                            \
