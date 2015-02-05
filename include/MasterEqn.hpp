@@ -20,6 +20,7 @@ with lindblad.  If not, see <http://www.gnu.org/licenses/>.
 #define MASTEREQN_HPP
 
 #include <Amplitude.hpp>
+#include <SparseMatrix.hpp>
 #include <LindbladExport.h>
 
 class LINDBLAD_API MasterEqn {
@@ -31,6 +32,7 @@ class LINDBLAD_API MasterEqn {
   void addCoupling(int m, int n, Amplitude a);
   void addDecay(int into, int outOf, double gamma);
   void addSourceSink(int into, double gamma);
+  void addGeneralDecayOperator(SparseMatrix lambda);
   void apply(const Amplitude* A, Amplitude* B) const;
   int getDim() const;
 
