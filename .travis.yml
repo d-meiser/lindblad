@@ -5,13 +5,22 @@ compiler:
   - g++
 before_install:
   - sh ./utilities/download_gtest.sh
+  - sudo apt-get update -qq
+  - sudo apt-get install -qq lcov
+  - gem install coveralls-lcov
   - sudo apt-get install libblas-dev libatlas-dev liblapack-dev
   - sudo apt-get install -qq python-numpy
   - sh ./utilities/get_petsc.sh
 script:
   - mkdir -p build
   - cd build
-  - cmake -DLINDBLAD_BUILD_TESTS=ON -DPETSC_DIR=../petsc-cpucmplx ..
+  - cmake -DLINDBLAD_BUILD_TESTS:BOOL=ON -DLINDBLAD_ENABLE_COVERAGE:BOOL=ON -DPETSC_DIR:PATH=../petsc-cpucmplx ..
   - make
   - ctest --output-on-failure
-  - rm -rf *
+after_success:
+  - lcov -d tests -d src -d examples -base-directory .. -c -o coverage.info
+  - lcov --remove coverage.info '/usr/*' -o coverage.info
+  - lcov --remove coverage.info 'gtest*' -o coverage.info
+  - lcov --remove coverage.info 'petsc-cpucmplx/*' -o coverage.info
+  - cd ..
+  - coveralls-lcov build/coverage.info

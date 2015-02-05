@@ -1,4 +1,6 @@
 [![Build Status](https://travis-ci.org/d-meiser/lindblad.png?branch=master)](https://travis-ci.org/d-meiser/lindblad)
+[![Build status](https://ci.appveyor.com/api/projects/status/nsun22swq5f2tn15/branch/master?svg=true)](https://ci.appveyor.com/project/d-meiser/lindblad/branch/master)
+[![Coverage Status](https://coveralls.io/repos/d-meiser/lindblad/badge.svg)](https://coveralls.io/r/d-meiser/lindblad)
 
 lindblad
 ========

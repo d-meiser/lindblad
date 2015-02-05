@@ -20,8 +20,9 @@ with lindblad.  If not, see <http://www.gnu.org/licenses/>.
 #define MASTEREQN_HPP
 
 #include <Amplitude.hpp>
+#include <LindbladExport.h>
 
-class MasterEqn {
+class LINDBLAD_API MasterEqn {
  public:
   MasterEqn(int dim);
   MasterEqn(const MasterEqn& other);

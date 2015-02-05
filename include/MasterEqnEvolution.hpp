@@ -20,8 +20,9 @@ with lindblad.  If not, see <http://www.gnu.org/licenses/>.
 #define MASTER_EQN_EVOLUTION_HPP
 
 #include <MasterEqn.hpp>
+#include <LindbladExport.h>
 
-class MasterEqnEvolution {
+class LINDBLAD_API MasterEqnEvolution {
  public:
   MasterEqnEvolution(const MasterEqn& eqn, const Amplitude* initialState);
   ~MasterEqnEvolution();
