@@ -2,9 +2,17 @@ cmake_minimum_required(VERSION 2.6.2)
 project(LINDBLAD)
 enable_testing()
 set(CMAKE_MODULE_PATH "${CMAKE_MODULE_PATH};${PROJECT_SOURCE_DIR}/cmake")
+include(CheckCXXCompilerFlag)
 
 option(LINDBLAD_BUILD_TESTS "Whether to build tests" OFF)
 option(LINDBLAD_ENABLE_COVERAGE "Instrument tests for coverage" OFF)
+
+set(CMAKE_REQUIRED_FLAGS "${CMAKE_REQUIRED_FLAGS} -fsanitize=address")
+CHECK_CXX_COMPILER_FLAG("-fsanitize=address" HAVE_ADDRESS_SANITIZER)
+if(HAVE_ADDRESS_SANITIZER)
+  set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -fsanitize=address")
+  set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -fsanitize=address")
+endif()
 
 if(CMAKE_COMPILER_IS_GNUCC OR "${CMAKE_C_COMPILER_ID}" STREQUAL "Clang")
   if(LINDBLAD_ENABLE_COVERAGE)
