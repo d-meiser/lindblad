@@ -14,7 +14,7 @@ if(CMAKE_COMPILER_IS_GNUCC OR "${CMAKE_C_COMPILER_ID}" STREQUAL "Clang")
     set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -ftest-coverage -fprofile-arcs")
     set(COV_LIBRARIES gcov)
   endif()
-endif
+endif()
 
 include_directories(
     ${PROJECT_SOURCE_DIR}/include
