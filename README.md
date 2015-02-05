@@ -1,4 +1,5 @@
 [![Build Status](https://travis-ci.org/d-meiser/lindblad.png?branch=master)](https://travis-ci.org/d-meiser/lindblad)
+[![Coverage Status](https://coveralls.io/repos/d-meiser/lindblad/badge.svg)](https://coveralls.io/r/d-meiser/lindblad)
 
 lindblad
 ========
