@@ -3,6 +3,7 @@ include_directories(${PROJECT_BINARY_DIR})
 add_library(lindblad
     Coupling.cpp
     Decay.cpp
+    GeneralDecayOperator.cpp
     Integrator.cpp
     MasterEqn.cpp
     MasterEqnEvolution.cpp

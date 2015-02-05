@@ -1,16 +1,18 @@
 include_directories(${PROJECT_SOURCE_DIR}/include/detail)
 set(TESTS
-    test_leftApply
-    test_rightApply
     test_Coupling
     test_Decay
+    test_GeneralDecayOperator
+    test_Integrator
     test_MasterEqn
     test_MasterEqnEvolution
     test_Memory
-    test_Integrator
     test_RK4
-    test_SourceSink
     test_RK45
+    test_SourceSink
+    test_leftApply
+    test_rightApply
+    test_SparseMatrix
    )
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})
