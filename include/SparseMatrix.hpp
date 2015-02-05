@@ -16,12 +16,27 @@ for more details.
 You should have received a copy of the GNU General Public License along
 with lindblad.  If not, see <http://www.gnu.org/licenses/>.
 */
-#ifndef LINDBLAD_HPP
-#define LINDBLAD_HPP
+#ifndef SPARSE_MATRIX_HPP
+#define SPARSE_MATRIX_HPP
 
 #include <Amplitude.hpp>
-#include <SparseMatrix.hpp>
-#include <MasterEqn.hpp>
-#include <MasterEqnEvolution.hpp>
+#include <vector>
+
+struct SparseMatrixEntry {
+  SparseMatrixEntry(int row, int col, Amplitude element)
+      : row(row), col(col), element(element) {}
+  int row;
+  int col;
+  Amplitude element;
+};
+
+struct SparseMatrix {
+  SparseMatrix() : entries() {}
+  SparseMatrix(SparseMatrixEntry entry) : entries(1, entry) {}
+  void add(SparseMatrixEntry entry) { entries.push_back(entry); }
+  std::vector<SparseMatrixEntry> entries;
+};
 
 #endif
+
+

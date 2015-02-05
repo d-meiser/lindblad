@@ -1,5 +1,5 @@
 /*
-Copyright 2014-2015 Dominic Meiser
+Copyright 2014 Dominic Meiser
 
 This file is part of lindblad.
 
@@ -16,12 +16,20 @@ for more details.
 You should have received a copy of the GNU General Public License along
 with lindblad.  If not, see <http://www.gnu.org/licenses/>.
 */
-#ifndef LINDBLAD_HPP
-#define LINDBLAD_HPP
+#ifndef GENERAL_DECAY_OPERATOR_HPP
+#define GENERAL_DECAY_OPERATOR_HPP
 
 #include <Amplitude.hpp>
 #include <SparseMatrix.hpp>
-#include <MasterEqn.hpp>
-#include <MasterEqnEvolution.hpp>
+
+class GeneralDecayOperator {
+  public:
+  GeneralDecayOperator(SparseMatrix lambda);
+  void apply(int dim, const Amplitude *A, Amplitude *B) const;
+  private:
+    SparseMatrix lambda;
+    SparseMatrix lambdaDagger;
+    SparseMatrix lambdaDaggerLambda;
+};
 
 #endif
