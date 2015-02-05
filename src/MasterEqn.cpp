@@ -20,6 +20,7 @@ with lindblad.  If not, see <http://www.gnu.org/licenses/>.
 #include <Coupling.hpp>
 #include <Decay.hpp>
 #include <SourceSink.hpp>
+#include <GeneralDecayOperator.hpp>
 #include <vector>
 
 struct MasterEqn::Impl {
@@ -39,6 +40,11 @@ struct MasterEqn::Impl {
          s != sourceSinks.end(); ++s) {
       s->apply(dim, A, B);
     }
+    for (std::vector<GeneralDecayOperator>::const_iterator d =
+             generalDecayOperators.begin();
+         d != generalDecayOperators.end(); ++d) {
+      d->apply(dim, A, B);
+    }
   }
   int getDim() const { return dim; }
 
@@ -46,6 +52,7 @@ struct MasterEqn::Impl {
   std::vector<Coupling> couplings;
   std::vector<Decay> decays;
   std::vector<SourceSink> sourceSinks;
+  std::vector<GeneralDecayOperator> generalDecayOperators;
 };
 
 MasterEqn::MasterEqn(int d) { impl = new Impl(d); }
@@ -75,6 +82,10 @@ void MasterEqn::addDecay(int into, int outOf, double gamma) {
 
 void MasterEqn::addSourceSink(int into, double gamma) {
   impl->sourceSinks.push_back(SourceSink(into, gamma));
+}
+
+void MasterEqn::addGeneralDecayOperator(SparseMatrix lambda) {
+  impl->generalDecayOperators.push_back(GeneralDecayOperator(lambda));
 }
 
 void MasterEqn::apply(const Amplitude* A, Amplitude *B) const {
