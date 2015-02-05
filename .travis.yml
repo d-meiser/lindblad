@@ -1,15 +1,25 @@
 virtualenv:
   system_site_packages: true
 language: cpp
-compiler:
-  - g++
+env:
+  - CXX_="clang++"
+  - CXX_="g++"
+  - CXX_="g++-4.4"
+  - CXX_="g++-4.8"
 before_install:
-  - sh ./utilities/download_gtest.sh
+  - sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
   - sudo apt-get update -qq
   - sudo apt-get install -qq lcov
   - gem install coveralls-lcov
   - sudo apt-get install libblas-dev libatlas-dev liblapack-dev
   - sudo apt-get install -qq python-numpy
+  - if [ "$CXX_" = "clang++" ]; then export CXX="clang++" CC=clang; fi
+  - if [ "$CXX_" = "g++-4.4" ]; then sudo apt-get install -qq g++-4.4; fi
+  - if [ "$CXX_" = "g++-4.4" ]; then export CXX="g++-4.4" CC="gcc-4.4"; fi
+  - if [ "$CXX_" = "g++-4.8" ]; then sudo apt-get install -qq g++-4.8; fi
+  - if [ "$CXX_" = "g++-4.8" ]; then export CXX="g++-4.8" CC="gcc-4.8"; fi
+  - echo $CXX --version
+  - sh ./utilities/download_gtest.sh
   - sh ./utilities/get_petsc.sh
 script:
   - mkdir -p build
