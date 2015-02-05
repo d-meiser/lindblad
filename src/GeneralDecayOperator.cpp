@@ -49,20 +49,16 @@ void GeneralDecayOperator::apply(int dim, const Amplitude *A,
     leftApply(e->row, e->col, -0.5 * e->element, dim, A, B);
     rightApply(e->row, e->col, -0.5 * e->element, dim, A, B);
   }
-  Amplitude *tmp =
-      (Amplitude *)LINDBLAD_ALIGNED_ALLOCA(dim * dim * sizeof(*tmp), 64);
-  for (int i = 0; i < dim * dim; ++i) {
-    tmp[i] = 0;
-  }
+  std::vector<Amplitude> tmp(dim * dim, 0);
   for (std::vector<SparseMatrixEntry>::const_iterator e =
            lambda.entries.begin();
        e != lambda.entries.end(); ++e) {
-    leftApply(e->row, e->col, e->element, dim, A, tmp);
+    leftApply(e->row, e->col, e->element, dim, A, &tmp[0]);
   }
   for (std::vector<SparseMatrixEntry>::const_iterator e =
            lambdaDagger.entries.begin();
        e != lambdaDagger.entries.end(); ++e) {
-    rightApply(e->row, e->col, e->element, dim, tmp, B);
+    rightApply(e->row, e->col, e->element, dim, &tmp[0], B);
   }
 }
 
