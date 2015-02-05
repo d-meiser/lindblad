@@ -5,7 +5,10 @@ set(CMAKE_MODULE_PATH "${CMAKE_MODULE_PATH};${PROJECT_SOURCE_DIR}/cmake")
 
 option(LINDBLAD_BUILD_TESTS "Whether to build tests" OFF)
 
-include_directories(${PROJECT_SOURCE_DIR}/include)
+include_directories(
+    ${PROJECT_SOURCE_DIR}/include
+    ${PROJECT_BINARY_DIR}
+    )
 add_subdirectory(src)
 add_subdirectory(examples)
 add_subdirectory(include)
