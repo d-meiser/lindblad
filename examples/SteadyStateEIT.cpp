@@ -7,6 +7,7 @@ static const char help[] =
     "Compute steady state with given parameters. All parameters must be "
     "provided\n"
     "in this form. Provide a floating point number for each parameters.";
+#define _USE_MATH_DEFINES
 #include <MasterEqn.hpp>
 #include <Amplitude.hpp>
 
