@@ -1,5 +1,7 @@
 cmake_minimum_required(VERSION 2.6.2)
 project(LINDBLAD)
+set(CMAKE_CXX_VISIBILITY_PRESET hidden)
+set(CMAKE_VISIBILITY_INLINES_HIDDEN 1)
 enable_testing()
 set(CMAKE_MODULE_PATH "${CMAKE_MODULE_PATH};${PROJECT_SOURCE_DIR}/cmake")
 include(CheckCXXCompilerFlag)
