@@ -24,6 +24,7 @@ if(CMAKE_COMPILER_IS_GNUCC OR "${CMAKE_C_COMPILER_ID}" STREQUAL "Clang")
     set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -ftest-coverage -fprofile-arcs")
     set(COV_LIBRARIES gcov)
   endif()
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC")
 endif()
 
 include_directories(
@@ -44,7 +45,7 @@ try_compile(HAVE_PRAGMA_OMP_SIMD ${PROJECT_BINARY_DIR}/cmake
 configure_file(config.h.in config.h)
 
 include(GenerateExportHeader)
-generate_export_header(lindblad
+generate_export_header(lindblad_shared
     EXPORT_FILE_NAME LindbladExport.h
     EXPORT_MACRO_NAME LINDBLAD_API
     )
