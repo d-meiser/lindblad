@@ -21,9 +21,8 @@ with lindblad.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <Amplitude.hpp>
 #include <vector>
-#include <LindbladExport.h>
 
-struct LINDBLAD_API SparseMatrixEntry {
+struct SparseMatrixEntry {
   SparseMatrixEntry(int row, int col, Amplitude element)
       : row(row), col(col), element(element) {}
   int row;
@@ -31,7 +30,7 @@ struct LINDBLAD_API SparseMatrixEntry {
   Amplitude element;
 };
 
-struct LINDBLAD_API SparseMatrix {
+struct SparseMatrix {
   SparseMatrix() : entries() {}
   SparseMatrix(SparseMatrixEntry entry) : entries(1, entry) {}
   void add(SparseMatrixEntry entry) { entries.push_back(entry); }
