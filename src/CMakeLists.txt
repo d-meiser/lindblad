@@ -40,3 +40,5 @@ set_target_properties(lindblad_static PROPERTIES
 	COMPILE_FLAGS -DLINDBLAD_STATIC_DEFINE
 	)
 
+install(TARGETS lindblad_static lindblad_shared DESTINATION lib)
+
