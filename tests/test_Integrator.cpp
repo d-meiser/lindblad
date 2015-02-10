@@ -89,7 +89,7 @@ TEST(Integrator, EvaluateRHS) {
   std::vector<double> y(10);
   integ.evaluateRHS(&x[0], &y[0], 0, &ctx);
   for (int i = 0; i < 10; ++i) {
-    EXPECT_FLOAT_EQ(y[i], x[i]);
+    EXPECT_DOUBLE_EQ(y[i], x[i]);
   }
 }
 
@@ -97,5 +97,5 @@ TEST(Integrator, GetTimeStep) {
   MockEuler integ(0, 0, 0, &foo);
   integ.setTimeStep(1.0e-5);
   double dt = integ.getTimeStep();
-  EXPECT_FLOAT_EQ(1.0e-5, dt);
+  EXPECT_DOUBLE_EQ(1.0e-5, dt);
 }

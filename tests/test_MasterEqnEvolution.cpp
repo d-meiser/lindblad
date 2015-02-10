@@ -34,7 +34,7 @@ TEST(MasterEqnEvolution, GetTime) {
   std::vector<Amplitude> rhoInitial(4, 0);
   rhoInitial[0] = 1.0;
   MasterEqnEvolution evolution(meqn, &rhoInitial[0]);
-  EXPECT_FLOAT_EQ(0, evolution.getTime());
+  EXPECT_DOUBLE_EQ(0, evolution.getTime());
 }
 
 TEST(MasterEqnEvolution, TakeStep) {

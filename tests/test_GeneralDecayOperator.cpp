@@ -31,8 +31,8 @@ TEST(GeneralDecayOperator, IsNullOperatorWhenEmpty) {
   std::vector<Amplitude> result(4, 0);
   op.apply(2, &rho[0], &result[0]);
   for (int i = 0; i < 4; ++i) {
-    EXPECT_FLOAT_EQ(0.0, result[i].real()) << "(i == " << i << ")";
-    EXPECT_FLOAT_EQ(0.0, result[i].imag()) << "(i == " << i << ")";
+    EXPECT_DOUBLE_EQ(0.0, result[i].real()) << "(i == " << i << ")";
+    EXPECT_DOUBLE_EQ(0.0, result[i].imag()) << "(i == " << i << ")";
   }
 }
 
@@ -43,14 +43,14 @@ TEST(GeneralDecayOperator, ProducesCorrectDensityMatrixForEToGDecay) {
   std::vector<Amplitude> rho1(4, 1);
   std::vector<Amplitude> rho2(4, 0);
   op.apply(2, &rho1[0], &rho2[0]);
-  EXPECT_FLOAT_EQ(gamma, rho2[0].real());
-  EXPECT_FLOAT_EQ(0.0, rho2[0].imag());
-  EXPECT_FLOAT_EQ(-gamma, rho2[3].real());
-  EXPECT_FLOAT_EQ(0.0, rho2[3].imag());
-  EXPECT_FLOAT_EQ(-0.5 * gamma, rho2[1].real());
-  EXPECT_FLOAT_EQ(0.0, rho2[1].imag());
-  EXPECT_FLOAT_EQ(-0.5 * gamma, rho2[2].real());
-  EXPECT_FLOAT_EQ(0.0, rho2[2].imag());
+  EXPECT_DOUBLE_EQ(gamma, rho2[0].real());
+  EXPECT_DOUBLE_EQ(0.0, rho2[0].imag());
+  EXPECT_DOUBLE_EQ(-gamma, rho2[3].real());
+  EXPECT_DOUBLE_EQ(0.0, rho2[3].imag());
+  EXPECT_DOUBLE_EQ(-0.5 * gamma, rho2[1].real());
+  EXPECT_DOUBLE_EQ(0.0, rho2[1].imag());
+  EXPECT_DOUBLE_EQ(-0.5 * gamma, rho2[2].real());
+  EXPECT_DOUBLE_EQ(0.0, rho2[2].imag());
 }
 
 TEST(GeneralDecayOperator, IsTracelessForEToG) {

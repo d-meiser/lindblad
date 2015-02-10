@@ -32,8 +32,8 @@ void MY_EXPECT_EQ(T a, T b, size_t i) {
 
 template <>
 void MY_EXPECT_EQ(Amplitude a, Amplitude b, size_t i) {
-  EXPECT_FLOAT_EQ(a.real(), b.real()) << "real, i == " << i;
-  EXPECT_FLOAT_EQ(a.imag(), b.imag()) << "imag, i == " << i;
+  EXPECT_DOUBLE_EQ(a.real(), b.real()) << "real, i == " << i;
+  EXPECT_DOUBLE_EQ(a.imag(), b.imag()) << "imag, i == " << i;
 }
 
 template <typename IterA, typename IterB>
@@ -102,9 +102,9 @@ void CheckLindbladHermiticityProperty(const T& op, int dim) {
     for (int j = 0; j <= i; ++j) {
       Amplitude bij = B[i * dim + j];
       Amplitude bji = B[j * dim + i];
-      EXPECT_FLOAT_EQ(bij.real(), bji.real()) << "(i,j) == (" << i << "," << j
+      EXPECT_DOUBLE_EQ(bij.real(), bji.real()) << "(i,j) == (" << i << "," << j
                                               << ") [real]";
-      EXPECT_FLOAT_EQ(bij.imag(), -bji.imag()) << "(i,j) == (" << i << "," << j
+      EXPECT_DOUBLE_EQ(bij.imag(), -bji.imag()) << "(i,j) == (" << i << "," << j
                                               << ") [imag]";
     }
   }
@@ -119,9 +119,9 @@ void CheckLindbladHermiticityProperty(const MasterEqn& op, int dim) {
     for (int j = 0; j <= i; ++j) {
       Amplitude bij = B[i * dim + j];
       Amplitude bji = B[j * dim + i];
-      EXPECT_FLOAT_EQ(bij.real(), bji.real()) << "(i,j) == (" << i << "," << j
+      EXPECT_DOUBLE_EQ(bij.real(), bji.real()) << "(i,j) == (" << i << "," << j
                                               << ") [real]";
-      EXPECT_FLOAT_EQ(bij.imag(), -bji.imag()) << "(i,j) == (" << i << "," << j
+      EXPECT_DOUBLE_EQ(bij.imag(), -bji.imag()) << "(i,j) == (" << i << "," << j
                                               << ") [imag]";
     }
   }

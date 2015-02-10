@@ -30,7 +30,7 @@ TEST(AlignedAlloca, ReturnsSufficientlySizedMemory) {
   for (int i = 0; i < len; ++i) {
     a[i] = 2.8;
   }
-  EXPECT_FLOAT_EQ(a[len - 1], 2.8);
+  EXPECT_DOUBLE_EQ(a[len - 1], 2.8);
 }
 
 TEST(AlignedAlloca, ReturnsCorrectlyAlignedMemory) {

@@ -30,14 +30,14 @@ TEST(Decay, EToG) {
   std::vector<Amplitude> rho1(4, 1);
   std::vector<Amplitude> rho2(4, 0);
   d.apply(2, &rho1[0], &rho2[0]);
-  EXPECT_FLOAT_EQ(gamma, rho2[0].real());
-  EXPECT_FLOAT_EQ(0.0, rho2[0].imag());
-  EXPECT_FLOAT_EQ(-gamma, rho2[3].real());
-  EXPECT_FLOAT_EQ(0.0, rho2[3].imag());
-  EXPECT_FLOAT_EQ(-0.5 * gamma, rho2[1].real());
-  EXPECT_FLOAT_EQ(0.0, rho2[1].imag());
-  EXPECT_FLOAT_EQ(-0.5 * gamma, rho2[2].real());
-  EXPECT_FLOAT_EQ(0.0, rho2[2].imag());
+  EXPECT_DOUBLE_EQ(gamma, rho2[0].real());
+  EXPECT_DOUBLE_EQ(0.0, rho2[0].imag());
+  EXPECT_DOUBLE_EQ(-gamma, rho2[3].real());
+  EXPECT_DOUBLE_EQ(0.0, rho2[3].imag());
+  EXPECT_DOUBLE_EQ(-0.5 * gamma, rho2[1].real());
+  EXPECT_DOUBLE_EQ(0.0, rho2[1].imag());
+  EXPECT_DOUBLE_EQ(-0.5 * gamma, rho2[2].real());
+  EXPECT_DOUBLE_EQ(0.0, rho2[2].imag());
 }
 
 TEST(Decay, EToGTrace) {
