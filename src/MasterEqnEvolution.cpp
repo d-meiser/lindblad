@@ -38,6 +38,7 @@ struct MasterEqnEvolution::Impl {
     std::copy(initialState, initialState + d * d, state.begin());
     ctx = MasterEqnEvolutionContext(this);
   }
+  ~Impl() { delete integrator; }
   MasterEqn meqn;
   MasterEqnEvolutionContext ctx;
   std::vector<Amplitude> state;

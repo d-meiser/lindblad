@@ -1,9 +1,16 @@
+if(BUILD_SHARED_LIBS)
+  set(LINDBLAD_LIBRARY lindblad_shared)
+else()
+  set(LINDBLAD_LIBRARY lindblad_static)
+endif()
+
 set(EXAMPLES
     RabiOscillations
     EIT)
 foreach(e ${EXAMPLES})
   add_executable(${e} ${e}.cpp)
-  target_link_libraries(${e} lindblad)
+  target_link_libraries(${e} ${LINDBLAD_LIBRARY})
+  set_target_properties(${e} PROPERTIES COMPILE_FLAGS -DLINDBLAD_STATIC_DEFINE)
   add_test(${e} ${e})
 endforeach()
 
@@ -23,7 +30,7 @@ endif()
 if(PETSC_FOUND)
   foreach(e ${PETSC_EXAMPLES})
     add_executable(${e} ${e}.cpp)
-    target_link_libraries(${e} lindblad ${PETSC_LIBS} lapack blas pthread ${DL_LIBRARIES})
+    target_link_libraries(${e} ${LINDBLAD_LIBRARY} ${PETSC_LIBS} lapack blas pthread ${DL_LIBRARIES})
     add_test(${e} ${e})
   endforeach()
 endif()

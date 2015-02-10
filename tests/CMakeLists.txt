@@ -18,7 +18,8 @@ set(TESTS
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 foreach(t ${TESTS})
   add_executable(${t} ${t}.cpp)
-  target_link_libraries(${t} lindblad gtest_main gtest)
+  target_link_libraries(${t} lindblad_static gtest_main gtest)
+  set_target_properties(${t} PROPERTIES COMPILE_FLAGS -DLINDBLAD_STATIC_DEFINE)
   add_test(${t} ${t})
 endforeach()
 
