@@ -29,7 +29,7 @@ class Integrator {
         t(time),
         dt(1.0e-3),
         rhs(f) {}
-  ~Integrator();
+  virtual ~Integrator();
   void takeStep(void* ctx);
   double getTime() const { return t; }
   const double* getState() const;
