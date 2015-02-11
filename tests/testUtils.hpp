@@ -30,10 +30,12 @@ void MY_EXPECT_EQ(T a, T b, size_t i) {
   EXPECT_EQ(a, b) << " i == " << i;
 }
 
+static const double LindbladTolerance = 1.0e-12;
+
 template <>
 void MY_EXPECT_EQ(Amplitude a, Amplitude b, size_t i) {
-  EXPECT_DOUBLE_EQ(a.real(), b.real()) << "real, i == " << i;
-  EXPECT_DOUBLE_EQ(a.imag(), b.imag()) << "imag, i == " << i;
+  EXPECT_NEAR(a.real(), b.real(), LindbladTolerance) << "real, i == " << i;
+  EXPECT_NEAR(a.imag(), b.imag(), LindbladTolerance) << "imag, i == " << i;
 }
 
 template <typename IterA, typename IterB>
@@ -102,10 +104,10 @@ void CheckLindbladHermiticityProperty(const T& op, int dim) {
     for (int j = 0; j <= i; ++j) {
       Amplitude bij = B[i * dim + j];
       Amplitude bji = B[j * dim + i];
-      EXPECT_DOUBLE_EQ(bij.real(), bji.real()) << "(i,j) == (" << i << "," << j
-                                              << ") [real]";
-      EXPECT_DOUBLE_EQ(bij.imag(), -bji.imag()) << "(i,j) == (" << i << "," << j
-                                              << ") [imag]";
+      EXPECT_NEAR(bij.real(), bji.real(), LindbladTolerance)
+          << "(i,j) == (" << i << "," << j << ") [real]";
+      EXPECT_NEAR(bij.imag(), -bji.imag(), LindbladTolerance)
+          << "(i,j) == (" << i << "," << j << ") [imag]";
     }
   }
 }
@@ -119,10 +121,10 @@ void CheckLindbladHermiticityProperty(const MasterEqn& op, int dim) {
     for (int j = 0; j <= i; ++j) {
       Amplitude bij = B[i * dim + j];
       Amplitude bji = B[j * dim + i];
-      EXPECT_DOUBLE_EQ(bij.real(), bji.real()) << "(i,j) == (" << i << "," << j
-                                              << ") [real]";
-      EXPECT_DOUBLE_EQ(bij.imag(), -bji.imag()) << "(i,j) == (" << i << "," << j
-                                              << ") [imag]";
+      EXPECT_NEAR(bij.real(), bji.real(), LindbladTolerance)
+          << "(i,j) == (" << i << "," << j << ") [real]";
+      EXPECT_NEAR(bij.imag(), -bji.imag(), LindbladTolerance)
+          << "(i,j) == (" << i << "," << j << ") [imag]";
     }
   }
 }
