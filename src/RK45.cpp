@@ -22,6 +22,9 @@ with lindblad.  If not, see <http://www.gnu.org/licenses/>.
 #include <iostream>
 #include <cmath>
 
+namespace Lindblad {
+namespace Detail {
+
 const double RK45::cs[6] = {0.0,         1.0 / 4.0, 3.0 / 8.0,
                             12.0 / 13.0, 1.0,       1.0 / 2.0};
 const double RK45::as[25] = {
@@ -110,4 +113,7 @@ double RK45::errorEstimate(const std::vector<double>& x, const std::vector<doubl
 
 RK45* RK45::makeCopy() const {
   return new RK45(*this);
+}
+
+}
 }

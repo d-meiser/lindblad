@@ -20,6 +20,8 @@ with lindblad.  If not, see <http://www.gnu.org/licenses/>.
 #include <RK4.hpp>
 #include <vector>
 
+namespace Lindblad {
+
 static void applyRhs(double* x, double* y, double t, void* ctx);
 
 struct MasterEqnEvolutionContext {
@@ -33,7 +35,7 @@ struct MasterEqnEvolution::Impl {
       : meqn(eqn) {
     int d = eqn.getDim();
     integrator =
-        new RK4(2 * d * d, 0, (const double*)initialState, &applyRhs);
+        new Detail::RK4(2 * d * d, 0, (const double*)initialState, &applyRhs);
     state.resize(d * d);
     std::copy(initialState, initialState + d * d, state.begin());
     ctx = MasterEqnEvolutionContext(this);
@@ -42,7 +44,7 @@ struct MasterEqnEvolution::Impl {
   MasterEqn meqn;
   MasterEqnEvolutionContext ctx;
   std::vector<Amplitude> state;
-  Integrator* integrator;
+  Detail::Integrator* integrator;
 };
 
 
@@ -80,3 +82,4 @@ static void applyRhs(double* x, double* y, double t, void* ctx) {
   meCtx->impl->meqn.apply((const Amplitude*)x, (Amplitude*)y);
 }
 
+}

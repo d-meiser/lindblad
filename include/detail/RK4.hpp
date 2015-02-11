@@ -22,6 +22,9 @@ with lindblad.  If not, see <http://www.gnu.org/licenses/>.
 #include <Integrator.hpp>
 #include <vector>
 
+namespace Lindblad {
+namespace Detail {
+
 class RK4 : public Integrator {
  public:
   RK4(int dim, double time, const double* state,
@@ -34,6 +37,8 @@ class RK4 : public Integrator {
   virtual void advance(double* t, double* dt, void* ctx);
   virtual RK4* makeCopy() const;
 };
+}
+}
 
 #endif
 

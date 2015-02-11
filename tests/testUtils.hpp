@@ -25,17 +25,19 @@ with lindblad.  If not, see <http://www.gnu.org/licenses/>.
 #include <vector>
 #include <MasterEqn.hpp>
 
+namespace Lindblad {
+
 template <typename T>
 void MY_EXPECT_EQ(T a, T b, size_t i) {
   EXPECT_EQ(a, b) << " i == " << i;
 }
 
-static const double LindbladTolerance = 1.0e-12;
+static const double Tolerance = 1.0e-12;
 
 template <>
 void MY_EXPECT_EQ(Amplitude a, Amplitude b, size_t i) {
-  EXPECT_NEAR(a.real(), b.real(), LindbladTolerance) << "real, i == " << i;
-  EXPECT_NEAR(a.imag(), b.imag(), LindbladTolerance) << "imag, i == " << i;
+  EXPECT_NEAR(a.real(), b.real(), Tolerance) << "real, i == " << i;
+  EXPECT_NEAR(a.imag(), b.imag(), Tolerance) << "imag, i == " << i;
 }
 
 template <typename IterA, typename IterB>
@@ -49,20 +51,20 @@ void EXPECT_RANGES_EQ(IterA beginA, IterA endA, IterB beginB, IterB endB) {
   }
 }
 
-Amplitude RandomNumber() {
-  return Amplitude(std::rand() / (double)RAND_MAX,
+Lindblad::Amplitude RandomNumber() {
+  return Lindblad::Amplitude(std::rand() / (double)RAND_MAX,
                    std::rand() / (double)RAND_MAX);
 }
 
-std::vector<Amplitude> randomVector(int dim) {
-  std::vector<Amplitude> A(dim);
+std::vector<Lindblad::Amplitude> randomVector(int dim) {
+  std::vector<Lindblad::Amplitude> A(dim);
   std::generate(A.begin(), A.end(), RandomNumber);
   return A;
 }
 
-std::vector<Amplitude> hermitianMatrix(int dim) {
-  std::vector<Amplitude> A = randomVector(dim * dim);
-  std::vector<Amplitude> B(dim * dim, 0);
+std::vector<Lindblad::Amplitude> hermitianMatrix(int dim) {
+  std::vector<Lindblad::Amplitude> A = randomVector(dim * dim);
+  std::vector<Lindblad::Amplitude> B(dim * dim, 0);
   for (int i = 0; i < dim; ++i) {
     for (int j = 0; j < dim; ++j) {
       B[i * dim + j] = A[i * dim + j] + conj(A[j * dim + i]);
@@ -73,10 +75,10 @@ std::vector<Amplitude> hermitianMatrix(int dim) {
 
 template <typename T>
 void CheckLindbladTraceProperty(const T& op, int dim) {
-  std::vector<Amplitude> A = hermitianMatrix(dim);
-  std::vector<Amplitude> B(dim * dim, 0);
+  std::vector<Lindblad::Amplitude> A = hermitianMatrix(dim);
+  std::vector<Lindblad::Amplitude> B(dim * dim, 0);
   op.apply(dim, &A[0], &B[0]);
-  Amplitude trace;
+  Lindblad::Amplitude trace;
   for (int i = 0; i < dim; ++i) {
     trace += B[i + i * dim];
   }
@@ -84,11 +86,11 @@ void CheckLindbladTraceProperty(const T& op, int dim) {
 }
 
 template <>
-void CheckLindbladTraceProperty(const MasterEqn& op, int dim) {
-  std::vector<Amplitude> A = hermitianMatrix(dim);
-  std::vector<Amplitude> B(dim * dim, 0);
+void CheckLindbladTraceProperty(const Lindblad::MasterEqn& op, int dim) {
+  std::vector<Lindblad::Amplitude> A = hermitianMatrix(dim);
+  std::vector<Lindblad::Amplitude> B(dim * dim, 0);
   op.apply(&A[0], &B[0]);
-  Amplitude trace;
+  Lindblad::Amplitude trace;
   for (int i = 0; i < dim; ++i) {
     trace += B[i + i * dim];
   }
@@ -97,36 +99,38 @@ void CheckLindbladTraceProperty(const MasterEqn& op, int dim) {
 
 template <typename T>
 void CheckLindbladHermiticityProperty(const T& op, int dim) {
-  std::vector<Amplitude> A = hermitianMatrix(dim);
-  std::vector<Amplitude> B(dim * dim, 0);
+  std::vector<Lindblad::Amplitude> A = hermitianMatrix(dim);
+  std::vector<Lindblad::Amplitude> B(dim * dim, 0);
   op.apply(dim, &A[0], &B[0]);
   for (int i = 0; i < dim; ++i) {
     for (int j = 0; j <= i; ++j) {
       Amplitude bij = B[i * dim + j];
       Amplitude bji = B[j * dim + i];
-      EXPECT_NEAR(bij.real(), bji.real(), LindbladTolerance)
+      EXPECT_NEAR(bij.real(), bji.real(), Tolerance)
           << "(i,j) == (" << i << "," << j << ") [real]";
-      EXPECT_NEAR(bij.imag(), -bji.imag(), LindbladTolerance)
+      EXPECT_NEAR(bij.imag(), -bji.imag(), Tolerance)
           << "(i,j) == (" << i << "," << j << ") [imag]";
     }
   }
 }
 
 template <>
-void CheckLindbladHermiticityProperty(const MasterEqn& op, int dim) {
-  std::vector<Amplitude> A = hermitianMatrix(dim);
-  std::vector<Amplitude> B(dim * dim, 0);
+void CheckLindbladHermiticityProperty(const Lindblad::MasterEqn& op, int dim) {
+  std::vector<Lindblad::Amplitude> A = hermitianMatrix(dim);
+  std::vector<Lindblad::Amplitude> B(dim * dim, 0);
   op.apply(&A[0], &B[0]);
   for (int i = 0; i < dim; ++i) {
     for (int j = 0; j <= i; ++j) {
       Amplitude bij = B[i * dim + j];
       Amplitude bji = B[j * dim + i];
-      EXPECT_NEAR(bij.real(), bji.real(), LindbladTolerance)
+      EXPECT_NEAR(bij.real(), bji.real(), Tolerance)
           << "(i,j) == (" << i << "," << j << ") [real]";
-      EXPECT_NEAR(bij.imag(), -bji.imag(), LindbladTolerance)
+      EXPECT_NEAR(bij.imag(), -bji.imag(), Tolerance)
           << "(i,j) == (" << i << "," << j << ") [imag]";
     }
   }
+}
+
 }
 
 #endif

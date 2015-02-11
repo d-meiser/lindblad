@@ -18,6 +18,8 @@ with lindblad.  If not, see <http://www.gnu.org/licenses/>.
 */
 #include <gtest/gtest.h>
 #include <SourceSink.hpp>
+using namespace Lindblad;
+using namespace Lindblad::Detail;
 #include <vector>
 #include <cmath>
 #include <testUtils.hpp>

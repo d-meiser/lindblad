@@ -21,9 +21,14 @@ with lindblad.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <Amplitude.hpp>
 
+namespace Lindblad {
+namespace Detail {
+
 void leftApply(int row, int col, Amplitude alpha, int dim, const Amplitude *A,
                Amplitude *B);
 void rightApply(int row, int col, Amplitude alpha, int dim, const Amplitude *A,
                 Amplitude *B);
+}
+}
 
 #endif

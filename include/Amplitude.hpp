@@ -21,6 +21,10 @@ with lindblad.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <complex>
 
+namespace Lindblad {
+
 typedef std::complex<double> Amplitude;
+
+}
 
 #endif

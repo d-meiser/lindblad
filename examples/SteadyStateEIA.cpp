@@ -1,5 +1,6 @@
 static const char help[] = "Computation of steady state of a master eqaution.";
 #include <MasterEqn.hpp>
+using namespace Lindblad;
 #include <Amplitude.hpp>
 
 #include <petscmat.h>

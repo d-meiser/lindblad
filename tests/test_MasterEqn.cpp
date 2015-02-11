@@ -18,6 +18,7 @@ with lindblad.  If not, see <http://www.gnu.org/licenses/>.
 */
 #include <gtest/gtest.h>
 #include <MasterEqn.hpp>
+using namespace Lindblad;
 #include <testUtils.hpp>
 
 TEST(MasterEqn, Constructor) {

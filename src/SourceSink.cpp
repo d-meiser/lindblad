@@ -18,6 +18,9 @@ with lindblad.  If not, see <http://www.gnu.org/licenses/>.
 */
 #include <SourceSink.hpp>
 
+namespace Lindblad {
+namespace Detail {
+
 void SourceSink::apply(int dim, const Amplitude *rhoIn,
                        Amplitude *rhoOut) const {
   for (int i = 0; i < dim * dim; ++i) {
@@ -30,3 +33,5 @@ void SourceSink::apply(int dim, const Amplitude *rhoIn,
   rhoOut[m + m * dim] += trace * gamma;
 }
 
+}
+}
