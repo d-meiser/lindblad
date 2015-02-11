@@ -34,7 +34,7 @@ int main(int argn, char **argv) {
   Mat            A;
   PetscInt       i, m, n, mp;
   PetscErrorCode ierr;
-  PetscReal      Delta, OmegaR, OmegaB, gamma;
+  PetscReal      OmegaR, OmegaB, gamma;
   MasterEqn      meqn(N);
   PetscScalar    *xarr, trace;
 
@@ -57,7 +57,6 @@ int main(int argn, char **argv) {
 
   OmegaR = 1.0;
   OmegaB = 0.00;
-  Delta = -0.1;
   gamma = 1.0;
   // magnetic field interactions in the ground state manifold
   meqn.addCoupling(0, 1, OmegaB / 8.0);

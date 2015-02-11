@@ -17,6 +17,12 @@ if(HAVE_ADDRESS_SANITIZER)
   set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -fsanitize=address")
 endif()
 
+set(CMAKE_REQUIRED_FLAGS "${CMAKE_REQUIRED_FLAGS} -fopenmp-simd")
+CHECK_CXX_COMPILER_FLAG("-fopenmp-simd" HAVE_PRAGMA_OMP_SIMD)
+if(HAVE_PRAGMA_OMP_SIMD)
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS_DEBUG} -fopenmp-simd")
+endif()
+
 if(CMAKE_COMPILER_IS_GNUCC OR "${CMAKE_C_COMPILER_ID}" STREQUAL "Clang")
   if(LINDBLAD_ENABLE_COVERAGE)
     add_definitions("-ftest-coverage -fprofile-arcs")
@@ -25,7 +31,9 @@ if(CMAKE_COMPILER_IS_GNUCC OR "${CMAKE_C_COMPILER_ID}" STREQUAL "Clang")
     set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -ftest-coverage -fprofile-arcs")
     set(COV_LIBRARIES gcov)
   endif()
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC")
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC -Wall")
+elseif("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
+  add_definitions(-D_SCL_SECURE_NO_WARNINGS -D_CRT_SECURE_NO_WARNINGS)
 endif()
 
 include_directories(
@@ -42,7 +50,5 @@ if(LINDBLAD_BUILD_TESTS)
   add_subdirectory(tests)
 endif()
 
-try_compile(HAVE_PRAGMA_OMP_SIMD ${PROJECT_BINARY_DIR}/cmake
-            ${PROJECT_SOURCE_DIR}/cmake/try_compile/pragma_omp_simd.cpp)
 configure_file(config.h.in config.h)
 

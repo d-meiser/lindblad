@@ -73,6 +73,6 @@ TEST(SourceSink, LeadsToDecayingCoherence) {
   std::vector<Amplitude> rhoIn = hermitianMatrix(dim);
   std::vector<Amplitude> rhoOut(dim * dim, 0);
   ss.apply(dim, &rhoIn[0], &rhoOut[0]);
-  EXPECT_FLOAT_EQ(-gamma,
+  EXPECT_DOUBLE_EQ(-gamma,
                   std::real(rhoOut[0 + 1 * dim] / rhoIn[0 + 1 * dim]));
 }
