@@ -21,6 +21,9 @@ with lindblad.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <cstddef>
 
+namespace Lindblad {
+namespace Detail {
+
 class Integrator {
  public:
   Integrator(int dim, double time, const double* state,
@@ -48,5 +51,7 @@ class Integrator {
   virtual void advance(double* t, double* dt, void* ctx) = 0;
   virtual Integrator* makeCopy() const = 0;
 };
+}
+}
 
 #endif

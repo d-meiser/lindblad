@@ -22,6 +22,9 @@ with lindblad.  If not, see <http://www.gnu.org/licenses/>.
 #include <Amplitude.hpp>
 #include <SparseMatrix.hpp>
 
+namespace Lindblad {
+namespace Detail {
+
 class GeneralDecayOperator {
   public:
   GeneralDecayOperator(SparseMatrix lambda);
@@ -31,5 +34,7 @@ class GeneralDecayOperator {
     SparseMatrix lambdaDagger;
     SparseMatrix lambdaDaggerLambda;
 };
+}
+}
 
 #endif

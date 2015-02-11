@@ -23,24 +23,27 @@ with lindblad.  If not, see <http://www.gnu.org/licenses/>.
 #include <GeneralDecayOperator.hpp>
 #include <vector>
 
+namespace Lindblad {
+
 struct MasterEqn::Impl {
   Impl(int d) : dim(d) {}
   ~Impl() {}
   void apply(const Amplitude* A, Amplitude* B) const {
     std::fill(B, B + dim * dim, 0);
-    for (std::vector<Coupling>::const_iterator c = couplings.begin();
+    for (std::vector<Detail::Coupling>::const_iterator c = couplings.begin();
          c != couplings.end(); ++c) {
       c->apply(dim, A, B);
     }
-    for (std::vector<Decay>::const_iterator d = decays.begin();
+    for (std::vector<Detail::Decay>::const_iterator d = decays.begin();
          d != decays.end(); ++d) {
       d->apply(dim, A, B);
     }
-    for (std::vector<SourceSink>::const_iterator s = sourceSinks.begin();
+    for (std::vector<Detail::SourceSink>::const_iterator s =
+             sourceSinks.begin();
          s != sourceSinks.end(); ++s) {
       s->apply(dim, A, B);
     }
-    for (std::vector<GeneralDecayOperator>::const_iterator d =
+    for (std::vector<Detail::GeneralDecayOperator>::const_iterator d =
              generalDecayOperators.begin();
          d != generalDecayOperators.end(); ++d) {
       d->apply(dim, A, B);
@@ -49,10 +52,10 @@ struct MasterEqn::Impl {
   int getDim() const { return dim; }
 
   int dim;
-  std::vector<Coupling> couplings;
-  std::vector<Decay> decays;
-  std::vector<SourceSink> sourceSinks;
-  std::vector<GeneralDecayOperator> generalDecayOperators;
+  std::vector<Detail::Coupling> couplings;
+  std::vector<Detail::Decay> decays;
+  std::vector<Detail::SourceSink> sourceSinks;
+  std::vector<Detail::GeneralDecayOperator> generalDecayOperators;
 };
 
 MasterEqn::MasterEqn(int d) { impl = new Impl(d); }
@@ -73,19 +76,19 @@ MasterEqn::~MasterEqn() {
 }
 
 void MasterEqn::addCoupling(int m, int n, Amplitude a) {
-  impl->couplings.push_back(Coupling(m, n, a));
+  impl->couplings.push_back(Detail::Coupling(m, n, a));
 }
 
 void MasterEqn::addDecay(int into, int outOf, double gamma) {
-  impl->decays.push_back(Decay(into, outOf, gamma));
+  impl->decays.push_back(Detail::Decay(into, outOf, gamma));
 }
 
 void MasterEqn::addSourceSink(int into, double gamma) {
-  impl->sourceSinks.push_back(SourceSink(into, gamma));
+  impl->sourceSinks.push_back(Detail::SourceSink(into, gamma));
 }
 
 void MasterEqn::addGeneralDecayOperator(SparseMatrix lambda) {
-  impl->generalDecayOperators.push_back(GeneralDecayOperator(lambda));
+  impl->generalDecayOperators.push_back(Detail::GeneralDecayOperator(lambda));
 }
 
 void MasterEqn::apply(const Amplitude* A, Amplitude *B) const {
@@ -96,3 +99,4 @@ int MasterEqn::getDim() const {
   return impl->getDim();
 }
 
+}

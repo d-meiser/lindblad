@@ -18,6 +18,9 @@ with lindblad.  If not, see <http://www.gnu.org/licenses/>.
 */
 #include <Integrator.hpp>
 
+namespace Lindblad {
+namespace Detail {
+
 void Integrator::takeStep(void* ctx) {
   advance(&t, &dt, ctx);
 }
@@ -34,3 +37,5 @@ Integrator* Integrator::copy() const {
 }
 
 Integrator::~Integrator() {}
+}
+}

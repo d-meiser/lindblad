@@ -19,6 +19,7 @@ with lindblad.  If not, see <http://www.gnu.org/licenses/>.
 #include <gtest/gtest.h>
 #include <MasterEqnEvolution.hpp>
 #include <MasterEqn.hpp>
+using namespace Lindblad;
 
 TEST(MasterEqnEvolution, Constructor) { 
   int dim = 4;

@@ -18,6 +18,7 @@ with lindblad.  If not, see <http://www.gnu.org/licenses/>.
 */
 #include <gtest/gtest.h>
 #include <SparseMatrix.hpp>
+using namespace Lindblad;
 
 TEST(SparseMatrix, DefaultConstructible) {
   SparseMatrix a;

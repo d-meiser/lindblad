@@ -20,6 +20,9 @@ with lindblad.  If not, see <http://www.gnu.org/licenses/>.
 #include <SparseApply.hpp>
 #include <Memory.hpp>
 
+namespace Lindblad {
+namespace Detail {
+
 GeneralDecayOperator::GeneralDecayOperator(SparseMatrix lambda)
     : lambda(lambda) {
   for (std::vector<SparseMatrixEntry>::const_iterator e =
@@ -62,3 +65,5 @@ void GeneralDecayOperator::apply(int dim, const Amplitude *A,
   }
 }
 
+}
+}

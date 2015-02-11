@@ -21,6 +21,9 @@ with lindblad.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <Amplitude.hpp>
 
+namespace Lindblad {
+namespace Detail {
+
 class Coupling {
  public:
   Coupling(int m, int n, Amplitude g) : m(m), n(n), g(g) {}
@@ -31,6 +34,9 @@ class Coupling {
   int n;
   Amplitude g;
 };
+
+}
+}
 
 #endif
 

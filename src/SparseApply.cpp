@@ -28,6 +28,8 @@ with lindblad.  If not, see <http://www.gnu.org/licenses/>.
 #define LINDBLAD_SMALL_DIM 1024
 #endif
 
+namespace Lindblad {
+namespace Detail {
 
 static void extractStrided(const Amplitude *x, int offset, int stride, int n,
                            Amplitude *y);
@@ -95,3 +97,5 @@ void insertStrided(const Amplitude *x, int offset, int stride, int n,
   }
 }
 
+}
+}

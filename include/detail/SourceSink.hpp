@@ -21,6 +21,9 @@ with lindblad.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <Amplitude.hpp>
 
+namespace Lindblad {
+namespace Detail {
+
 /**
  * @brief Source for particles in a specific quantum level
  *
@@ -44,6 +47,8 @@ class SourceSink {
   int m;
   double gamma;
 };
+}
+}
 
 #endif
 

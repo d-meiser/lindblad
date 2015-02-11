@@ -9,6 +9,7 @@ static const char help[] =
     "in this form. Provide a floating point number for each parameters.";
 #define _USE_MATH_DEFINES
 #include <MasterEqn.hpp>
+using namespace Lindblad;
 #include <Amplitude.hpp>
 
 #include <petscmat.h>

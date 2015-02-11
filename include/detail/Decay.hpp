@@ -21,6 +21,9 @@ with lindblad.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <Amplitude.hpp>
 
+namespace Lindblad {
+namespace Detail {
+
 class Decay {
  public:
   Decay(int into, int outof, double gamma)
@@ -32,6 +35,9 @@ class Decay {
   int outof;
   double gamma;
 };
+
+}
+}
 
 #endif
 

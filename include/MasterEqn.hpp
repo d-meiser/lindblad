@@ -23,6 +23,8 @@ with lindblad.  If not, see <http://www.gnu.org/licenses/>.
 #include <SparseMatrix.hpp>
 #include <LindbladExport.h>
 
+namespace Lindblad {
+
 class LINDBLAD_API MasterEqn {
  public:
   MasterEqn(int dim);
@@ -40,6 +42,8 @@ class LINDBLAD_API MasterEqn {
   struct Impl;
   Impl* impl;
 };
+
+}
 
 #endif
 

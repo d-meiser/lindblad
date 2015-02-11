@@ -22,6 +22,8 @@ with lindblad.  If not, see <http://www.gnu.org/licenses/>.
 #include <MasterEqn.hpp>
 #include <LindbladExport.h>
 
+namespace Lindblad {
+
 class LINDBLAD_API MasterEqnEvolution {
  public:
   MasterEqnEvolution(const MasterEqn& eqn, const Amplitude* initialState);
@@ -38,6 +40,8 @@ class LINDBLAD_API MasterEqnEvolution {
   struct Impl;
   Impl* impl;
 };
+
+}
 
 #endif
 

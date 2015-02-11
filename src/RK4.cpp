@@ -19,6 +19,9 @@ with lindblad.  If not, see <http://www.gnu.org/licenses/>.
 #include <RK4.hpp>
 #include <iostream>
 
+namespace Lindblad {
+namespace Detail {
+
 RK4::RK4(int dim, double time, const double* state,
       void (*f)(double* x, double* y, double t, void* ctx))
     : Integrator(dim, time, state, f) {
@@ -58,4 +61,7 @@ void RK4::advance(double* t, double* dt, void* ctx) {
 
 RK4* RK4::makeCopy() const {
   return new RK4(*this);
+}
+
+}
 }

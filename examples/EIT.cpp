@@ -18,6 +18,7 @@ with lindblad.  If not, see <http://www.gnu.org/licenses/>.
 */
 #define _USE_MATH_DEFINES
 #include <Lindblad.hpp>
+using namespace Lindblad;
 #include <cmath>
 #include <vector>
 #include <cstdio>

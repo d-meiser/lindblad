@@ -23,6 +23,9 @@ with lindblad.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <Integrator.hpp>
 
+namespace Lindblad {
+namespace Detail {
+
 class RK45 : public Integrator {
  public:
   RK45(int dim, double time, const double* state,
@@ -47,5 +50,7 @@ class RK45 : public Integrator {
   virtual void advance(double* t, double* dt, void* ctx);
   virtual RK45* makeCopy() const;
 };
+}
+}
 
 #endif
