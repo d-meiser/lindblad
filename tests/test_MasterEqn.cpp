@@ -66,3 +66,33 @@ TEST(MasterEqn, HermiticityProperty) {
   MasterEqn meqn = buildME(8);
   CheckLindbladHermiticityProperty(meqn, 8);
 }
+
+TEST(MasterEqn, NullOperatorHasZeroLevelShifts) {
+  MasterEqn nullME(3);
+  Amplitude omegas[3];
+  nullME.getEnergyLevels(omegas);
+  Amplitude zero(0);
+  MY_EXPECT_EQ(zero, omegas[0], 0);
+  MY_EXPECT_EQ(zero, omegas[1], 1);
+  MY_EXPECT_EQ(zero, omegas[2], 2);
+}
+
+TEST(MasterEqn, DiagonalCouplingLeadsToLevelShift) {
+  MasterEqn me(3);
+  me.addCoupling(0, 0, 3.0);
+  Amplitude omegas[3];
+  me.getEnergyLevels(omegas);
+  MY_EXPECT_EQ(Amplitude(3.0), omegas[0], 0);
+  MY_EXPECT_EQ(Amplitude(0), omegas[1], 1);
+  MY_EXPECT_EQ(Amplitude(0), omegas[2], 2);
+}
+
+TEST(MasterEqn, OffDiagonalCouplingDoesNotLeadToLevelShift) {
+  MasterEqn me(3);
+  me.addCoupling(0, 1, 3.0);
+  Amplitude omegas[3];
+  me.getEnergyLevels(omegas);
+  MY_EXPECT_EQ(Amplitude(0), omegas[0], 0);
+  MY_EXPECT_EQ(Amplitude(0), omegas[1], 1);
+  MY_EXPECT_EQ(Amplitude(0), omegas[2], 2);
+}

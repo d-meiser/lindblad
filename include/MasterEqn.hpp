@@ -37,6 +37,7 @@ class LINDBLAD_API MasterEqn {
   void addGeneralDecayOperator(SparseMatrix lambda);
   void apply(const Amplitude* A, Amplitude* B) const;
   int getDim() const;
+  void getEnergyLevels(Amplitude* omegas) const;
 
  private:
   struct Impl;
