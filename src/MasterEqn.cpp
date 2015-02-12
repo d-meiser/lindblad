@@ -50,6 +50,15 @@ struct MasterEqn::Impl {
     }
   }
   int getDim() const { return dim; }
+  void getEnergyLevels(Amplitude* omegas) const {
+    std::fill(omegas, omegas + dim, 0);
+    for (std::vector<Detail::Coupling>::const_iterator c = couplings.begin();
+         c != couplings.end(); ++c) {
+      if (c->isDiagonal()) {
+        omegas[c->getRow()] += c->getCouplingStrength();
+      }
+    }
+  }
 
   int dim;
   std::vector<Detail::Coupling> couplings;
@@ -97,6 +106,10 @@ void MasterEqn::apply(const Amplitude* A, Amplitude *B) const {
 
 int MasterEqn::getDim() const {
   return impl->getDim();
+}
+
+void MasterEqn::getEnergyLevels(Amplitude *omegas) const {
+  impl->getEnergyLevels(omegas);
 }
 
 }

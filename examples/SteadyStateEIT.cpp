@@ -11,6 +11,7 @@ static const char help[] =
 #include <MasterEqn.hpp>
 using namespace Lindblad;
 #include <Amplitude.hpp>
+#include <detail/Memory.hpp>
 
 #include <petscmat.h>
 #include <petscksp.h>
@@ -33,18 +34,37 @@ static PetscErrorCode readParameter(int n, const char** argv, PetscReal* param,
 static PetscErrorCode printDensityMatrix(Vec x);
 
 #undef __FUNCT__
+#define __FUNCT__ "applyFreeEvolution"
+static int applyFreeEvolution(int dim, Amplitude *levelShifts, const Amplitude *x, Amplitude *y) {
+  PetscErrorCode     ierr = 0;
+  int                i, j;
+
+  PetscFunctionBegin;
+  for (i = 0; i < dim; ++i) {
+    for (j = 0; j < dim; ++j) {
+      y[i * dim + j] += Amplitude(0, -1) * (levelShifts[i] - levelShifts[j]) * x[i * dim + j];
+    }
+  }
+  PetscFunctionReturn(ierr);
+}
+
+#undef __FUNCT__
 #define __FUNCT__ "mult"
 int mult(Mat A, Vec x, Vec y) {
   PetscErrorCode     ierr;
   MasterEqn*         meqn;
   PetscScalar*       yarr;
   const PetscScalar* xarr;
+  Amplitude*         levelShifts;
 
   PetscFunctionBegin;
   ierr = MatShellGetContext(A, (void*)&meqn);CHKERRQ(ierr);
   ierr = VecGetArrayRead(x, &xarr);CHKERRQ(ierr);
   ierr = VecGetArray(y, &yarr);CHKERRQ(ierr);
   meqn->apply((const Amplitude*)xarr, (Amplitude*)yarr);
+  levelShifts = (Amplitude*)LINDBLAD_ALIGNED_ALLOCA(meqn->getDim() * sizeof(*levelShifts), 64);
+  meqn->getEnergyLevels(levelShifts);
+  applyFreeEvolution(meqn->getDim(), levelShifts, xarr, yarr);
   ierr = VecRestoreArrayRead(x, &xarr);CHKERRQ(ierr);
   ierr = VecRestoreArray(y, &yarr);CHKERRQ(ierr);
   PetscFunctionReturn(0);

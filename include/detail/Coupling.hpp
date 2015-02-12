@@ -28,6 +28,10 @@ class Coupling {
  public:
   Coupling(int m, int n, Amplitude g) : m(m), n(n), g(g) {}
   void apply(int dim, const Amplitude *A, Amplitude *B) const;
+  bool isDiagonal() const { return m == n; }
+  Amplitude getCouplingStrength() const { return g; }
+  int getRow() const { return m; }
+  int getCol() const { return n; }
 
  private:
   int m;

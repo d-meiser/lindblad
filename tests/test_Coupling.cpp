@@ -87,3 +87,16 @@ TEST(Coupling, HermiticityComplexMatElem) {
   Coupling a(0, 1, Amplitude(2.3, 4.8));
   CheckLindbladHermiticityProperty(a, 2);
 }
+
+TEST(Coupling, Diagonal) {
+  Coupling a(1, 0, 0.0);
+  EXPECT_FALSE(a.isDiagonal());
+  Coupling b(0, 0, 0.0);
+  EXPECT_TRUE(b.isDiagonal());
+}
+
+TEST(Coupling, DiagonalEntryHasSameRowAsCol) {
+  Coupling a(0, 0, 1.0);
+  ASSERT_TRUE(a.isDiagonal());
+  EXPECT_EQ(a.getRow(), a.getCol());
+}

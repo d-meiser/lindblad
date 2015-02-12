@@ -27,7 +27,7 @@ script:
   - mkdir -p build
   - cd build
   - cmake --version
-  - cmake -DLINDBLAD_BUILD_TESTS:BOOL=ON -DLINDBLAD_ENABLE_COVERAGE:BOOL=ON -DPETSC_DIR:PATH=../petsc-cpucmplx -DCMAKE_BUILD_TYPE:STRING=Debug -Dgtest_disable_pthreads=ON ..
+  - cmake -DLINDBLAD_BUILD_TESTS:BOOL=ON -DLINDBLAD_ENABLE_COVERAGE:BOOL=ON -DLINDBLAD_WITH_ADDRESS_SANITIZER:BOOL=ON -DPETSC_DIR:PATH=../petsc-cpucmplx -DCMAKE_BUILD_TYPE:STRING=Debug -Dgtest_disable_pthreads=ON ..
   - make
   - ctest --output-on-failure
 after_success:
