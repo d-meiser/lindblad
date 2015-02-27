@@ -112,4 +112,32 @@ void MasterEqn::getEnergyLevels(Amplitude *omegas) const {
   impl->getEnergyLevels(omegas);
 }
 
+static void buildIdentityMatrix(int d, Amplitude* m) {
+  for (int i = 0; i < d; ++i) {
+    for (int j = 0; j < d; ++j) {
+      m[i * d + j] = (i == j) ? Amplitude(1) : Amplitude(0);
+    }
+  }
+}
+
+static void transposeMatrix(int d, Amplitude* m) {
+  for (int i = 0; i < d; ++i) {
+    for (int j = 0; j < d; ++j) {
+      Amplitude tmp = m[i * d + j];
+      m[i * d + j] = m[j * d + i];
+      m[j * d + i] = tmp;
+    }
+  }
+}
+
+void MasterEqn::buildMatrix(Amplitude* matrix) const {
+  int dim = getDim();
+  std::vector<Amplitude> identityMatrix(dim * dim * dim * dim);
+  buildIdentityMatrix(dim * dim, &identityMatrix[0]);
+  for (int i = 0; i < dim * dim; ++i) {
+    apply(&identityMatrix[i * dim * dim], &matrix[i * dim * dim]);
+  }
+  transposeMatrix(dim * dim, &matrix[0]);
+}
+
 }
