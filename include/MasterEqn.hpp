@@ -39,6 +39,7 @@ class LINDBLAD_API MasterEqn {
   int getDim() const;
   void getEnergyLevels(Amplitude* omegas) const;
   void buildMatrix(Amplitude* matrix) const;
+  void buildTransposedMatrix(Amplitude* matrix) const;
 
  private:
   struct Impl;

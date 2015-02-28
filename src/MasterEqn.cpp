@@ -131,13 +131,18 @@ static void transposeMatrix(int d, Amplitude* m) {
 }
 
 void MasterEqn::buildMatrix(Amplitude* matrix) const {
+  buildTransposedMatrix(matrix);
+  int dim = getDim();
+  transposeMatrix(dim * dim, &matrix[0]);
+}
+
+void MasterEqn::buildTransposedMatrix(Amplitude* matrix) const {
   int dim = getDim();
   std::vector<Amplitude> identityMatrix(dim * dim * dim * dim);
   buildIdentityMatrix(dim * dim, &identityMatrix[0]);
   for (int i = 0; i < dim * dim; ++i) {
     apply(&identityMatrix[i * dim * dim], &matrix[i * dim * dim]);
   }
-  transposeMatrix(dim * dim, &matrix[0]);
 }
 
 }
