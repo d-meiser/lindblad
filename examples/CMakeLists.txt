@@ -17,23 +17,31 @@ endforeach()
 set(PETSC_EXAMPLES
     SteadyStateEIT
     SteadyStateEIA
-    SteadyState)
-find_package(DL)
-find_path(PETSC_INCLUDE_DIR petsc.h ${PETSC_DIR}/include)
-message(STATUS "PETSC_INCLUDE_DIR==${PETSC_INCLUDE_DIR}")
-find_library(PETSC_LIBS petsc ${PETSC_DIR}/lib)
-message(STATUS "PETSC_LIBS==${PETSC_LIBS}")
-if(PETSC_INCLUDE_DIR AND PETSC_LIBS)
-  set (PETSC_FOUND TRUE)
-  include_directories(${PETSC_INCLUDE_DIR}/mpiuni ${PETSC_INCLUDE_DIR})
+    SteadyState
+    SteadyStateDirectDense
+   )
+find_package(BLAS)
+find_package(LAPACK)
+if(LAPACK_FOUND AND BLAS_FOUND)
+  find_path(PETSC_INCLUDE_DIR petsc.h ${PETSC_DIR}/include)
+  message(STATUS "PETSC_INCLUDE_DIR==${PETSC_INCLUDE_DIR}")
+  find_library(PETSC_LIBS petsc ${PETSC_DIR}/lib)
+  message(STATUS "PETSC_LIBS==${PETSC_LIBS}")
+  if(PETSC_INCLUDE_DIR AND PETSC_LIBS)
+    set (PETSC_FOUND TRUE)
+    include_directories(${PETSC_INCLUDE_DIR}/mpiuni ${PETSC_INCLUDE_DIR})
+  endif()
+  find_package(DL)
+  if(PETSC_FOUND)
+    foreach(e ${PETSC_EXAMPLES})
+      add_executable(${e} ${e}.cpp)
+      target_link_libraries(${e} ${LINDBLAD_LIBRARY} ${PETSC_LIBS}
+          ${LAPACK_LIBRARIES} ${BLAS_LIBRARIES} pthread ${DL_LIBRARIES})
+      add_test(${e} ${e})
+    endforeach()
+  endif()
 endif()
-if(PETSC_FOUND)
-  foreach(e ${PETSC_EXAMPLES})
-    add_executable(${e} ${e}.cpp)
-    target_link_libraries(${e} ${LINDBLAD_LIBRARY} ${PETSC_LIBS} lapack blas pthread ${DL_LIBRARIES})
-    add_test(${e} ${e})
-  endforeach()
-endif()
+
 
 set(SCRIPTS 
     plotRabiOscillationsData.py
