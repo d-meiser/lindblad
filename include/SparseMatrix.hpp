@@ -24,18 +24,39 @@ with lindblad.  If not, see <http://www.gnu.org/licenses/>.
 
 namespace Lindblad {
 
+/**
+@brief A non-zero entry in a sparse matrix
+*/
 struct SparseMatrixEntry {
   SparseMatrixEntry(int row, int col, Amplitude element)
       : row(row), col(col), element(element) {}
-  int row;
-  int col;
-  Amplitude element;
+  int row;           /**< Row index of the entry */
+  int col;           /**< Column index of the entry */
+  Amplitude element; /**< Value of the entry */
 };
 
+/**
+@brief Simplistic representation of sparse matrices.
+
+Internally this sparse matrix type uses a coordinate format to represent
+the non-zero entries of the matrix.
+*/
 struct SparseMatrix {
+/**
+@brief Build an emtpy matrix
+*/
   SparseMatrix() : entries() {}
+
+/**
+@brief Build a matrix with one non-zero entry
+*/
   SparseMatrix(SparseMatrixEntry entry) : entries(1, entry) {}
+
+/**
+@brief Add a non-zero entry to the sparse matrix
+*/
   void add(SparseMatrixEntry entry) { entries.push_back(entry); }
+
   std::vector<SparseMatrixEntry> entries;
 };
 
