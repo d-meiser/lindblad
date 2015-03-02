@@ -23,6 +23,9 @@ with lindblad.  If not, see <http://www.gnu.org/licenses/>.
 
 namespace Lindblad {
 
+/**
+@brief Quantum mechanical amplitudes.
+*/
 typedef std::complex<double> Amplitude;
 
 }
