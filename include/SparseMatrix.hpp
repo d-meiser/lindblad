@@ -28,6 +28,7 @@ namespace Lindblad {
 @brief A non-zero entry in a sparse matrix
 */
 struct SparseMatrixEntry {
+/// @brief Constructor
   SparseMatrixEntry(int row, int col, Amplitude element)
       : row(row), col(col), element(element) {}
   int row;           /**< Row index of the entry */
@@ -57,6 +58,9 @@ struct SparseMatrix {
 */
   void add(SparseMatrixEntry entry) { entries.push_back(entry); }
 
+/**
+@brief Collection of non-zero entries
+*/
   std::vector<SparseMatrixEntry> entries;
 };
 

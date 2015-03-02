@@ -1,0 +1,78 @@
+/**
+\mainpage Lindblad documentation
+
+\section intro_sec What is Lindblad?
+
+Lindblad is a C++ library for calculations with open quantum systems.
+The main application areas are atomic physics problems, quantum optics,
+quantum information, quantum computing, and quantum communication.  An
+emphasis of the Lindblad library is on computational and memory
+efficiency.
+
+
+\section simple_example A simple example
+
+\code
+#include <Lindblad.hpp>
+#include <vector>
+
+static const int numIters = 1000;
+
+int main() {
+  MasterEqn meqn(2);
+  double g = 1.0;
+  meqn.addCoupling(0, 1, g);
+  std::vector<Amplitude> rhoInitial(4, 0);
+  rhoInitial[0] = 1.0;
+  MasterEqnEvolution evolution(meqn, &rhoInitial[0]);
+  for (int i = 0; i < numIters; ++i) {
+    evolution.takeStep();
+  }
+  return 0;
+}
+\endcode
+
+
+\section quick_start Quick start guide
+
+The lindblad library is distributed in source form.  It can be
+downloaded from the 
+[lindblad github repository](https://github.com/d-meiser/lindblad).
+Configuration is via cmake.  On linux the library is downloaded,
+configured, built, and installed with the following commands:
+
+    git clone https://github.com/d-meiser/lindblad
+    cd lindblad
+    mkdir build
+    cd build
+    cmake ..
+    make -j4
+    make install
+
+
+## Building PETSc
+
+Several of the examples require the
+[PETSc](http://www.mcs.anl.gov/petsc/) library.  To build PETSc, blas
+and lapack headers and libraries are needed.  A minimal configuration of
+PETSc can be created with the script
+[./utilities/get_petsc.sh](./utilities/get_petsc.sh).  On ubuntu, the
+following works for me:
+
+    sudo apt-get install libblas-dev libatlas-dev liblapack-dev
+    cd $LINDBLAD_ROOT_DIRECTORY
+    sh ./utilities/get_petsc.sh
+
+`$LINDBLAD_ROOT_DIRECTORY` is the directory in which this README file
+lives.  The `get_petsc.sh` script builds a minimal PETSc library and
+installs it into the `${LINDBLAD_ROOT_DIRECTORY}/petsc-cpucmplx`
+directory.
+
+Once PETSc is built and installed lindblad can be configured with PETSc
+support as follows:
+
+    cd ${LINDBLAD_ROOT_DIRECTORY}/build
+    cmake -DPETSC_DIR=../petsc-cpucmplx ..
+    make
+
+*/
