@@ -43,6 +43,25 @@ set(SCRIPTS
     )
 file(COPY ${SCRIPTS} DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
 
+if(LINDBLAD_BUILD_DOCS)
+  foreach(e ${EXAMPLES} ${PETSC_EXAMPLES})
+    set(${e}_PARENT_GROUP lindblad_tutorials)
+  endforeach()
+  foreach(EXAMPLE ${EXAMPLES} ${PETSC_EXAMPLES})
+    set(DOXIFIED_SOURCE ${PROJECT_BINARY_DIR}/doc/${EXAMPLE}.cpp.dox)
+    add_custom_command(OUTPUT ${DOXIFIED_SOURCE}
+        COMMAND runhaskell
+        ${PROJECT_SOURCE_DIR}/utilities/ProgramToDoxygen.hs
+        ${CMAKE_CURRENT_SOURCE_DIR}/${EXAMPLE}.cpp
+        ${EXAMPLE}
+        ${${EXAMPLE}_PARENT_GROUP} ${DOXIFIED_SOURCE}
+        DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/${EXAMPLE}.cpp
+        COMMENT "Pre-processing example file ${EXAMPLE}.cpp")
+    add_custom_target(${EXAMPLE}-doxygen DEPENDS ${DOXIFIED_SOURCE})
+    add_dependencies(doc ${EXAMPLE}-doxygen)
+  endforeach()
+endif()
+
 set(PYTHON_SCRIPT_TESTS
     dynamicsEIT
     SteadyStateFromDynEIT
