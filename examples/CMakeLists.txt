@@ -6,7 +6,8 @@ endif()
 
 set(EXAMPLES
     RabiOscillations
-    EIT)
+    EIT
+    )
 foreach(e ${EXAMPLES})
   add_executable(${e} ${e}.cpp)
   target_link_libraries(${e} ${LINDBLAD_LIBRARY})
@@ -17,7 +18,9 @@ endforeach()
 set(PETSC_EXAMPLES
     SteadyStateEIT
     SteadyStateEIA
-    SteadyState)
+    SteadyState
+    Laser
+    )
 find_package(DL)
 find_path(PETSC_INCLUDE_DIR petsc.h ${PETSC_DIR}/include)
 message(STATUS "PETSC_INCLUDE_DIR==${PETSC_INCLUDE_DIR}")

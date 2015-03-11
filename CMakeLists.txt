@@ -9,8 +9,9 @@ include(GenerateExportHeader)
 set(LINDBLAD_VER_MAJOR 0)
 set(LINDBLAD_VER_MINOR 0)
 set(LINDBLAD_VER_PATCH 1)
-set(LINDBLAD_VER
+set(LINDBLAD_VERSION
     "${LINDBLAD_VER_MAJOR}.${LINDBLAD_VER_MINOR}.${LINDBLAD_VER_PATCH}")
+message(STATUS "LINDBLAD_VERSION == ${LINDBLAD_VERSION}")
 
 option(LINDBLAD_BUILD_TESTS "Whether to build tests" OFF)
 option(LINDBLAD_BUILD_DOCS "Whether to build documentation" OFF)
