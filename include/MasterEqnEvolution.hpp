@@ -16,6 +16,14 @@ for more details.
 You should have received a copy of the GNU General Public License along
 with lindblad.  If not, see <http://www.gnu.org/licenses/>.
 */
+/**
+@file MasterEqnEvolution.hpp
+@brief the MasterEqnEvolution API.
+
+@defgroup lindblad_mastereqnevolution MasterEqnEvolution
+@ingroup lindblad_core
+@{
+*/
 #ifndef MASTER_EQN_EVOLUTION_HPP
 #define MASTER_EQN_EVOLUTION_HPP
 
@@ -90,4 +98,4 @@ actual time step size is usually different.
 }
 
 #endif
-
+/** @} */

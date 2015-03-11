@@ -16,6 +16,14 @@ for more details.
 You should have received a copy of the GNU General Public License along
 with lindblad.  If not, see <http://www.gnu.org/licenses/>.
 */
+/**
+@file MasterEqn.hpp
+@brief the MasterEqn API.
+
+@defgroup lindblad_mastereqn MasterEqn
+@ingroup lindblad_core
+@{
+*/
 #ifndef MASTEREQN_HPP
 #define MASTEREQN_HPP
 
@@ -26,7 +34,7 @@ with lindblad.  If not, see <http://www.gnu.org/licenses/>.
 namespace Lindblad {
 
 /**
-@brief The representation of Master Equations in Lindblad
+@brief The representation of quantum mechanical Master equations in Lindblad
 
 The master equation describes the evolution of an open quantum system.
 It can be written in the form
@@ -161,4 +169,5 @@ dim\f$.
 }
 
 #endif
+/** @} */
 

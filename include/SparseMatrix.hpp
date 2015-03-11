@@ -16,6 +16,14 @@ for more details.
 You should have received a copy of the GNU General Public License along
 with lindblad.  If not, see <http://www.gnu.org/licenses/>.
 */
+/**
+@file SparseMatrix.hpp
+@brief A simple representation of sparse matrices.
+
+@defgroup lindblad_sparsematrix SparseMatrix
+@ingroup lindblad_core
+@{
+*/
 #ifndef SPARSE_MATRIX_HPP
 #define SPARSE_MATRIX_HPP
 
@@ -67,3 +75,4 @@ struct SparseMatrix {
 }
 
 #endif
+/** @} */
