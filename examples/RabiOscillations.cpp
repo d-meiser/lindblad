@@ -95,7 +95,9 @@ integrator of 4th order (the default in Lindblad) this results in an
 estimated single step error of 1.0e-12 and a total error of 1.0e-3 for a
 time interval of length 1.  In this example we dump the state of the
 system every <tt>itersPerStep</tt> steps with a total number of
-<tt>numSteps * itersPerStep</tt> time steps.
+<tt>numSteps * itersPerStep</tt> time steps.  The time evolution can be
+visualized with the python script <tt>plotRabiOscillationsData.py</tt>
+(requires numpy and matplotlib).
 */
   evolution.setTimeStep(1.0e-3);
   const int numSteps = 40;

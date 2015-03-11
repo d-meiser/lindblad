@@ -1,3 +1,7 @@
 // Wheter we have #pragma omp simd
 #cmakedefine HAVE_PRAGMA_OMP_SIMD
 
+#cmakedefine LINDBLAD_VER_MAJOR @LINDBLAD_VER_MAJOR@
+#cmakedefine LINDBLAD_VER_MINOR @LINDBLAD_VER_MINOR@
+#cmakedefine LINDBLAD_VER_PATCH @LINDBLAD_VER_PATCH@
+#cmakedfine LINDBLAD_VERSION "@LINDBLAD_VER"

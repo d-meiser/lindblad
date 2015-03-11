@@ -6,6 +6,11 @@ enable_testing()
 set(CMAKE_MODULE_PATH "${CMAKE_MODULE_PATH};${PROJECT_SOURCE_DIR}/cmake")
 include(CheckCXXCompilerFlag)
 include(GenerateExportHeader)
+set(LINDBLAD_VER_MAJOR 0)
+set(LINDBLAD_VER_MINOR 0)
+set(LINDBLAD_VER_PATCH 1)
+set(LINDBLAD_VER
+    "${LINDBLAD_VER_MAJOR}.${LINDBLAD_VER_MINOR}.${LINDBLAD_VER_PATCH}")
 
 option(LINDBLAD_BUILD_TESTS "Whether to build tests" OFF)
 option(LINDBLAD_BUILD_DOCS "Whether to build documentation" OFF)
