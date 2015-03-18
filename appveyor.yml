@@ -1,8 +1,7 @@
 version: 1.0.{build}
 before_build:
-- cinst wget -x86
 - cinst 7zip.commandline -x86
-- wget -q http://googletest.googlecode.com/files/gtest-1.7.0.zip
+- appveyor DownloadFile http://googletest.googlecode.com/files/gtest-1.7.0.zip -FileName gtest-1.7.0.zip
 - 7z x gtest-1.7.0.zip > NUL
 build:
   verbosity: minimal
