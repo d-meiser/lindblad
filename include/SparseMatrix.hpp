@@ -16,6 +16,14 @@ for more details.
 You should have received a copy of the GNU General Public License along
 with lindblad.  If not, see <http://www.gnu.org/licenses/>.
 */
+/**
+@file SparseMatrix.hpp
+@brief A simple representation of sparse matrices.
+
+@defgroup lindblad_sparsematrix SparseMatrix
+@ingroup lindblad_core
+@{
+*/
 #ifndef SPARSE_MATRIX_HPP
 #define SPARSE_MATRIX_HPP
 
@@ -24,21 +32,47 @@ with lindblad.  If not, see <http://www.gnu.org/licenses/>.
 
 namespace Lindblad {
 
+/**
+@brief A non-zero entry in a sparse matrix
+*/
 struct SparseMatrixEntry {
+/// @brief Constructor
   SparseMatrixEntry(int row, int col, Amplitude element)
       : row(row), col(col), element(element) {}
-  int row;
-  int col;
-  Amplitude element;
+  int row;           /**< Row index of the entry */
+  int col;           /**< Column index of the entry */
+  Amplitude element; /**< Value of the entry */
 };
 
+/**
+@brief Simplistic representation of sparse matrices.
+
+Internally this sparse matrix type uses a coordinate format to represent
+the non-zero entries of the matrix.
+*/
 struct SparseMatrix {
+/**
+@brief Build an emtpy matrix
+*/
   SparseMatrix() : entries() {}
+
+/**
+@brief Build a matrix with one non-zero entry
+*/
   SparseMatrix(SparseMatrixEntry entry) : entries(1, entry) {}
+
+/**
+@brief Add a non-zero entry to the sparse matrix
+*/
   void add(SparseMatrixEntry entry) { entries.push_back(entry); }
+
+/**
+@brief Collection of non-zero entries
+*/
   std::vector<SparseMatrixEntry> entries;
 };
 
 }
 
 #endif
+/** @} */

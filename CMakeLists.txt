@@ -6,8 +6,15 @@ enable_testing()
 set(CMAKE_MODULE_PATH "${CMAKE_MODULE_PATH};${PROJECT_SOURCE_DIR}/cmake")
 include(CheckCXXCompilerFlag)
 include(GenerateExportHeader)
+set(LINDBLAD_VER_MAJOR 0)
+set(LINDBLAD_VER_MINOR 0)
+set(LINDBLAD_VER_PATCH 1)
+set(LINDBLAD_VERSION
+    "${LINDBLAD_VER_MAJOR}.${LINDBLAD_VER_MINOR}.${LINDBLAD_VER_PATCH}")
+message(STATUS "LINDBLAD_VERSION == ${LINDBLAD_VERSION}")
 
 option(LINDBLAD_BUILD_TESTS "Whether to build tests" OFF)
+option(LINDBLAD_BUILD_DOCS "Whether to build documentation" OFF)
 option(LINDBLAD_ENABLE_COVERAGE "Instrument tests for coverage" OFF)
 option(LINDBLAD_WITH_ADDRESS_SANITIZER "Whether to build with address sanitizer enabled" OFF)
 
@@ -20,6 +27,21 @@ if(LINDBLAD_WITH_ADDRESS_SANITIZER)
   endif()
   set(CMAKE_REQUIRED_FLAGS ${OLD_CMAKE_REQUIRED_FLAGS})
 endif()
+if(LINDBLAD_BUILD_DOCS)
+  find_package(Doxygen)
+  if(DOXYGEN_FOUND)
+  configure_file(${CMAKE_CURRENT_SOURCE_DIR}/doxyfile.in ${CMAKE_CURRENT_BINARY_DIR}/doxyfile @ONLY)
+  file(MAKE_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/doc")
+  add_custom_target(doc
+    ${DOXYGEN_EXECUTABLE} ${CMAKE_CURRENT_BINARY_DIR}/doxyfile
+    WORKING_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/doc"
+    COMMENT "Generating API documentation with Doxygen" VERBATIM
+  )
+  else()
+    message(STATUS "Doxygen not found -- not building docs")
+  endif()
+endif()
+
 
 set(CMAKE_REQUIRED_FLAGS "-fopenmp-simd")
 CHECK_CXX_COMPILER_FLAG(-fopenmp-simd HAVE_PRAGMA_OMP_SIMD)
