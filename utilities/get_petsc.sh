@@ -1,6 +1,19 @@
 #!/bin/sh
-wget http://ftp.mcs.anl.gov/pub/petsc/release-snapshots/petsc-lite-3.5.3.tar.gz
-tar xfz petsc-lite-3.5.3.tar.gz
+
+# Download PETSc if necessary
+if [ ! -e petsc-lite-3.5.3.tar.gz ];
+then
+  wget http://ftp.mcs.anl.gov/pub/petsc/release-snapshots/petsc-lite-3.5.3.tar.gz
+fi
+
+if [ ! -e petsc-3.5.3 ];
+then
+# Extract PETSc
+  tar xfz petsc-lite-3.5.3.tar.gz
+else
+# Clean out exisiting configuration directories
+  rm -rf petsc-3.5.3/cpucmplx*
+fi
 cd petsc-3.5.3
 PETSC_ARCH=cpucmplx PETSC_DIR=`pwd` ./configure \
   --with-debugging=1 \
