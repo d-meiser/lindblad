@@ -99,7 +99,11 @@ Rayleigh scattering.
 /**
 @brief Add a decay process between arbitrary states.
 
-This method is a generalization of addDecay in that it allows the description of decay processes between states that are not bare energy levels.  For instance this could be used to model decay between dressed states.  Another common scenario is the case of several indistinguishable decay processes.  This method adds the term
+This method is a generalization of addDecay in that it allows the
+description of decay processes between states that are not bare energy
+levels.  For instance this could be used to model decay between dressed
+states.  Another common scenario is the case of several
+indistinguishable decay processes.  This method adds the term
 \f$
 -\frac{1}{2}\left(
 \hat \lambda^\dagger\hat \lambda \hat \rho +
