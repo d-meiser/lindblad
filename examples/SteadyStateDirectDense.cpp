@@ -29,23 +29,6 @@ using namespace Lindblad;
 
 
 #undef __FUNCT__
-#define __FUNCT__ "inPlaceTranspose"
-static PetscErrorCode inPlaceTranspose(int n, PetscScalar *a) {
-  PetscScalar tmp;
-  int i, j;
-
-  PetscFunctionBegin;
-  for (i = 0; i < n; ++i) {
-    for (j = i + 1; j < n; ++j) {
-      tmp = a[i * n + j];
-      a[i * n + j] = a[j * n + i];
-      a[j * n + i] = tmp;
-    }
-  }
-  PetscFunctionReturn(0);
-}
-
-#undef __FUNCT__
 #define __FUNCT__ "main"
 PetscErrorCode main(int argn, char **argv) {
   MasterEqn              meqn(2);
@@ -60,9 +43,15 @@ PetscErrorCode main(int argn, char **argv) {
   Vec                    rhs, x;
   PetscScalar            *xarr;
   PetscReal              trace;
+  PetscBool              print_matrix, flg;
 
   PetscFunctionBegin;
   PetscInitialize(&argn, &argv, 0, help);
+
+  ierr = PetscOptionsGetReal("", "-g", &g, &flg);CHKERRQ(ierr);
+  ierr = PetscOptionsGetReal("", "-delta", &delta, &flg);CHKERRQ(ierr);
+  ierr = PetscOptionsGetReal("", "-gamma", &gamma, &flg);CHKERRQ(ierr);
+  ierr = PetscOptionsGetReal("", "-w", &w, &flg);CHKERRQ(ierr);
 
   meqn.addCoupling(0, 1, g);
   meqn.addCoupling(0, 0, -0.5 * delta);
@@ -70,8 +59,16 @@ PetscErrorCode main(int argn, char **argv) {
   meqn.addDecay(0, 1, gamma);
   meqn.addDecay(1, 0, w);
 
-  meqn.buildTransposedMatrix(&matrix[0]);
-  inPlaceTranspose(N, &matrix[0]);
+  meqn.buildMatrix(&matrix[0]);
+  ierr = PetscOptionsGetBool("", "-print_matrix", &print_matrix, &flg);CHKERRQ(ierr);
+  if (print_matrix) {
+    for (i = 0; i < N; ++i) {
+      for (j = 0; j < N; ++j) {
+        std::cout << matrix[i * N + j] << " ";
+      }
+      std::cout << std::endl;
+    }
+  }
 
   ierr = MatCreate(PETSC_COMM_WORLD, &mat);CHKERRQ(ierr);
   ierr = MatSetType(mat, MATSEQBAIJ);CHKERRQ(ierr);
