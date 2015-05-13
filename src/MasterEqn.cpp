@@ -122,7 +122,7 @@ static void buildIdentityMatrix(int d, Amplitude* m) {
 
 static void transposeMatrix(int d, Amplitude* m) {
   for (int i = 0; i < d; ++i) {
-    for (int j = 0; j < d; ++j) {
+    for (int j = i + 1; j < d; ++j) {
       Amplitude tmp = m[i * d + j];
       m[i * d + j] = m[j * d + i];
       m[j * d + i] = tmp;
@@ -133,7 +133,7 @@ static void transposeMatrix(int d, Amplitude* m) {
 void MasterEqn::buildMatrix(Amplitude* matrix) const {
   buildTransposedMatrix(matrix);
   int dim = getDim();
-  transposeMatrix(dim * dim, &matrix[0]);
+  transposeMatrix(dim * dim, matrix);
 }
 
 void MasterEqn::buildTransposedMatrix(Amplitude* matrix) const {
