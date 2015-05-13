@@ -1,6 +1,6 @@
 version: 1.0.{build}
 before_build:
-- cinst 7zip.commandline -x86
+- choco install -y 7zip.commandline -x86
 - appveyor DownloadFile http://googletest.googlecode.com/files/gtest-1.7.0.zip -FileName gtest-1.7.0.zip
 - 7z x gtest-1.7.0.zip > NUL
 build:
