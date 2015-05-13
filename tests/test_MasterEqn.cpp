@@ -96,3 +96,63 @@ TEST(MasterEqn, OffDiagonalCouplingDoesNotLeadToLevelShift) {
   MY_EXPECT_EQ(Amplitude(0), omegas[1], 1);
   MY_EXPECT_EQ(Amplitude(0), omegas[2], 2);
 }
+
+TEST(MasterEqn, BuildMatrix) {
+  MasterEqn me(3);
+  std::vector<Amplitude> matrix(9 * 9, 3.0);
+  me.buildMatrix(&matrix[0]);
+  MY_EXPECT_EQ(Amplitude(0), matrix[0], 0);
+}
+
+static int delta(int m, int n) { return (m == n) ? 1 : 0; }
+
+TEST(MasterEqn, BuildMatrixForALevelShift) {
+  MasterEqn me(2);
+  double g = 2.3;
+  me.addCoupling(0, 0, g);
+  std::vector<Amplitude> matrix(4 * 4, 3.0);
+  me.buildMatrix(&matrix[0]);
+  int i = 0;
+  for (int m = 0; m < 2; ++m) {
+    for (int n = 0; n < 2; ++n) {
+      for (int mp = 0; mp < 2; ++mp) {
+        for (int np = 0; np < 2; ++np) {
+          Amplitude expectedResult =
+              g * Amplitude(0, -1) * Amplitude((delta(m, 0) - delta(n, 0)) *
+                                               delta(m, mp) * delta(n, np));
+          MY_EXPECT_EQ(expectedResult, matrix[i], i);
+          ++i;
+        }
+      }
+    }
+  }
+}
+
+TEST(MasterEqn, BuildTransposedMatrix) {
+  MasterEqn me(3);
+  std::vector<Amplitude> matrix(9 * 9, 3.0);
+  me.buildTransposedMatrix(&matrix[0]);
+  MY_EXPECT_EQ(Amplitude(0), matrix[0], 0);
+}
+
+TEST(MasterEqn, BuildTransposedMatrixForALevelShift) {
+  MasterEqn me(2);
+  double g = 2.3;
+  me.addCoupling(0, 0, g);
+  std::vector<Amplitude> matrix(4 * 4, 3.0);
+  me.buildTransposedMatrix(&matrix[0]);
+  int i = 0;
+  for (int m = 0; m < 2; ++m) {
+    for (int n = 0; n < 2; ++n) {
+      for (int mp = 0; mp < 2; ++mp) {
+        for (int np = 0; np < 2; ++np) {
+          Amplitude expectedResult =
+              g * Amplitude(0, -1) * Amplitude((delta(m, 0) - delta(n, 0)) *
+                                               delta(m, mp) * delta(n, np));
+          MY_EXPECT_EQ(expectedResult, matrix[i], i);
+          ++i;
+        }
+      }
+    }
+  }
+}

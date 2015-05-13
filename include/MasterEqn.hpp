@@ -164,6 +164,8 @@ diagonal part of the Hamiltonian of the system is \f$\sum_{i=1}^dim
 dim\f$.
 */
   void getEnergyLevels(Amplitude* omegas) const;
+  void buildMatrix(Amplitude* matrix) const;
+  void buildTransposedMatrix(Amplitude* matrix) const;
 
  private:
   struct Impl;

@@ -17,13 +17,15 @@ fi
 
 cd petsc-3.5.3
 PETSC_ARCH=cpucmplx-rel PETSC_DIR=`pwd` ./configure \
+  --with-debugging=0 \
+  --CFLAGS='-O3 -ffast-math -march=native' \
   --with-scalar-type=complex \
   --with-mpi=0 \
   --with-shared-libraries=0 \
   --prefix=../petsc-cpucmplx-rel \
   --with-x=0 \
   --with-ssl=0 \
-  --with-fortran-kernels=0 \
+  --with-fortran-kernels=1 \
   --with-pthread=0 \
   --with-mpiuni-fortran-binding=0 \
   --with-fortran-interfaces=0
