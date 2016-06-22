@@ -77,5 +77,5 @@ if(LINDBLAD_BUILD_TESTS)
   add_subdirectory(tests)
 endif()
 
-configure_file(config.h.in config.h)
+configure_file(LindbladConfig.h.in LindbladConfig.h)
 

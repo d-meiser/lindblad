@@ -19,7 +19,7 @@ with lindblad.  If not, see <http://www.gnu.org/licenses/>.
 #include <cstdlib>
 #include <detail/SparseApply.hpp>
 #include <detail/Memory.hpp>
-#include <config.h>
+#include <LindbladConfig.h>
 
 #if !defined(LINDBLAD_STACK_ARRAY_ALIGNMENT)
 #define LINDBLAD_STACK_ARRAY_ALIGNMENT 64
