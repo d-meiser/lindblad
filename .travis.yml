@@ -27,9 +27,10 @@ script:
   - mkdir -p build
   - cd build
   - cmake --version
-  - cmake -DLINDBLAD_BUILD_TESTS:BOOL=ON -DLINDBLAD_ENABLE_COVERAGE:BOOL=ON -DLINDBLAD_WITH_ADDRESS_SANITIZER:BOOL=ON -DPETSC_DIR:PATH=../petsc-cpucmplx -DCMAKE_BUILD_TYPE:STRING=Debug -Dgtest_disable_pthreads=ON ..
+  - cmake -DCMAKE_INSTALL_PREFIX:PATH=../installation -DLINDBLAD_BUILD_TESTS:BOOL=ON -DLINDBLAD_ENABLE_COVERAGE:BOOL=ON -DLINDBLAD_WITH_ADDRESS_SANITIZER:BOOL=ON -DPETSC_DIR:PATH=../petsc-cpucmplx -DCMAKE_BUILD_TYPE:STRING=Debug -Dgtest_disable_pthreads=ON ..
   - make
   - ctest --output-on-failure
+  - make install
 after_success:
   - lcov -d tests -d src -d examples -base-directory .. -c -o coverage.info
   - lcov --remove coverage.info '/usr/*' -o coverage.info
